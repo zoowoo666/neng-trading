@@ -1,0 +1,954 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NENG² Trading · 能能贸易</title>
+<meta name="description" content="首尔能能贸易：海运代购、港台化妆品批发、行李寄存，首尔、仁川两地仓储直发。">
+<style>body{margin:0;padding:0;background:#F1E7D8}img{max-width:100%}[hidden]:not([hidden=until-found]){display:none!important}</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,500&family=Noto+Serif+SC:wght@600;700;900&family=Gowun+Batang:wght@400;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,500&family=Noto+Serif+SC:wght@600;700;900&family=Gowun+Batang:wght@400;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap"></noscript>
+<style>
+  :root{
+    --cream:#F1E7D8;
+    --paper:#FAF3E6;
+    --ink:#3F2B1C;
+    --umber:#6B4A30;
+    --caramel:#BE7C40;
+    --rust:#B14F29;
+    --on-accent:#FBF3E6;
+    --line:#C9AE87;
+    --good:#4C7A3D;
+    --promo-bg:#E4D3B4;
+    --shadow:rgba(63,43,28,.32);
+    --grain-opacity:.05;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --cream:#241C15;
+      --paper:#2E2416;
+      --ink:#F0E3CE;
+      --umber:#C9AE87;
+      --caramel:#E0A25E;
+      --rust:#E68B62;
+      --on-accent:#241C15;
+      --line:#4A3A28;
+      --good:#86C171;
+      --promo-bg:#3A2D1E;
+      --shadow:rgba(0,0,0,.55);
+      --grain-opacity:.07;
+    }
+  }
+  :root[data-theme="dark"]{
+    --cream:#241C15;
+    --paper:#2E2416;
+    --ink:#F0E3CE;
+    --umber:#C9AE87;
+    --caramel:#E0A25E;
+    --rust:#E68B62;
+    --on-accent:#241C15;
+    --line:#4A3A28;
+    --good:#86C171;
+    --promo-bg:#3A2D1E;
+    --shadow:rgba(0,0,0,.55);
+    --grain-opacity:.07;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--ink);
+    font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    opacity:var(--grain-opacity);
+    background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%25" height="100%25" filter="url(%23n)"/></svg>');
+    mix-blend-mode:multiply;
+    z-index:1;
+  }
+  :root[data-theme="dark"] body::before,
+  @media (prefers-color-scheme: dark){ body::before{ mix-blend-mode:screen; } }
+
+  a{color:inherit;}
+  h1,h2,h3{text-wrap:balance; margin:0;}
+  p{margin:0;}
+  ul{margin:0; padding:0; list-style:none;}
+  button{font:inherit; color:inherit; background:none; border:0; cursor:pointer;}
+
+  .site{
+    position:relative;
+    z-index:2;
+    max-width:1440px;
+    margin:0 auto;
+    padding:0 2rem 4rem;
+  }
+  .site[data-lang="zh"]{
+    --font-display:'Noto Serif SC',serif;
+    --font-body:'Noto Sans SC',-apple-system,sans-serif;
+  }
+  .site[data-lang="en"]{
+    --font-display:'Fraunces',Georgia,serif;
+    --font-body:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
+  }
+  .site[data-lang="kr"]{
+    --font-display:'Gowun Batang','Noto Serif KR',serif;
+    --font-body:'Noto Sans KR',-apple-system,sans-serif;
+  }
+  .site *{font-family:var(--font-body);}
+  .site .headline,
+  .site .brand-name,
+  .site .section-title,
+  .site .ledger-title,
+  .site .ledger-index,
+  .site .modal-title{font-family:var(--font-display);}
+
+  :focus-visible{outline:2px solid var(--rust); outline-offset:2px;}
+
+  /* ---------- header ---------- */
+  .topbar{
+    position:sticky; top:0; z-index:5;
+    display:flex; align-items:center; justify-content:space-between; gap:1rem;
+    padding:1rem 0;
+    background:var(--cream);
+    border-bottom:2px solid var(--line);
+  }
+  .brand{display:flex; align-items:center; gap:.65rem;}
+  .brand-mark{
+    display:grid; place-items:center;
+    width:2.35rem; height:2.35rem;
+    background:var(--rust); color:var(--on-accent);
+    border:2px solid var(--ink);
+    font-weight:700; font-size:1rem; letter-spacing:-.02em;
+    flex:none;
+  }
+  .brand-text{display:flex; flex-direction:column; line-height:1.15;}
+  .brand-name{font-size:1.15rem; font-weight:700;}
+  .brand-tagline{font-size:.62rem; font-weight:600; letter-spacing:.12em; color:var(--umber);}
+
+  .langswitch{display:flex; gap:.4rem;}
+  .lang-tab{
+    padding:.35rem .65rem;
+    border:2px solid var(--ink);
+    background:var(--paper);
+    color:var(--ink);
+    font-size:.78rem; font-weight:600;
+    box-shadow:2px 2px 0 var(--shadow);
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .lang-tab:hover{transform:translate(1px,1px); box-shadow:1px 1px 0 var(--shadow);}
+  .lang-tab.is-active{
+    background:var(--rust); color:var(--on-accent); border-color:var(--rust);
+    box-shadow:none; transform:translate(2px,2px);
+  }
+
+  /* ---------- hero ---------- */
+  .hero{padding:3rem 0 2.25rem;}
+  .hero-text{max-width:44rem;}
+  .hero.has-promo{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) minmax(280px,360px);
+    gap:3rem;
+    align-items:stretch;
+  }
+  .hero.has-promo .hero-text{max-width:none;}
+  .promo-panel{
+    background:var(--promo-bg);
+    padding:1.85rem 1.6rem;
+    align-self:start;
+  }
+  .promo-label{
+    display:block;
+    font-size:.72rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--rust); margin-bottom:.65rem;
+  }
+  .promo-body{font-size:.94rem; line-height:1.7; color:var(--ink);}
+  @media (max-width:760px){
+    .hero.has-promo{grid-template-columns:1fr;}
+  }
+  .eyebrow{
+    font-size:.8rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--umber); margin-bottom:.85rem;
+  }
+  .headline{
+    font-size:clamp(1.9rem, 4.6vw + 1rem, 3rem);
+    font-weight:700; line-height:1.18; margin-bottom:1rem;
+  }
+  .subline{
+    font-size:1.05rem; line-height:1.65; color:var(--ink);
+    max-width:38rem; margin-bottom:1.75rem;
+  }
+  .hero-actions{display:flex; flex-direction:column; align-items:flex-start; gap:.7rem;}
+  .btn{
+    display:inline-block;
+    padding:.9rem 1.6rem;
+    background:var(--rust); color:var(--on-accent);
+    border:2px solid var(--ink);
+    font-weight:700; font-size:1rem;
+    text-decoration:none;
+    box-shadow:4px 4px 0 var(--shadow);
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .btn:hover{transform:translate(2px,2px); box-shadow:2px 2px 0 var(--shadow);}
+  .btn:active{transform:translate(4px,4px); box-shadow:none;}
+  .channels-note{font-size:.82rem; color:var(--umber); letter-spacing:.02em;}
+
+  /* ---------- tearline ---------- */
+  .tearline{
+    position:relative;
+    height:2px;
+    margin:1.5rem 0;
+    background-image:repeating-linear-gradient(to right, var(--line) 0 10px, transparent 10px 18px);
+  }
+  .tearline::before,.tearline::after{
+    content:""; position:absolute; top:50%; transform:translateY(-50%);
+    width:14px; height:14px; border-radius:50%; background:var(--cream);
+    border:2px solid var(--line);
+  }
+  .tearline::before{left:-1.25rem;}
+  .tearline::after{right:-1.25rem;}
+
+  /* ---------- section shared ---------- */
+  .section-title{
+    font-size:1.6rem; font-weight:700; margin-bottom:1.5rem;
+  }
+
+  /* ---------- layout: sidebar + main ---------- */
+  .layout{
+    display:grid;
+    grid-template-columns:280px minmax(0,1fr);
+    gap:3.25rem;
+    align-items:start;
+  }
+  .main{min-width:0;}
+  .sidebar{
+    display:flex; flex-direction:column; gap:1.25rem;
+    position:sticky; top:4.5rem;
+  }
+  .side-card{
+    position:relative;
+    padding:1.1rem 1.15rem;
+    background:var(--paper);
+    border:2px solid var(--ink);
+    box-shadow:3px 3px 0 var(--shadow);
+  }
+  .side-label{
+    display:block;
+    font-size:.68rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--umber); margin-bottom:.55rem;
+  }
+  .side-card p{font-size:.86rem; line-height:1.55; color:var(--ink);}
+  .notice-card::before{
+    content:"";
+    position:absolute; top:-8px; left:1.3rem;
+    width:14px; height:14px; border-radius:50%;
+    background:var(--rust); border:2px solid var(--ink);
+  }
+  .status-row{display:flex; align-items:center; gap:.55rem; margin-bottom:.45rem;}
+  .status-dot{
+    flex:none; width:10px; height:10px; border-radius:50%;
+    background:var(--umber);
+  }
+  .status-dot.is-open{background:var(--good);}
+  .status-dot.is-break{background:var(--caramel);}
+  .status-text{font-size:.95rem; font-weight:700;}
+  .status-note{font-size:.78rem; color:var(--umber); line-height:1.5;}
+  .unclaimed-list{display:flex; flex-direction:column; gap:.5rem; margin:.2rem 0 .8rem;}
+  .unclaimed-item{
+    display:flex; align-items:baseline; justify-content:space-between; gap:.6rem;
+    padding-bottom:.5rem; border-bottom:1px dashed var(--line);
+  }
+  .unclaimed-item:last-child{border-bottom:none; padding-bottom:0;}
+  .unclaimed-code{font-size:.85rem; font-weight:700; color:var(--ink); font-variant-numeric:tabular-nums;}
+  .unclaimed-meta{font-size:.76rem; color:var(--umber); font-variant-numeric:tabular-nums; white-space:nowrap;}
+  .unclaimed-note{font-size:.78rem; color:var(--umber); line-height:1.5; margin:0;}
+
+  @media (max-width:900px){
+    .layout{grid-template-columns:1fr; gap:1.75rem;}
+    .sidebar{position:static;}
+  }
+
+  /* ---------- services ---------- */
+  .services{padding:1rem 0;}
+  .ledger-row{
+    display:flex; gap:1.1rem;
+    padding:1.4rem 0;
+    border-top:1px solid var(--line);
+  }
+  .ledger-row:first-of-type{border-top:none;}
+  .ledger-index{
+    flex:none; width:2.75rem;
+    font-size:2rem; font-weight:700; color:var(--caramel); line-height:1;
+  }
+  .ledger-body{flex:1 1 0%; min-width:0;}
+  .ledger-head{
+    display:flex; align-items:flex-start; justify-content:space-between;
+    gap:.75rem; flex-wrap:wrap; margin-bottom:.5rem;
+  }
+  .ledger-title{font-size:1.2rem; font-weight:700; margin:0;}
+  .rate-badge{
+    flex:none;
+    display:inline-flex; align-items:center; gap:.4rem;
+    padding:.35rem .7rem;
+    background:var(--paper);
+    border:2px solid var(--ink);
+    font-size:.72rem; font-weight:700;
+    white-space:nowrap;
+    box-shadow:2px 2px 0 var(--shadow);
+    font-variant-numeric:tabular-nums;
+    transition:transform .12s ease, box-shadow .12s ease, background .12s ease, color .12s ease;
+  }
+  .rate-badge::after{content:"›"; font-weight:700; font-size:.95em;}
+  .rate-badge:hover{
+    background:var(--rust); color:var(--on-accent); border-color:var(--rust);
+    transform:translate(1px,1px); box-shadow:1px 1px 0 var(--shadow);
+  }
+  .rate-badge:active{transform:translate(2px,2px); box-shadow:none;}
+  .ledger-desc{font-size:.95rem; line-height:1.6; color:var(--ink); margin-bottom:.9rem;}
+  .tag-list{display:flex; flex-wrap:wrap; gap:.55rem;}
+  .tag{
+    position:relative;
+    padding:.4rem .8rem .4rem 1.6rem;
+    background:var(--paper);
+    border:2px solid var(--caramel);
+    font-size:.85rem; font-weight:600;
+  }
+  .tag::before{
+    content:""; position:absolute; left:.65rem; top:50%; transform:translateY(-50%);
+    width:6px; height:6px; border-radius:50%;
+    background:var(--caramel);
+  }
+
+  /* ---------- contact ---------- */
+  .contact{padding:1rem 0;}
+  .contact-subtitle{font-size:.98rem; color:var(--ink); margin-bottom:1.5rem; max-width:34rem; line-height:1.6;}
+  .ticket-grid{
+    display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:1.1rem;
+  }
+  .ticket{
+    display:flex; flex-direction:column; gap:.35rem;
+    text-align:left;
+    padding:1rem 1.1rem;
+    background:var(--paper);
+    border:2px dashed var(--umber);
+    text-decoration:none;
+    box-shadow:3px 3px 0 var(--shadow);
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .ticket:hover{transform:translate(2px,2px); box-shadow:1px 1px 0 var(--shadow); background:var(--cream);}
+  .ticket:active{transform:translate(3px,3px); box-shadow:none;}
+  .ticket-label{font-size:.78rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--umber);}
+  .ticket-value{font-size:1.05rem; font-weight:700; font-variant-numeric:tabular-nums;}
+  .ticket-action{font-size:.78rem; color:var(--rust); font-weight:600;}
+
+  .copy-toast{
+    position:fixed; left:50%; bottom:1.5rem;
+    opacity:0; visibility:hidden;
+    transform:translate(-50%,10px);
+    padding:.65rem 1.1rem; background:var(--ink); color:var(--paper);
+    font-size:.85rem; font-weight:600; border:2px solid var(--ink);
+    z-index:20; transition:opacity .18s ease, transform .18s ease, visibility 0s linear .18s;
+  }
+  .copy-toast.is-visible{
+    opacity:1; visibility:visible; transform:translate(-50%,0);
+    transition:opacity .18s ease, transform .18s ease;
+  }
+
+  /* ---------- rate modal ---------- */
+  .modal-overlay{
+    position:fixed; inset:0; z-index:30;
+    background:rgba(20,14,9,.5);
+    display:flex; align-items:center; justify-content:center;
+    padding:1.5rem;
+  }
+  .modal-overlay[hidden]{display:none;}
+  .modal-panel{
+    width:100%; max-width:26rem;
+    max-height:82vh; overflow-y:auto;
+    background:var(--paper);
+    border:2px solid var(--ink);
+    box-shadow:6px 6px 0 var(--shadow);
+    padding:1.6rem 1.6rem 1.4rem;
+  }
+  .modal-head{
+    display:flex; align-items:flex-start; justify-content:space-between; gap:1rem;
+    margin-bottom:1.1rem;
+  }
+  .modal-title{font-size:1.15rem; font-weight:700; line-height:1.3;}
+  .modal-close{
+    flex:none; width:2.1rem; height:2.1rem;
+    display:grid; place-items:center;
+    border:2px solid var(--ink); background:var(--cream);
+    font-size:.85rem; font-weight:700;
+    transition:background .12s ease, color .12s ease;
+  }
+  .modal-close:hover{background:var(--rust); color:var(--on-accent); border-color:var(--rust);}
+  .rate-table{width:100%; border-collapse:collapse; font-size:.9rem;}
+  .rate-table td{padding:.6rem 0; border-bottom:1px solid var(--line); vertical-align:top;}
+  .rate-table td:first-child{color:var(--ink); font-weight:600; padding-right:1rem;}
+  .rate-table td:last-child{text-align:right; font-weight:700; font-variant-numeric:tabular-nums; color:var(--rust); white-space:nowrap;}
+  .modal-footnote{font-size:.78rem; color:var(--umber); line-height:1.6; margin-top:1rem;}
+
+  /* ---------- about ---------- */
+  .about{padding:1rem 0 0;}
+  .about-body{font-size:.98rem; line-height:1.7; max-width:38rem; margin-bottom:1.75rem;}
+  .route{margin-bottom:1.75rem;}
+  .route-svg{width:100%; max-width:320px; height:auto; display:block;}
+  .route-label{font-size:11px; fill:var(--ink); font-weight:700;}
+  .stamp-table{display:flex; flex-direction:column; gap:0; max-width:38rem; margin:0 0 1.5rem; border-top:1px solid var(--line);}
+  .stamp-row{
+    display:flex; justify-content:space-between; gap:1rem;
+    padding:.75rem 0; border-bottom:1px solid var(--line);
+    font-size:.92rem;
+  }
+  .stamp-row dt{color:var(--umber); font-weight:600;}
+  .stamp-row dd{margin:0; font-weight:700; text-align:right;}
+  .tabular{font-variant-numeric:tabular-nums;}
+  .footer-note{font-size:.8rem; color:var(--umber); line-height:1.6; margin-bottom:.5rem;}
+  .copyright{font-size:.78rem; color:var(--umber);}
+
+  /* ---------- page-load fade (never scroll-gated: everything is visible at rest) ---------- */
+  @media (prefers-reduced-motion:no-preference){
+    .site{animation:pageIn .45s ease both;}
+    @keyframes pageIn{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;} }
+  }
+
+  @media (max-width:640px){
+    .site{padding-left:1.1rem; padding-right:1.1rem;}
+  }
+  @media (max-width:520px){
+    .topbar{flex-wrap:wrap;}
+    .ledger-row{gap:.8rem;}
+    .ledger-index{width:2.1rem; font-size:1.5rem;}
+    .modal-panel{padding:1.3rem 1.2rem 1.1rem;}
+  }
+</style>
+</head>
+<body>
+
+<div class="site" data-lang="zh" id="site">
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">N&sup2;</span>
+      <span class="brand-text">
+        <span class="brand-name" data-i18n="nav_brand">能能贸易</span>
+        <span class="brand-tagline" data-i18n="nav_tagline">SEOUL TRADING CO.</span>
+      </span>
+    </div>
+    <nav class="langswitch" role="group" aria-label="Language / 语言 / 언어">
+      <button type="button" class="lang-tab is-active" data-setlang="zh">中文</button>
+      <button type="button" class="lang-tab" data-setlang="en">EN</button>
+      <button type="button" class="lang-tab" data-setlang="kr">한국어</button>
+    </nav>
+  </header>
+
+  <section class="hero" id="heroSection">
+    <div class="hero-text">
+      <p class="eyebrow" data-i18n="hero_eyebrow">首尔 · 跨境代购与货运</p>
+      <h1 class="headline" data-i18n="hero_headline">你在小红书看中的,能能贸易帮你运回来</h1>
+      <p class="subline" data-i18n="hero_subline">海运代购 · 化妆品批发 · 行李寄存 —— 首尔、仁川两地仓储直发,一条私信,货就上路。</p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn" data-i18n="hero_cta">联系能能贸易</a>
+        <p class="channels-note" data-i18n="hero_channels_note">微信 · Line · Instagram · Telegram · 小红书私信</p>
+      </div>
+    </div>
+    <div class="promo-panel" id="promoPanel" hidden>
+      <span class="promo-label" data-i18n="promo_label">限时活动</span>
+      <p class="promo-body" data-i18n="promo_body"></p>
+    </div>
+  </section>
+
+  <div class="tearline" aria-hidden="true"></div>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="side-card notice-card">
+        <span class="side-label" data-i18n="notice_label">公告 NOTICE</span>
+        <p data-i18n="notice_body">欢迎关注能能贸易!首次下单可先私信咨询流程与预计时效,我们会尽快回复。</p>
+      </div>
+
+      <div class="side-card status-card">
+        <span class="side-label" data-i18n="status_label">营业状态</span>
+        <div class="status-row">
+          <span class="status-dot" id="statusDot" aria-hidden="true"></span>
+          <span class="status-text" id="statusText">营业中</span>
+        </div>
+        <p class="status-note" data-i18n="status_hours_note">营业时间 10:00–18:00(首尔时间)</p>
+      </div>
+
+      <div class="side-card unclaimed-card">
+        <span class="side-label" data-i18n="unclaimed_label">无主包裹认领</span>
+        <ul class="unclaimed-list">
+          <li class="unclaimed-item"><span class="unclaimed-code">···2216</span><span class="unclaimed-meta">2.3kg · 09.01</span></li>
+          <li class="unclaimed-item"><span class="unclaimed-code">···0847</span><span class="unclaimed-meta">0.8kg · 08.29</span></li>
+          <li class="unclaimed-item"><span class="unclaimed-code">···5590</span><span class="unclaimed-meta">5.1kg · 08.27</span></li>
+        </ul>
+        <p class="unclaimed-note" data-i18n="unclaimed_note">如有对应包裹信息,请私信联系我们认领。</p>
+      </div>
+    </aside>
+
+    <main class="main">
+      <section class="services" id="services">
+        <h2 class="section-title" data-i18n="services_title">经营业务</h2>
+
+        <article class="ledger-row">
+          <div class="ledger-index" data-i18n="idx_sea">一</div>
+          <div class="ledger-body">
+            <div class="ledger-head">
+              <h3 class="ledger-title" data-i18n="services_sea_title">海运业务</h3>
+              <button type="button" class="rate-badge" data-rate="sea" aria-haspopup="dialog" data-i18n="rate_cta">查看资费</button>
+            </div>
+            <p class="ledger-desc" data-i18n="services_sea_desc">从下单到海运出货,以下四大品类均可代购代运:</p>
+            <ul class="tag-list">
+              <li class="tag" data-i18n="services_sea_item1">明星周边</li>
+              <li class="tag" data-i18n="services_sea_item2">电子元件</li>
+              <li class="tag" data-i18n="services_sea_item3">工业辅料</li>
+              <li class="tag" data-i18n="services_sea_item4">SD娃娃</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="ledger-row">
+          <div class="ledger-index" data-i18n="idx_cosmetics">二</div>
+          <div class="ledger-body">
+            <div class="ledger-head">
+              <h3 class="ledger-title" data-i18n="services_cosmetics_title">港台化妆品大包裹</h3>
+              <button type="button" class="rate-badge" data-rate="cosmetics" aria-haspopup="dialog" data-i18n="rate_cta">查看资费</button>
+            </div>
+            <p class="ledger-desc" data-i18n="services_cosmetics_desc" style="margin-bottom:0">港台美妆产品集运打包,支持大批量整箱发货,适合分销与批发采购。</p>
+          </div>
+        </article>
+
+        <article class="ledger-row">
+          <div class="ledger-index" data-i18n="idx_luggage">三</div>
+          <div class="ledger-body">
+            <div class="ledger-head">
+              <h3 class="ledger-title" data-i18n="services_luggage_title">行李寄存</h3>
+              <button type="button" class="rate-badge" data-rate="luggage" aria-haspopup="dialog" data-i18n="rate_cta">查看资费</button>
+            </div>
+            <p class="ledger-desc" data-i18n="services_luggage_desc" style="margin-bottom:0">首尔市内行李短期寄存,出差、旅行、转机均可安排,详情请私信咨询。</p>
+          </div>
+        </article>
+      </section>
+
+      <div class="tearline" aria-hidden="true"></div>
+
+      <section class="contact" id="contact">
+    <h2 class="section-title" data-i18n="contact_title">联系我们</h2>
+    <p class="contact-subtitle" data-i18n="contact_subtitle">点击下方任一方式添加我们,备注「小红书」可优先回复。</p>
+
+    <div class="ticket-grid">
+      <button type="button" class="ticket" data-copy="neungneung_trade">
+        <span class="ticket-label" data-i18n="contact_wechat_label">微信</span>
+        <span class="ticket-value">neungneung_trade</span>
+        <span class="ticket-action" data-i18n="copy_action">点击复制</span>
+      </button>
+
+      <button type="button" class="ticket" data-copy="neungneung_trade">
+        <span class="ticket-label" data-i18n="contact_line_label">Line</span>
+        <span class="ticket-value">neungneung_trade</span>
+        <span class="ticket-action" data-i18n="copy_action">点击复制</span>
+      </button>
+
+      <a href="https://instagram.com/neungneung_trade" target="_blank" rel="noopener" class="ticket">
+        <span class="ticket-label" data-i18n="contact_ig_label">Instagram</span>
+        <span class="ticket-value">@neungneung_trade</span>
+        <span class="ticket-action">↗</span>
+      </a>
+
+      <a href="https://t.me/neungneung_trade" target="_blank" rel="noopener" class="ticket">
+        <span class="ticket-label" data-i18n="contact_tg_label">Telegram</span>
+        <span class="ticket-value">@neungneung_trade</span>
+        <span class="ticket-action">↗</span>
+      </a>
+
+      <button type="button" class="ticket" data-copy="能能贸易">
+        <span class="ticket-label" data-i18n="contact_xhs_label">小红书私信</span>
+        <span class="ticket-value">能能贸易</span>
+        <span class="ticket-action" data-i18n="copy_action">点击复制</span>
+      </button>
+    </div>
+  </section>
+
+  <div class="tearline" aria-hidden="true"></div>
+
+  <section class="about">
+    <h2 class="section-title" data-i18n="about_title">关于能能贸易</h2>
+    <p class="about-body" data-i18n="about_body">能能贸易扎根首尔城东区圣水洞,专注海运代购、港台化妆品批发与行李寄存服务,以首尔、仁川两地仓储,把你在韩国看中的一切安全送到手中。</p>
+
+    <div class="route" aria-hidden="true">
+      <svg class="route-svg" viewBox="0 0 320 50" role="img" aria-label="Seoul - Incheon route">
+        <line x1="30" y1="34" x2="270" y2="34" stroke="var(--umber)" stroke-width="2" stroke-dasharray="4 6"/>
+        <path d="M262 27 L272 34 L262 41" fill="none" stroke="var(--rust)" stroke-width="2"/>
+        <circle cx="30" cy="34" r="6" fill="var(--caramel)"/>
+        <circle cx="270" cy="34" r="6" fill="var(--rust)"/>
+        <text x="30" y="16" text-anchor="middle" class="route-label">SEOUL</text>
+        <text x="270" y="16" text-anchor="middle" class="route-label">INCHEON</text>
+      </svg>
+    </div>
+
+    <dl class="stamp-table">
+      <div class="stamp-row">
+        <dt data-i18n="about_seoul_label">首尔办公室</dt>
+        <dd data-i18n="about_seoul_value">首尔特别市城东区圣水洞</dd>
+      </div>
+      <div class="stamp-row">
+        <dt data-i18n="about_incheon_label">仁川仓库</dt>
+        <dd data-i18n="about_incheon_value">仁川广域市元昌洞</dd>
+      </div>
+      <div class="stamp-row">
+        <dt data-i18n="about_hours_label">营业时间</dt>
+        <dd data-i18n="about_hours_value" class="tabular">10:00 – 18:00</dd>
+      </div>
+    </dl>
+
+    <p class="footer-note" data-i18n="footer_note">以上信息如有更新,以本页面最新版本为准。</p>
+    <p class="copyright">© <span id="year"></span> NENG² Trading · 능능무역 · 能能贸易</p>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-overlay" id="rateModalOverlay" hidden>
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="rateModalTitle">
+      <div class="modal-head">
+        <h3 class="modal-title" id="rateModalTitle">资费参考</h3>
+        <button type="button" class="modal-close" id="rateModalClose" aria-label="Close">✕</button>
+      </div>
+      <table class="rate-table"><tbody id="rateModalBody"></tbody></table>
+      <p class="modal-footnote" id="rateModalNote"></p>
+    </div>
+  </div>
+
+</div>
+
+<div class="copy-toast" id="copyToast" role="status" aria-live="polite"></div>
+<script>
+(function(){
+  var LANG = {
+    zh:{
+      meta_title:"能能贸易",
+      nav_brand:"能能贸易", nav_tagline:"SEOUL TRADING CO.",
+      hero_eyebrow:"首尔 · 跨境代购与货运",
+      hero_headline:"你在小红书看中的,能能贸易帮你运回来",
+      hero_subline:"海运代购 · 化妆品批发 · 行李寄存 —— 首尔、仁川两地仓储直发,一条私信,货就上路。",
+      hero_cta:"联系能能贸易",
+      hero_channels_note:"微信 · Line · Instagram · Telegram · 小红书私信",
+      services_title:"经营业务",
+      idx_sea:"一", idx_cosmetics:"二", idx_luggage:"三",
+      services_sea_title:"海运业务",
+      services_sea_desc:"从下单到海运出货,以下四大品类均可代购代运:",
+      services_sea_item1:"明星周边", services_sea_item2:"电子元件",
+      services_sea_item3:"工业辅料", services_sea_item4:"SD娃娃",
+      services_cosmetics_title:"港台化妆品大包裹",
+      services_cosmetics_desc:"港台美妆产品集运打包,支持大批量整箱发货,适合分销与批发采购。",
+      services_luggage_title:"行李寄存",
+      services_luggage_desc:"首尔市内行李短期寄存,出差、旅行、转机均可安排,详情请私信咨询。",
+      contact_title:"联系我们",
+      contact_subtitle:"点击下方任一方式添加我们,备注「小红书」可优先回复。",
+      contact_wechat_label:"微信", contact_line_label:"Line",
+      contact_ig_label:"Instagram", contact_tg_label:"Telegram", contact_xhs_label:"小红书私信",
+      copy_action:"点击复制", copy_success:"已复制",
+      about_title:"关于能能贸易",
+      about_body:"能能贸易扎根首尔城东区圣水洞,专注海运代购、港台化妆品批发与行李寄存服务,以首尔、仁川两地仓储,把你在韩国看中的一切安全送到手中。",
+      about_seoul_label:"首尔办公室", about_seoul_value:"首尔特别市城东区圣水洞",
+      about_incheon_label:"仁川仓库", about_incheon_value:"仁川广域市元昌洞",
+      about_hours_label:"营业时间", about_hours_value:"10:00 – 18:00",
+      footer_note:"以上信息如有更新,以本页面最新版本为准。",
+      notice_label:"公告 NOTICE",
+      notice_body:"欢迎关注能能贸易!首次下单可先私信咨询流程与预计时效,我们会尽快回复。",
+      status_label:"营业状态", status_open:"营业中", status_closed:"休息中", status_lunch:"午休中",
+      status_hours_note:"营业时间 10:00–18:00(12:00–13:00 午休,首尔时间)",
+      unclaimed_label:"无主包裹认领",
+      unclaimed_note:"如有对应包裹信息,请私信联系我们认领。",
+      rate_cta:"查看资费",
+      promo_label:"限时活动",
+      promo_body:"",
+      rates:{
+        sea:{
+          title:"海运业务 · 资费参考",
+          rows:[["明星周边","¥XX/kg 起(占位)"],["电子元件","¥XX/kg 起(占位)"],["工业辅料","¥XX/kg 起(占位)"],["SD娃娃","¥XX/件 起(占位)"]],
+          note:"具体资费根据重量、体积与品类核算,以实际报价为准(以上为占位数据)。"
+        },
+        cosmetics:{
+          title:"港台化妆品大包裹 · 资费参考",
+          rows:[["小包裹(≤5kg)","¥XX/kg 起(占位)"],["大批量整箱","¥XX/箱 起(占位)"]],
+          note:"具体资费根据数量与品类核算,以实际报价为准(以上为占位数据)。"
+        },
+        luggage:{
+          title:"行李寄存 · 资费参考",
+          rows:[["短期寄存(1–3天)","¥XX/天 起(占位)"],["长期寄存(4天以上)","¥XX/天 起(占位)"]],
+          note:"大件行李或超时寄存另议(以上为占位数据)。"
+        }
+      }
+    },
+    en:{
+      meta_title:"NENG² Trading",
+      nav_brand:"NENG² Trading", nav_tagline:"SEOUL TRADING CO.",
+      hero_eyebrow:"Seoul · Cross-Border Sourcing & Freight",
+      hero_headline:"What you find on Xiaohongshu, we ship home",
+      hero_subline:"Sea-freight sourcing, cosmetics wholesale, and luggage storage — dispatched from our Seoul and Incheon warehouses, one message away.",
+      hero_cta:"Contact NENG² Trading",
+      hero_channels_note:"WeChat · Line · Instagram · Telegram · Xiaohongshu DM",
+      services_title:"What We Handle",
+      idx_sea:"01", idx_cosmetics:"02", idx_luggage:"03",
+      services_sea_title:"Sea-Freight Sourcing",
+      services_sea_desc:"From order to ocean shipment, we source and forward across four categories:",
+      services_sea_item1:"Celebrity Merch", services_sea_item2:"Electronic Components",
+      services_sea_item3:"Industrial Supplies", services_sea_item4:"BJD / SD Dolls",
+      services_cosmetics_title:"HK / TW Cosmetics — Bulk Parcels",
+      services_cosmetics_desc:"Consolidated freight for Hong Kong and Taiwan beauty products, packed for bulk and wholesale orders.",
+      services_luggage_title:"Luggage Storage",
+      services_luggage_desc:"Short-term luggage storage in Seoul for business trips, travel, or layovers — message us for details.",
+      contact_title:"Get in Touch",
+      contact_subtitle:"Tap a channel below to add us — mention “Xiaohongshu” for a faster reply.",
+      contact_wechat_label:"WeChat", contact_line_label:"Line",
+      contact_ig_label:"Instagram", contact_tg_label:"Telegram", contact_xhs_label:"Xiaohongshu DM",
+      copy_action:"Tap to copy", copy_success:"Copied",
+      about_title:"About NENG² Trading",
+      about_body:"Based in Seongsu-dong, Seoul, NENG² Trading handles sea-freight sourcing, HK/TW cosmetics wholesale, and luggage storage — using our Seoul and Incheon warehouses to get what you want from Korea safely into your hands.",
+      about_seoul_label:"Seoul Office", about_seoul_value:"Seongsu-dong, Seongdong-gu, Seoul",
+      about_incheon_label:"Incheon Warehouse", about_incheon_value:"Wonchang-dong, Incheon",
+      about_hours_label:"Hours", about_hours_value:"10:00 – 18:00",
+      footer_note:"Details on this page are updated periodically — please check back for the latest.",
+      notice_label:"NOTICE",
+      notice_body:"Welcome to NENG² Trading! First time ordering — message us for the process and estimated timing, we'll reply as soon as we can.",
+      status_label:"Store Status", status_open:"Open Now", status_closed:"Closed Now", status_lunch:"On Lunch Break",
+      status_hours_note:"Hours 10:00–18:00 (lunch break 12:00–13:00, Seoul time)",
+      unclaimed_label:"Unclaimed Parcels",
+      unclaimed_note:"If any of these match your shipment, message us to claim it.",
+      rate_cta:"View Rates",
+      promo_label:"Limited-Time",
+      promo_body:"",
+      rates:{
+        sea:{
+          title:"Sea-Freight Sourcing · Rate Reference",
+          rows:[["Celebrity Merch","from ¥XX/kg (placeholder)"],["Electronic Components","from ¥XX/kg (placeholder)"],["Industrial Supplies","from ¥XX/kg (placeholder)"],["BJD / SD Dolls","from ¥XX/pc (placeholder)"]],
+          note:"Final rate depends on weight, volume and category — confirmed at quote time (figures above are placeholders)."
+        },
+        cosmetics:{
+          title:"HK / TW Cosmetics · Rate Reference",
+          rows:[["Small parcel (≤5kg)","from ¥XX/kg (placeholder)"],["Bulk / full carton","from ¥XX/carton (placeholder)"]],
+          note:"Final rate depends on quantity and category — confirmed at quote time (figures above are placeholders)."
+        },
+        luggage:{
+          title:"Luggage Storage · Rate Reference",
+          rows:[["Short-term (1–3 days)","from ¥XX/day (placeholder)"],["Long-term (4+ days)","from ¥XX/day (placeholder)"]],
+          note:"Oversized bags or extended storage quoted separately (figures above are placeholders)."
+        }
+      }
+    },
+    kr:{
+      meta_title:"능능무역",
+      nav_brand:"능능무역", nav_tagline:"SEOUL TRADING CO.",
+      hero_eyebrow:"서울 · 해외 구매대행 & 화물",
+      hero_headline:"샤오홍슈에서 찜한 물건, 능능무역이 배송해 드립니다",
+      hero_subline:"해운 구매대행 · 화장품 도매 · 짐 보관 — 서울·인천 창고에서 바로 출고, 메시지 한 통이면 시작됩니다.",
+      hero_cta:"능능무역에 문의하기",
+      hero_channels_note:"위챗 · 라인 · 인스타그램 · 텔레그램 · 샤오홍슈 DM",
+      services_title:"취급 업무",
+      idx_sea:"01", idx_cosmetics:"02", idx_luggage:"03",
+      services_sea_title:"해운 구매대행",
+      services_sea_desc:"주문부터 해상 출고까지, 아래 네 가지 품목을 대행합니다:",
+      services_sea_item1:"스타 굿즈", services_sea_item2:"전자부품",
+      services_sea_item3:"공업 부자재", services_sea_item4:"SD돌 (구체관절인형)",
+      services_cosmetics_title:"홍콩·대만 화장품 대량 소포",
+      services_cosmetics_desc:"홍콩·대만 뷰티 제품을 통합 포장하여 대량·도매 주문으로 발송합니다.",
+      services_luggage_title:"짐 보관",
+      services_luggage_desc:"출장, 여행, 경유 중 서울 시내 단기 짐 보관 서비스 — 자세한 사항은 메시지로 문의해 주세요.",
+      contact_title:"연락처",
+      contact_subtitle:"아래 채널을 눌러 추가해 주세요 — “샤오홍슈”라고 남겨주시면 더 빠르게 답변드립니다.",
+      contact_wechat_label:"위챗", contact_line_label:"라인",
+      contact_ig_label:"인스타그램", contact_tg_label:"텔레그램", contact_xhs_label:"샤오홍슈 DM",
+      copy_action:"눌러서 복사", copy_success:"복사됨",
+      about_title:"능능무역 소개",
+      about_body:"서울 성동구 성수동에 자리한 능능무역은 해운 구매대행, 홍콩·대만 화장품 도매, 짐 보관 서비스를 전문으로 합니다. 서울과 인천 두 곳의 창고를 통해 한국에서 원하시는 모든 것을 안전하게 전달합니다.",
+      about_seoul_label:"서울 사무실", about_seoul_value:"서울특별시 성동구 성수동",
+      about_incheon_label:"인천 창고", about_incheon_value:"인천광역시 원창동",
+      about_hours_label:"영업시간", about_hours_value:"10:00 – 18:00",
+      footer_note:"본 페이지의 정보는 수시로 업데이트됩니다. 최신 내용을 확인해 주세요.",
+      notice_label:"공지사항",
+      notice_body:"능능무역을 찾아주셔서 감사합니다! 첫 주문이시라면 메시지로 진행 절차와 예상 소요 시간을 문의해 주세요.",
+      status_label:"영업 상태", status_open:"영업 중", status_closed:"영업 종료", status_lunch:"점심시간",
+      status_hours_note:"영업시간 10:00–18:00(점심시간 12:00–13:00, 서울 기준)",
+      unclaimed_label:"주인 없는 소포 찾기",
+      unclaimed_note:"본인 물품과 일치하는 정보가 있다면 메시지로 연락해 주세요.",
+      rate_cta:"요금 보기",
+      promo_label:"기간 한정",
+      promo_body:"",
+      rates:{
+        sea:{
+          title:"해운 구매대행 · 요금 참고",
+          rows:[["스타 굿즈","kg당 ¥XX부터 (임시)"],["전자부품","kg당 ¥XX부터 (임시)"],["공업 부자재","kg당 ¥XX부터 (임시)"],["SD돌","개당 ¥XX부터 (임시)"]],
+          note:"실제 요금은 무게·부피·품목에 따라 견적 시 확정됩니다 (위 수치는 임시 값입니다)."
+        },
+        cosmetics:{
+          title:"홍콩·대만 화장품 대량 소포 · 요금 참고",
+          rows:[["소포장(5kg 이하)","kg당 ¥XX부터 (임시)"],["대량·박스 단위","박스당 ¥XX부터 (임시)"]],
+          note:"실제 요금은 수량·품목에 따라 견적 시 확정됩니다 (위 수치는 임시 값입니다)."
+        },
+        luggage:{
+          title:"짐 보관 · 요금 참고",
+          rows:[["단기 보관(1–3일)","1일 ¥XX부터 (임시)"],["장기 보관(4일 이상)","1일 ¥XX부터 (임시)"]],
+          note:"대형 수하물이나 장기 보관은 별도 협의합니다 (위 수치는 임시 값입니다)."
+        }
+      }
+    }
+  };
+
+  var siteEl = document.getElementById('site');
+
+  function updateStatus(){
+    try{
+      var lang = siteEl.getAttribute('data-lang') || 'zh';
+      var dict = LANG[lang] || LANG.zh;
+      var hour = parseInt(new Intl.DateTimeFormat('en-US', {timeZone:'Asia/Seoul', hour:'numeric', hour12:false}).format(new Date()), 10);
+      var isLunch = hour >= 12 && hour < 13;
+      var isOpen = !isLunch && hour >= 10 && hour < 18;
+      var dot = document.getElementById('statusDot');
+      var text = document.getElementById('statusText');
+      if(dot){
+        dot.classList.toggle('is-open', isOpen);
+        dot.classList.toggle('is-break', isLunch);
+      }
+      if(text){ text.textContent = isLunch ? dict.status_lunch : (isOpen ? dict.status_open : dict.status_closed); }
+    }catch(e){}
+  }
+
+  // Limited-time promo panel: edit promo_body in the LANG dict above (per language) to
+  // publish a notice — the panel shows itself automatically. Leave promo_body empty
+  // ("") to keep it hidden, which is the default with no active campaign.
+  function updatePromo(dict){
+    try{
+      var hero = document.getElementById('heroSection');
+      var panel = document.getElementById('promoPanel');
+      if(!hero || !panel) return;
+      var hasPromo = !!(dict.promo_body && dict.promo_body.trim());
+      panel.hidden = !hasPromo;
+      hero.classList.toggle('has-promo', hasPromo);
+    }catch(e){}
+  }
+
+  function applyLang(code){
+    var dict = LANG[code];
+    if(!dict) return;
+    siteEl.setAttribute('data-lang', code);
+    try{ document.documentElement.lang = code === 'zh' ? 'zh-CN' : (code === 'kr' ? 'ko' : 'en'); }catch(e){}
+    try{ document.title = dict.meta_title; }catch(e){}
+    var nodes = siteEl.querySelectorAll('[data-i18n]');
+    for(var i=0;i<nodes.length;i++){
+      var key = nodes[i].getAttribute('data-i18n');
+      if(dict[key] !== undefined){ nodes[i].textContent = dict[key]; }
+    }
+    var tabs = siteEl.querySelectorAll('.lang-tab');
+    for(var j=0;j<tabs.length;j++){
+      var isActive = tabs[j].getAttribute('data-setlang') === code;
+      tabs[j].classList.toggle('is-active', isActive);
+      tabs[j].setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    }
+    updateStatus();
+    updatePromo(dict);
+  }
+
+  var tabButtons = siteEl.querySelectorAll('.lang-tab');
+  for(var t=0;t<tabButtons.length;t++){
+    tabButtons[t].addEventListener('click', function(){
+      applyLang(this.getAttribute('data-setlang'));
+    });
+  }
+
+  // copy-to-clipboard for WeChat / Line / Xiaohongshu tickets
+  var toast = document.getElementById('copyToast');
+  var toastTimer = null;
+  function showToast(text){
+    if(!toast) return;
+    toast.textContent = text;
+    toast.classList.add('is-visible');
+    if(toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toast.classList.remove('is-visible'); }, 1600);
+  }
+  var copyButtons = siteEl.querySelectorAll('[data-copy]');
+  for(var c=0;c<copyButtons.length;c++){
+    copyButtons[c].addEventListener('click', function(){
+      var value = this.getAttribute('data-copy');
+      var lang = siteEl.getAttribute('data-lang') || 'zh';
+      var successText = (LANG[lang] && LANG[lang].copy_success) || 'Copied';
+      try{
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(value).then(function(){ showToast(successText); }).catch(function(){ showToast(value); });
+        }else{
+          var ta = document.createElement('textarea');
+          ta.value = value; ta.style.position='fixed'; ta.style.opacity='0';
+          document.body.appendChild(ta); ta.select();
+          try{ document.execCommand('copy'); }catch(e){}
+          document.body.removeChild(ta);
+          showToast(successText);
+        }
+      }catch(err){ showToast(value); }
+    });
+  }
+
+  // rate modal
+  var rateOverlay = document.getElementById('rateModalOverlay');
+  var rateClose = document.getElementById('rateModalClose');
+  var rateTitleEl = document.getElementById('rateModalTitle');
+  var rateBodyEl = document.getElementById('rateModalBody');
+  var rateNoteEl = document.getElementById('rateModalNote');
+  var lastFocused = null;
+  function onModalKeydown(e){ if(e.key === 'Escape'){ closeRateModal(); } }
+  function openRateModal(key){
+    try{
+      var lang = siteEl.getAttribute('data-lang') || 'zh';
+      var dict = LANG[lang] || LANG.zh;
+      var data = dict.rates && dict.rates[key];
+      if(!data || !rateOverlay) return;
+      rateTitleEl.textContent = data.title;
+      rateBodyEl.innerHTML = '';
+      for(var i=0;i<data.rows.length;i++){
+        var tr = document.createElement('tr');
+        var td1 = document.createElement('td'); td1.textContent = data.rows[i][0];
+        var td2 = document.createElement('td'); td2.textContent = data.rows[i][1];
+        tr.appendChild(td1); tr.appendChild(td2);
+        rateBodyEl.appendChild(tr);
+      }
+      rateNoteEl.textContent = data.note || '';
+      lastFocused = document.activeElement;
+      rateOverlay.hidden = false;
+      document.addEventListener('keydown', onModalKeydown);
+      if(rateClose){ rateClose.focus(); }
+    }catch(e){}
+  }
+  function closeRateModal(){
+    if(!rateOverlay) return;
+    rateOverlay.hidden = true;
+    document.removeEventListener('keydown', onModalKeydown);
+    if(lastFocused && typeof lastFocused.focus === 'function'){ lastFocused.focus(); }
+  }
+  var rateButtons = siteEl.querySelectorAll('.rate-badge');
+  for(var rb=0; rb<rateButtons.length; rb++){
+    rateButtons[rb].addEventListener('click', function(){
+      openRateModal(this.getAttribute('data-rate'));
+    });
+  }
+  if(rateClose){ rateClose.addEventListener('click', closeRateModal); }
+  if(rateOverlay){
+    rateOverlay.addEventListener('click', function(e){
+      if(e.target === rateOverlay){ closeRateModal(); }
+    });
+  }
+
+  var yearEl = document.getElementById('year');
+  if(yearEl){ yearEl.textContent = new Date().getFullYear(); }
+
+  applyLang('zh');
+  setInterval(updateStatus, 60000);
+})();
+</script>
+
+</body></html>

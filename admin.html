@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>能能贸易 · 后台</title>
+<style>
+  :root{
+    --bg:#F1E7D8; --panel:#FAF3E6; --ink:#3F2B1C; --umber:#6B4A30; --rust:#B14F29;
+    --line:#C9AE87; --soft:#E9DCC6; --good:#4C7A3D; --bad:#B3261E; --on:#FBF3E6;
+    color-scheme:light;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0; height:100%;}
+  body{background:var(--bg); color:var(--ink); font:14px/1.5 -apple-system,"PingFang SC","Noto Sans SC","Segoe UI",sans-serif;}
+  button{font:inherit; color:inherit; cursor:pointer;}
+  input,textarea,select{font:inherit; color:var(--ink);}
+
+  .top{display:flex; align-items:center; gap:.75rem; flex-wrap:wrap; padding:.6rem 1rem; border-bottom:2px solid var(--line); background:var(--bg); position:sticky; top:0; z-index:10;}
+  .top h1{font-size:1rem; margin:0; font-weight:700;}
+  .top .spacer{flex:1;}
+  .msg{font-size:.82rem; color:var(--umber);}
+  .msg.ok{color:var(--good);} .msg.err{color:var(--bad);}
+  .btn{padding:.45rem .9rem; border:2px solid var(--ink); background:var(--panel); font-weight:600; box-shadow:2px 2px 0 rgba(63,43,28,.3);}
+  .btn:active{transform:translate(2px,2px); box-shadow:none;}
+  .btn.primary{background:var(--rust); color:var(--on); border-color:var(--ink);}
+  .btn.small{padding:.2rem .55rem; font-size:.82rem; box-shadow:none; border-width:1px;}
+  .btn.on{background:var(--ink); color:var(--on);}
+  a.link{color:var(--rust); font-size:.85rem;}
+
+  .wrap{display:grid; grid-template-columns:minmax(0,1fr) 380px; height:calc(100vh - 56px);}
+  .preview{display:flex; flex-direction:column; min-width:0; border-right:2px solid var(--line);}
+  .ptools{display:flex; gap:.4rem; align-items:center; flex-wrap:wrap; padding:.5rem 1rem; background:var(--soft);}
+  .ptools .lbl{font-size:.78rem; color:var(--umber); margin-right:.2rem;}
+  .ptools .sep{width:1rem;}
+  .frame-box{flex:1; overflow:auto; display:flex; justify-content:center; background:#d9cab2; padding:0;}
+  .frame-box iframe{border:0; width:100%; height:100%; background:#fff; transition:width .2s;}
+  .frame-box.mobile{padding:1rem 0;}
+  .frame-box.mobile iframe{width:390px; height:780px; max-height:100%; border:2px solid var(--ink); border-radius:18px;}
+
+  .side{overflow:auto; background:var(--panel);}
+  .tabs{display:flex; border-bottom:2px solid var(--line); position:sticky; top:0; background:var(--panel); z-index:2;}
+  .tabs button{flex:1; padding:.65rem 0; border:0; background:none; font-weight:600; color:var(--umber); border-bottom:3px solid transparent;}
+  .tabs button.on{color:var(--ink); border-bottom-color:var(--rust);}
+  .pane{padding:1rem; display:none;}
+  .pane.on{display:block;}
+
+  .hint{font-size:.85rem; color:var(--umber); background:var(--soft); padding:.7rem .8rem; border-left:3px solid var(--rust);}
+  .group{margin:0 0 1.2rem;}
+  .group > .gt{font-size:.78rem; font-weight:700; letter-spacing:.06em; color:var(--umber); margin:0 0 .45rem;}
+  .row{display:flex; gap:.4rem; align-items:center; flex-wrap:wrap;}
+  .field{display:flex; flex-direction:column; gap:.2rem; margin-bottom:.5rem;}
+  .field label{font-size:.75rem; color:var(--umber);}
+  input[type=text],input[type=password],input[type=time],textarea,select{width:100%; padding:.4rem .5rem; border:1px solid var(--line); background:#fff; border-radius:0;}
+  textarea{min-height:3.2rem; resize:vertical;}
+  input[type=range]{width:100%;}
+  .sw{width:26px; height:26px; border:2px solid var(--ink); border-radius:50%; padding:0;}
+  .sw.on{outline:3px solid var(--rust); outline-offset:1px;}
+  .sw.none{background:repeating-linear-gradient(45deg,#fff 0 4px,#ddd 4px 8px);}
+  .nudge{display:grid; grid-template-columns:repeat(3,34px); grid-template-rows:repeat(3,30px); gap:3px;}
+  .nudge button{border:1px solid var(--ink); background:#fff;}
+  .card{border:1px solid var(--line); background:#fff; padding:.6rem; margin-bottom:.6rem;}
+  .card .ch{display:flex; justify-content:space-between; align-items:center; margin-bottom:.4rem; font-weight:600; font-size:.85rem;}
+  .tri{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.3rem;}
+  .tri input{font-size:.85rem;}
+  .tri .tl{font-size:.68rem; color:var(--umber);}
+  .list-item{display:flex; align-items:center; gap:.5rem; padding:.4rem 0; border-bottom:1px dashed var(--line);}
+  .list-item .grow{flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .key{font-size:.7rem; color:var(--umber); font-family:ui-monospace,Menlo,monospace;}
+  details{margin-bottom:.8rem;}
+  summary{cursor:pointer; font-weight:700; padding:.3rem 0;}
+  .check{display:flex; align-items:center; gap:.35rem; font-size:.88rem;}
+
+  @media (max-width:900px){
+    .wrap{grid-template-columns:1fr; height:auto;}
+    .preview{border-right:0; border-bottom:2px solid var(--line);}
+    .frame-box{flex:none; height:62vh;}
+    .frame-box.mobile iframe{height:100%;}
+    .side{overflow:visible;}
+  }
+</style>
+</head>
+<body>
+<div class="top">
+  <h1>能能贸易 · 后台</h1>
+  <span class="msg" id="msg">载入中…</span>
+  <span class="spacer"></span>
+  <a class="link" href="./" target="_blank" rel="noopener">打开正式网页 ↗</a>
+  <button class="btn primary" id="saveBtn">保存并发布</button>
+</div>
+
+<div class="wrap">
+  <section class="preview">
+    <div class="ptools">
+      <span class="lbl">预览语言</span>
+      <button class="btn small on" data-plang="zh">中文</button>
+      <button class="btn small" data-plang="en">EN</button>
+      <button class="btn small" data-plang="kr">한국어</button>
+      <span class="sep"></span>
+      <span class="lbl">尺寸</span>
+      <button class="btn small on" data-view="desktop">电脑</button>
+      <button class="btn small" data-view="mobile">手机</button>
+    </div>
+    <div class="frame-box" id="frameBox">
+      <iframe id="frame" src="index.html?edit=1" title="网页预览"></iframe>
+    </div>
+  </section>
+
+  <aside class="side">
+    <nav class="tabs">
+      <button data-tab="edit" class="on">文字样式</button>
+      <button data-tab="data">资料</button>
+      <button data-tab="blocks">板块</button>
+      <button data-tab="settings">设置</button>
+    </nav>
+    <div class="pane on" id="pane-edit"></div>
+    <div class="pane" id="pane-data"></div>
+    <div class="pane" id="pane-blocks"></div>
+    <div class="pane" id="pane-settings"></div>
+  </aside>
+</div>
+
+<script>
+(function(){
+  var LANGS = ['zh','en','kr'], LNAME = {zh:'中文', en:'English', kr:'한국어'}, LSHORT = {zh:'中', en:'英', kr:'韩'};
+  var frame = document.getElementById('frame');
+  var msgEl = document.getElementById('msg');
+  var defaults = null, langDefaults = null, content = null, sha = null, dirty = false;
+  var selected = null, previewLang = 'zh', currentTab = 'edit', textFilter = '';
+
+  // ---------- 设置（钥匙存在这台设备上） ----------
+  var cfg = {token:'', owner:'zoowoo666', repo:'neng-trading', branch:'main'};
+  try{ var saved = JSON.parse(localStorage.getItem('neng_admin_cfg') || 'null'); if(saved) for(var k in saved) cfg[k] = saved[k]; }catch(e){}
+  function saveCfg(){ try{ localStorage.setItem('neng_admin_cfg', JSON.stringify(cfg)); }catch(e){} }
+
+  function say(text, kind){ msgEl.textContent = text; msgEl.className = 'msg' + (kind ? ' ' + kind : ''); }
+  function clone(o){ return JSON.parse(JSON.stringify(o)); }
+  function merge(data){
+    var c = clone(defaults);
+    if(data && typeof data === 'object'){ Object.keys(defaults).forEach(function(k){ if(data[k] !== undefined && data[k] !== null) c[k] = clone(data[k]); }); }
+    return c;
+  }
+  function h(tag, attrs, kids){
+    var e = document.createElement(tag);
+    if(attrs) Object.keys(attrs).forEach(function(k){
+      var v = attrs[k];
+      if(k === 'class') e.className = v;
+      else if(k === 'text') e.textContent = v;
+      else if(k.slice(0,2) === 'on') e.addEventListener(k.slice(2), v);
+      else if(k === 'value') e.value = v;
+      else if(k === 'checked') e.checked = !!v;
+      else if(v !== null && v !== undefined && v !== false) e.setAttribute(k, v === true ? '' : v);
+    });
+    (kids || []).forEach(function(c){ if(c === null || c === undefined) return; e.appendChild(typeof c === 'string' ? document.createTextNode(c) : c); });
+    return e;
+  }
+
+  // ---------- 和预览通信 ----------
+  function send(m){ m.source = 'neng-admin'; try{ frame.contentWindow.postMessage(m, '*'); }catch(e){} }
+  function changed(){
+    dirty = true; say('有未发布的修改', '');
+    send({type:'content', content:content});
+  }
+  window.addEventListener('beforeunload', function(e){ if(dirty){ e.preventDefault(); e.returnValue = ''; } });
+  window.addEventListener('message', function(e){
+    if(e.source !== frame.contentWindow || !e.data || e.data.source !== 'neng-site') return;
+    var m = e.data;
+    if(m.type === 'ready'){
+      var first = !defaults;
+      defaults = m.defaults; langDefaults = m.lang;
+      if(first){ loadContent(); }
+      else { send({type:'content', content:content}); send({type:'lang', lang:previewLang}); if(selected) send({type:'pick', key:selected.key}); }
+    }
+    if(m.type === 'select'){
+      selected = {key:m.key, hasText:m.hasText, sample:m.sample};
+      showTab('edit');
+    }
+  });
+
+  // ---------- GitHub ----------
+  function api(path, opts){
+    opts = opts || {};
+    opts.headers = Object.assign({'Accept':'application/vnd.github+json', 'Authorization':'Bearer ' + cfg.token, 'X-GitHub-Api-Version':'2022-11-28'}, opts.headers || {});
+    return fetch('https://api.github.com/repos/' + cfg.owner + '/' + cfg.repo + path, opts);
+  }
+  function b64encode(str){ var bytes = new TextEncoder().encode(str), bin = ''; for(var i=0;i<bytes.length;i++) bin += String.fromCharCode(bytes[i]); return btoa(bin); }
+  function b64decode(b64){ var bin = atob(b64.replace(/\s/g,'')), bytes = new Uint8Array(bin.length); for(var i=0;i<bin.length;i++) bytes[i] = bin.charCodeAt(i); return new TextDecoder().decode(bytes); }
+
+  function fetchRemote(){
+    return api('/contents/content.json?ref=' + cfg.branch + '&t=' + Date.now(), {cache:'no-store'}).then(function(r){
+      if(r.status === 404) return {data:null, sha:null};
+      if(!r.ok) throw r;
+      return r.json().then(function(j){ return {data: JSON.parse(b64decode(j.content)), sha: j.sha}; });
+    });
+  }
+  function loadContent(){
+    var p;
+    if(cfg.token){
+      p = fetchRemote().then(function(res){ sha = res.sha; return res.data; }).catch(function(){ say('用钥匙读取失败，改读公开版本', 'err'); return loadPublic(); });
+    }else{
+      p = loadPublic();
+    }
+    p.then(function(data){
+      content = merge(data);
+      send({type:'content', content:content});
+      renderAll();
+      if(!cfg.token){ say('还没设置钥匙：可以先改着看，发布前到「设置」贴上钥匙', 'err'); }
+      else if(msgEl.className.indexOf('err') === -1){ say('已载入最新内容', 'ok'); }
+    });
+  }
+  function loadPublic(){
+    return fetch('content.json?t=' + Date.now(), {cache:'no-store'}).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; });
+  }
+  function publish(){
+    if(!content) return;
+    if(!cfg.token){ showTab('settings'); say('请先在「设置」贴上 GitHub 钥匙', 'err'); return; }
+    var btn = document.getElementById('saveBtn'); btn.disabled = true; say('发布中…');
+    fetchRemote().then(function(res){
+      var now = new Date();
+      var stamp = new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Seoul', year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit', hour12:false}).format(now);
+      var body = {message:'后台更新内容 ' + stamp, content: b64encode(JSON.stringify(content, null, 2) + '\n'), branch: cfg.branch};
+      if(res.sha) body.sha = res.sha;
+      return api('/contents/content.json', {method:'PUT', body: JSON.stringify(body), headers:{'Content-Type':'application/json'}});
+    }).then(function(r){
+      if(!r.ok) throw r;
+      return r.json();
+    }).then(function(j){
+      sha = j.content && j.content.sha; dirty = false;
+      say('已发布 ✓ 约 1 分钟后正式网页更新', 'ok');
+    }).catch(function(err){
+      var s = err && err.status;
+      if(s === 401) say('钥匙无效或已过期，请到「设置」重新贴一把', 'err');
+      else if(s === 403 || s === 404) say('钥匙没有这个仓库的写入权限，或仓库名不对', 'err');
+      else if(s === 409) say('有冲突：请刷新页面后再改一次', 'err');
+      else say('发布失败，请检查网络后重试', 'err');
+    }).then(function(){ btn.disabled = false; });
+  }
+  document.getElementById('saveBtn').addEventListener('click', publish);
+
+  // ---------- 顶部预览工具 ----------
+  document.querySelectorAll('[data-plang]').forEach(function(b){
+    b.addEventListener('click', function(){
+      previewLang = b.getAttribute('data-plang');
+      document.querySelectorAll('[data-plang]').forEach(function(x){ x.classList.toggle('on', x === b); });
+      send({type:'lang', lang:previewLang});
+    });
+  });
+  document.querySelectorAll('[data-view]').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.querySelectorAll('[data-view]').forEach(function(x){ x.classList.toggle('on', x === b); });
+      document.getElementById('frameBox').classList.toggle('mobile', b.getAttribute('data-view') === 'mobile');
+    });
+  });
+  document.querySelectorAll('.tabs button').forEach(function(b){ b.addEventListener('click', function(){ showTab(b.getAttribute('data-tab')); }); });
+  function showTab(name){
+    currentTab = name;
+    document.querySelectorAll('.tabs button').forEach(function(b){ b.classList.toggle('on', b.getAttribute('data-tab') === name); });
+    document.querySelectorAll('.pane').forEach(function(p){ p.classList.toggle('on', p.id === 'pane-' + name); });
+    renderAll();
+  }
+  function renderAll(){
+    if(!content) return;
+    ({edit:renderEdit, data:renderData, blocks:renderBlocks, settings:renderSettings})[currentTab]();
+  }
+
+  // ---------- 文字样式 ----------
+  function effText(key, lang){
+    var o = content.texts[key];
+    if(o && o[lang] !== undefined && String(o[lang]).trim() !== '') return o[lang];
+    var d = langDefaults[lang] && langDefaults[lang][key];
+    if(d !== undefined) return d;
+    return (o && o.zh) || langDefaults.zh[key] || '';
+  }
+  function styleOf(key){ return content.styles[key] || {}; }
+  function setStyle(key, prop, val){
+    var st = content.styles[key] || {};
+    if(val === null || val === undefined || val === '' || val === 0 && (prop === 'dx' || prop === 'dy') || (prop === 'size' && val === 100) || val === false) delete st[prop];
+    else st[prop] = val;
+    if(Object.keys(st).length) content.styles[key] = st; else delete content.styles[key];
+    changed();
+  }
+  var COLORS = [
+    {v:null, n:'默认'}, {v:'var(--ink)', n:'深棕', c:'#3F2B1C'}, {v:'var(--umber)', n:'浅棕', c:'#6B4A30'},
+    {v:'var(--caramel)', n:'焦糖', c:'#BE7C40'}, {v:'var(--rust)', n:'砖红', c:'#B14F29'}, {v:'var(--good)', n:'绿色', c:'#4C7A3D'}
+  ];
+  var nudgeStep = 4;
+  function renderEdit(){
+    var pane = document.getElementById('pane-edit'); pane.innerHTML = '';
+    if(!selected){
+      pane.appendChild(h('p', {class:'hint', text:'在左边预览里，点一下任何文字，就能在这里改内容、字号、颜色、对齐和位置。改好后按右上角「保存并发布」。'}));
+      pane.appendChild(h('p', {class:'hint', text:'找不到某段文字（例如营业状态的「营业中」「休息中」）？到「资料」→「全部文字」里搜。'}));
+      return;
+    }
+    var key = selected.key, st = styleOf(key);
+    pane.appendChild(h('div', {class:'group'}, [
+      h('div', {class:'gt', text:'已选'}),
+      h('div', {text:'「' + (selected.sample || key) + '」'}),
+      h('div', {class:'key', text:key})
+    ]));
+
+    if(selected.hasText){
+      var g = h('div', {class:'group'}, [h('div', {class:'gt', text:'文字内容（英文、韩文留空时显示中文）'})]);
+      LANGS.forEach(function(l){
+        var ta = h('textarea', {rows:2, oninput:function(){
+          var o = content.texts[key] || {zh:effText(key,'zh'), en:effText(key,'en'), kr:effText(key,'kr')};
+          o[l] = ta.value; content.texts[key] = o; changed();
+        }});
+        ta.value = effText(key, l);
+        g.appendChild(h('div', {class:'field'}, [h('label', {text:LNAME[l]}), ta]));
+      });
+      pane.appendChild(g);
+    }else{
+      pane.appendChild(h('p', {class:'hint', text:'这段文字来自「资料」页（例如联系账号、无主包裹）或自动生成，这里只调样式。'}));
+    }
+
+    // 字号
+    var sizeVal = h('span', {text:(st.size || 100) + '%'});
+    var range = h('input', {type:'range', min:50, max:250, step:5, value:String(st.size || 100), oninput:function(){ sizeVal.textContent = range.value + '%'; setStyle(key, 'size', +range.value); }});
+    pane.appendChild(h('div', {class:'group'}, [h('div', {class:'gt'}, ['字号 ', sizeVal]), range,
+      h('div', {class:'row'}, [[80,'小'],[100,'原始'],[130,'大'],[170,'特大']].map(function(p){
+        return h('button', {class:'btn small', text:p[1], onclick:function(){ setStyle(key,'size',p[0]); renderEdit(); }});
+      }))]));
+
+    // 粗细
+    pane.appendChild(h('div', {class:'group'}, [h('div', {class:'gt', text:'粗细'}),
+      h('div', {class:'row'}, [[null,'默认'],['400','常规'],['600','中粗'],['700','粗'],['900','特粗']].map(function(p){
+        return h('button', {class:'btn small' + ((st.weight || null) === p[0] ? ' on' : ''), text:p[1], onclick:function(){ setStyle(key,'weight',p[0]); renderEdit(); }});
+      }))]));
+
+    // 颜色
+    var custom = h('input', {type:'color', value: (st.color && st.color.charAt(0) === '#') ? st.color : '#B14F29', title:'自选颜色', oninput:function(){ setStyle(key,'color',custom.value); }, onchange:function(){ renderEdit(); }});
+    pane.appendChild(h('div', {class:'group'}, [h('div', {class:'gt', text:'颜色'}),
+      h('div', {class:'row'}, COLORS.map(function(c){
+        return h('button', {class:'sw' + (c.v ? '' : ' none') + ((st.color || null) === c.v ? ' on' : ''), title:c.n, style: c.c ? 'background:' + c.c : null, onclick:function(){ setStyle(key,'color',c.v); renderEdit(); }});
+      }).concat([h('span', {class:'key', text:'自选'}), custom]))]));
+
+    // 对齐
+    pane.appendChild(h('div', {class:'group'}, [h('div', {class:'gt', text:'对齐'}),
+      h('div', {class:'row'}, [[null,'默认'],['left','靠左'],['center','居中'],['right','靠右']].map(function(p){
+        return h('button', {class:'btn small' + ((st.align || null) === p[0] ? ' on' : ''), text:p[1], onclick:function(){ setStyle(key,'align',p[0]); renderEdit(); }});
+      }))]));
+
+    // 微调
+    var posText = h('div', {class:'key', text:'水平 ' + (st.dx || 0) + 'px · 垂直 ' + (st.dy || 0) + 'px'});
+    function move(dx, dy){
+      var s2 = styleOf(key);
+      setStyle(key, 'dx', (s2.dx || 0) + dx * nudgeStep);
+      setStyle(key, 'dy', (styleOf(key).dy || 0) + dy * nudgeStep);
+      var s3 = styleOf(key); posText.textContent = '水平 ' + (s3.dx || 0) + 'px · 垂直 ' + (s3.dy || 0) + 'px';
+    }
+    var stepSel = h('select', {style:'width:auto', onchange:function(){ nudgeStep = +stepSel.value; }},
+      [1,4,10,20].map(function(n){ var o = h('option', {value:n, text:'每次 ' + n + 'px'}); if(n === nudgeStep) o.selected = true; return o; }));
+    pane.appendChild(h('div', {class:'group'}, [h('div', {class:'gt', text:'位置微调'}),
+      h('div', {class:'row', style:'gap:1rem; align-items:flex-start'}, [
+        h('div', {class:'nudge'}, [
+          h('span'), h('button', {text:'↑', onclick:function(){ move(0,-1); }}), h('span'),
+          h('button', {text:'←', onclick:function(){ move(-1,0); }}),
+          h('button', {text:'○', title:'归零', onclick:function(){ setStyle(key,'dx',0); setStyle(key,'dy',0); renderEdit(); }}),
+          h('button', {text:'→', onclick:function(){ move(1,0); }}),
+          h('span'), h('button', {text:'↓', onclick:function(){ move(0,1); }}), h('span')
+        ]),
+        h('div', {}, [stepSel, posText])
+      ])]));
+
+    // 隐藏 & 恢复
+    var hide = h('input', {type:'checkbox', checked: !!st.hide, onchange:function(){ setStyle(key,'hide', hide.checked || null); }});
+    pane.appendChild(h('div', {class:'group'}, [h('label', {class:'check'}, [hide, '隐藏这个元素（可在「板块」页恢复）'])]));
+    pane.appendChild(h('button', {class:'btn', text:'恢复这一项的默认', onclick:function(){
+      delete content.texts[key]; delete content.styles[key]; changed(); renderEdit();
+    }}));
+  }
+
+  // ---------- 资料 ----------
+  function triInputs(obj, onchange, placeholder){
+    return h('div', {class:'tri'}, LANGS.map(function(l){
+      var inp = h('input', {type:'text', value: obj[l] || '', placeholder: (placeholder || '') + LSHORT[l], oninput:function(){ obj[l] = inp.value; onchange(); }});
+      return h('div', {}, [h('div', {class:'tl', text:LNAME[l]}), inp]);
+    }));
+  }
+  function renderData(){
+    var pane = document.getElementById('pane-data'); pane.innerHTML = '';
+
+    // 限时活动
+    var promo = h('details', {open:true}, [h('summary', {text:'限时活动'}),
+      h('p', {class:'key', text:'填了中文就会在首页右侧显示，清空就隐藏。'})]);
+    LANGS.forEach(function(l){
+      var ta = h('textarea', {rows:2, oninput:function(){ content.promo[l] = ta.value; changed(); }});
+      ta.value = content.promo[l] || '';
+      promo.appendChild(h('div', {class:'field'}, [h('label', {text:LNAME[l]}), ta]));
+    });
+    pane.appendChild(promo);
+
+    // 营业时间
+    var hr = content.hours;
+    function timeField(label, prop){
+      var inp = h('input', {type:'time', value: hr[prop] || '', oninput:function(){ hr[prop] = inp.value; changed(); }});
+      return h('div', {class:'field'}, [h('label', {text:label}), inp]);
+    }
+    var days = ['日','一','二','三','四','五','六'];
+    var hours = h('details', {}, [h('summary', {text:'营业时间（自动判断营业中 / 午休 / 休息）'}),
+      h('div', {class:'tri', style:'grid-template-columns:1fr 1fr'}, [timeField('开门','open'), timeField('关门','close'), timeField('午休开始','lunchStart'), timeField('午休结束','lunchEnd')]),
+      h('div', {class:'field'}, [h('label', {text:'每周固定休息日'}), h('div', {class:'row'}, days.map(function(d, i){
+        var cb = h('input', {type:'checkbox', checked: (hr.closedDays || []).indexOf(i) !== -1, onchange:function(){
+          var arr = (hr.closedDays || []).filter(function(x){ return x !== i; }); if(cb.checked) arr.push(i); arr.sort(); hr.closedDays = arr; changed();
+        }});
+        return h('label', {class:'check'}, [cb, '周' + d]);
+      }))]),
+      (function(){ var cb = h('input', {type:'checkbox', checked: !!hr.closedToday, onchange:function(){ hr.closedToday = cb.checked; changed(); }});
+        return h('label', {class:'check'}, [cb, '临时休息（勾选后一直显示「休息中」，记得取消）']); })(),
+      h('p', {class:'key', text:'改了时间后，记得到「全部文字」把 status_hours_note（营业时间说明）和 about_hours_value 也改一下。'})
+    ]);
+    pane.appendChild(hours);
+
+    // 无主包裹
+    var parcels = h('details', {}, [h('summary', {text:'无主包裹（' + content.unclaimed.length + ' 个）'})]);
+    content.unclaimed.forEach(function(it, i){
+      function f(prop, ph){ var inp = h('input', {type:'text', value: it[prop] || '', placeholder:ph, oninput:function(){ it[prop] = inp.value; changed(); }}); return inp; }
+      parcels.appendChild(h('div', {class:'card'}, [
+        h('div', {class:'ch'}, ['包裹 ' + (i + 1), h('button', {class:'btn small', text:'删除', onclick:function(){ content.unclaimed.splice(i,1); changed(); renderData(); reopen('无主包裹'); }})]),
+        h('div', {class:'tri'}, [f('code','单号尾号'), f('weight','重量'), f('date','日期')])
+      ]));
+    });
+    parcels.appendChild(h('button', {class:'btn small', text:'＋ 新增包裹', onclick:function(){ content.unclaimed.push({code:'···', weight:'', date:''}); changed(); renderData(); reopen('无主包裹'); }}));
+    pane.appendChild(parcels);
+
+    // 联系方式
+    var names = {wechat:'微信', line:'Line', ig:'Instagram', tg:'Telegram', xhs:'小红书'};
+    var contacts = h('details', {}, [h('summary', {text:'联系方式'}), h('p', {class:'key', text:'Instagram 和 Telegram 填用户名即可（不用加 @），会自动变成可点击的链接；其余是「点击复制」。'})]);
+    Object.keys(names).forEach(function(id){
+      var c = content.contacts[id] || (content.contacts[id] = {value:'', show:false});
+      var inp = h('input', {type:'text', value:c.value || '', oninput:function(){ c.value = inp.value; changed(); }});
+      var cb = h('input', {type:'checkbox', checked: !!c.show, onchange:function(){ c.show = cb.checked; changed(); }});
+      contacts.appendChild(h('div', {class:'field'}, [h('label', {text:names[id]}), h('div', {class:'row', style:'flex-wrap:nowrap'}, [inp, h('label', {class:'check'}, [cb, '显示'])])]));
+    });
+    pane.appendChild(contacts);
+
+    // 资费
+    var rateNames = {sea:'海运业务', cosmetics:'港台化妆品大包裹', luggage:'行李寄存'};
+    Object.keys(content.rates).forEach(function(rk){
+      var r = content.rates[rk];
+      var d = h('details', {}, [h('summary', {text:'资费 · ' + (rateNames[rk] || rk)}),
+        h('div', {class:'field'}, [h('label', {text:'弹窗标题'}), triInputs(r.title, changed)])]);
+      r.rows.forEach(function(row, i){
+        d.appendChild(h('div', {class:'card'}, [
+          h('div', {class:'ch'}, ['第 ' + (i + 1) + ' 行', h('button', {class:'btn small', text:'删除', onclick:function(){ r.rows.splice(i,1); changed(); renderData(); reopen(rateNames[rk]); }})]),
+          h('div', {class:'field'}, [h('label', {text:'项目'}), triInputs(row.name, changed)]),
+          h('div', {class:'field'}, [h('label', {text:'价格'}), triInputs(row.price, changed)])
+        ]));
+      });
+      d.appendChild(h('button', {class:'btn small', text:'＋ 新增一行', onclick:function(){ r.rows.push({name:{zh:'',en:'',kr:''}, price:{zh:'',en:'',kr:''}}); changed(); renderData(); reopen(rateNames[rk]); }}));
+      d.appendChild(h('div', {class:'field', style:'margin-top:.6rem'}, [h('label', {text:'备注'}), triInputs(r.note, changed)]));
+      pane.appendChild(d);
+    });
+
+    // 全部文字
+    var all = h('details', {}, [h('summary', {text:'全部文字（找不到点不到的字，在这里搜）'})]);
+    var search = h('input', {type:'text', placeholder:'搜索文字…', value:textFilter, oninput:function(){ textFilter = search.value; fill(); }});
+    var list = h('div');
+    all.appendChild(search); all.appendChild(list);
+    function fill(){
+      list.innerHTML = '';
+      var q = textFilter.trim().toLowerCase();
+      Object.keys(langDefaults.zh).forEach(function(k){
+        var zh = effText(k, 'zh');
+        if(q && (zh + ' ' + k + ' ' + effText(k,'en') + ' ' + effText(k,'kr')).toLowerCase().indexOf(q) === -1) return;
+        list.appendChild(h('div', {class:'list-item'}, [
+          h('div', {class:'grow'}, [h('div', {text: zh || '（空）'}), h('div', {class:'key', text:k})]),
+          h('button', {class:'btn small', text:'编辑', onclick:function(){
+            selected = {key:k, hasText:k !== 'promo_body', sample:zh.slice(0,40)}; send({type:'pick', key:k}); showTab('edit');
+          }})
+        ]));
+      });
+    }
+    fill();
+    pane.appendChild(all);
+  }
+  function reopen(label){
+    document.querySelectorAll('#pane-data details').forEach(function(d){ if(d.querySelector('summary').textContent.indexOf(label) !== -1) d.open = true; });
+  }
+
+  // ---------- 板块 ----------
+  var BLOCK_NAMES = {services:'经营业务', contact:'联系我们', about:'关于我们', notice:'公告', status:'营业状态', unclaimed:'无主包裹'};
+  function renderBlocks(){
+    var pane = document.getElementById('pane-blocks'); pane.innerHTML = '';
+    [['main','右侧主栏（手机上在下方）'],['side','左侧栏（手机上在上方）']].forEach(function(pair){
+      var arr = content.order[pair[0]];
+      var g = h('div', {class:'group'}, [h('div', {class:'gt', text:pair[1]})]);
+      arr.forEach(function(id, i){
+        var cb = h('input', {type:'checkbox', checked: !content.hiddenBlocks[id], onchange:function(){
+          if(cb.checked) delete content.hiddenBlocks[id]; else content.hiddenBlocks[id] = true; changed();
+        }});
+        g.appendChild(h('div', {class:'list-item'}, [
+          h('span', {class:'grow', text:BLOCK_NAMES[id] || id}),
+          h('label', {class:'check'}, [cb, '显示']),
+          h('button', {class:'btn small', text:'↑', disabled: i === 0 ? true : null, onclick:function(){ arr.splice(i-1, 0, arr.splice(i,1)[0]); changed(); renderBlocks(); }}),
+          h('button', {class:'btn small', text:'↓', disabled: i === arr.length - 1 ? true : null, onclick:function(){ arr.splice(i+1, 0, arr.splice(i,1)[0]); changed(); renderBlocks(); }})
+        ]));
+      });
+      pane.appendChild(g);
+    });
+    var hidden = Object.keys(content.styles).filter(function(k){ return content.styles[k].hide; });
+    var g2 = h('div', {class:'group'}, [h('div', {class:'gt', text:'已隐藏的单个元素'})]);
+    if(!hidden.length) g2.appendChild(h('p', {class:'key', text:'没有'}));
+    hidden.forEach(function(k){
+      g2.appendChild(h('div', {class:'list-item'}, [
+        h('div', {class:'grow'}, [h('div', {text: (langDefaults.zh[k] !== undefined ? effText(k,'zh') : k)}), h('div', {class:'key', text:k})]),
+        h('button', {class:'btn small', text:'取消隐藏', onclick:function(){ setStyle(k,'hide',null); renderBlocks(); }})
+      ]));
+    });
+    pane.appendChild(g2);
+    pane.appendChild(h('div', {class:'group'}, [h('div', {class:'gt', text:'全部重来'}),
+      h('button', {class:'btn', text:'整个网页恢复成默认（发布后才生效）', onclick:function(){
+        if(confirm('确定把所有文字、样式、资料都恢复成默认吗？发布前还可以关掉页面放弃。')){ content = clone(defaults); changed(); renderBlocks(); }
+      }})]));
+  }
+
+  // ---------- 设置 ----------
+  function renderSettings(){
+    var pane = document.getElementById('pane-settings'); pane.innerHTML = '';
+    var tok = h('input', {type:'password', value:cfg.token, placeholder:'github_pat_…', autocomplete:'off'});
+    var owner = h('input', {type:'text', value:cfg.owner});
+    var repo = h('input', {type:'text', value:cfg.repo});
+    var result = h('p', {class:'key'});
+    pane.appendChild(h('div', {class:'group'}, [
+      h('div', {class:'gt', text:'GitHub 钥匙（只存在这台设备的浏览器里）'}),
+      h('div', {class:'field'}, [h('label', {text:'钥匙 Token'}), tok]),
+      h('div', {class:'tri', style:'grid-template-columns:1fr 1fr'}, [
+        h('div', {class:'field'}, [h('label', {text:'GitHub 用户名'}), owner]),
+        h('div', {class:'field'}, [h('label', {text:'仓库名'}), repo])
+      ]),
+      h('div', {class:'row'}, [
+        h('button', {class:'btn primary', text:'保存并测试', onclick:function(){
+          cfg.token = tok.value.trim(); cfg.owner = owner.value.trim(); cfg.repo = repo.value.trim(); saveCfg();
+          result.textContent = '测试中…';
+          api('').then(function(r){ return r.ok ? r.json() : Promise.reject(r); }).then(function(j){
+            if(j.permissions && j.permissions.push){ result.textContent = '✓ 连接成功，可以发布'; result.style.color = 'var(--good)'; loadContent(); }
+            else { result.textContent = '能读取但没有写入权限：钥匙要勾选 Contents → Read and write'; result.style.color = 'var(--bad)'; }
+          }).catch(function(r){ result.textContent = '✗ 连接失败（' + (r && r.status || '网络') + '）：钥匙不对，或没有选中这个仓库'; result.style.color = 'var(--bad)'; });
+        }}),
+        h('button', {class:'btn', text:'从这台设备删除钥匙', onclick:function(){ cfg.token = ''; saveCfg(); renderSettings(); say('钥匙已删除', ''); }})
+      ]),
+      result
+    ]));
+    pane.appendChild(h('div', {class:'hint'}, [
+      h('b', {text:'怎么拿钥匙（只要做一次）'}),
+      h('ol', {style:'padding-left:1.2rem; margin:.4rem 0 0'}, [
+        h('li', {}, ['打开 ', h('a', {href:'https://github.com/settings/personal-access-tokens/new', target:'_blank', rel:'noopener', text:'GitHub 新建钥匙页面'})]),
+        h('li', {text:'Token name 随便填，例如「能能后台」；Expiration 选 1 年'}),
+        h('li', {text:'Repository access 选 Only select repositories，只勾 neng-trading'}),
+        h('li', {text:'Permissions → Repository permissions → Contents 改成 Read and write'}),
+        h('li', {text:'拉到最下面按 Generate token，复制那串 github_pat_ 开头的字，贴到上面'})
+      ]),
+      h('p', {style:'margin:.5rem 0 0', text:'这把钥匙只能改这一个仓库。换手机或电脑要再贴一次；钥匙到期了照同样步骤再生成一把。'})
+    ]));
+  }
+
+  // 预览载入超时提示
+  setTimeout(function(){ if(!defaults) say('预览载入失败：请用正式网址打开后台（不要直接双击本地文件）', 'err'); }, 6000);
+})();
+</script>
+</body>
+</html>

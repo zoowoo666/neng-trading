@@ -109,6 +109,7 @@
   .site .ledger-index,
   .site .modal-title{font-family:var(--font-display);}
 
+  .site.is-loading{visibility:hidden;}
   :focus-visible{outline:2px solid var(--rust); outline-offset:2px;}
 
   /* ---------- header ---------- */
@@ -421,6 +422,8 @@
 
   @media (max-width:640px){
     .site{padding-left:1.1rem; padding-right:1.1rem;}
+    .tearline::before{left:-1.05rem;}
+    .tearline::after{right:-1.05rem;}
   }
   @media (max-width:520px){
     .topbar{flex-wrap:wrap;}
@@ -432,11 +435,11 @@
 </head>
 <body>
 
-<div class="site" data-lang="zh" id="site">
+<div class="site is-loading" data-lang="zh" id="site">
 
   <header class="topbar">
     <div class="brand">
-      <span class="brand-mark" aria-hidden="true">N&sup2;</span>
+      <span class="brand-mark" aria-hidden="true" data-i18n="brand_mark">N&sup2;</span>
       <span class="brand-text">
         <span class="brand-name" data-i18n="nav_brand">能能贸易</span>
         <span class="brand-tagline" data-i18n="nav_tagline">SEOUL TRADING CO.</span>
@@ -468,34 +471,30 @@
   <div class="tearline" aria-hidden="true"></div>
 
   <div class="layout">
-    <aside class="sidebar">
-      <div class="side-card notice-card">
+    <aside class="sidebar" id="sidebar">
+      <div class="side-card notice-card" data-block="notice">
         <span class="side-label" data-i18n="notice_label">公告 NOTICE</span>
         <p data-i18n="notice_body">欢迎关注能能贸易!首次下单可先私信咨询流程与预计时效,我们会尽快回复。</p>
       </div>
 
-      <div class="side-card status-card">
+      <div class="side-card status-card" data-block="status">
         <span class="side-label" data-i18n="status_label">营业状态</span>
         <div class="status-row">
           <span class="status-dot" id="statusDot" aria-hidden="true"></span>
-          <span class="status-text" id="statusText">营业中</span>
+          <span class="status-text" id="statusText" data-edit="status_text">营业中</span>
         </div>
         <p class="status-note" data-i18n="status_hours_note">营业时间 10:00–18:00(首尔时间)</p>
       </div>
 
-      <div class="side-card unclaimed-card">
+      <div class="side-card unclaimed-card" data-block="unclaimed">
         <span class="side-label" data-i18n="unclaimed_label">无主包裹认领</span>
-        <ul class="unclaimed-list">
-          <li class="unclaimed-item"><span class="unclaimed-code">···2216</span><span class="unclaimed-meta">2.3kg · 09.01</span></li>
-          <li class="unclaimed-item"><span class="unclaimed-code">···0847</span><span class="unclaimed-meta">0.8kg · 08.29</span></li>
-          <li class="unclaimed-item"><span class="unclaimed-code">···5590</span><span class="unclaimed-meta">5.1kg · 08.27</span></li>
-        </ul>
+        <ul class="unclaimed-list" id="unclaimedList"></ul>
         <p class="unclaimed-note" data-i18n="unclaimed_note">如有对应包裹信息,请私信联系我们认领。</p>
       </div>
     </aside>
 
-    <main class="main">
-      <section class="services" id="services">
+    <main class="main" id="mainCol">
+      <section class="services" id="services" data-block="services">
         <h2 class="section-title" data-i18n="services_title">经营业务</h2>
 
         <article class="ledger-row">
@@ -538,48 +537,18 @@
         </article>
       </section>
 
-      <div class="tearline" aria-hidden="true"></div>
+      
 
-      <section class="contact" id="contact">
+      <section class="contact" id="contact" data-block="contact">
     <h2 class="section-title" data-i18n="contact_title">联系我们</h2>
     <p class="contact-subtitle" data-i18n="contact_subtitle">点击下方任一方式添加我们,备注「小红书」可优先回复。</p>
 
-    <div class="ticket-grid">
-      <button type="button" class="ticket" data-copy="neungneung_trade">
-        <span class="ticket-label" data-i18n="contact_wechat_label">微信</span>
-        <span class="ticket-value">neungneung_trade</span>
-        <span class="ticket-action" data-i18n="copy_action">点击复制</span>
-      </button>
-
-      <button type="button" class="ticket" data-copy="neungneung_trade">
-        <span class="ticket-label" data-i18n="contact_line_label">Line</span>
-        <span class="ticket-value">neungneung_trade</span>
-        <span class="ticket-action" data-i18n="copy_action">点击复制</span>
-      </button>
-
-      <a href="https://instagram.com/neungneung_trade" target="_blank" rel="noopener" class="ticket">
-        <span class="ticket-label" data-i18n="contact_ig_label">Instagram</span>
-        <span class="ticket-value">@neungneung_trade</span>
-        <span class="ticket-action">↗</span>
-      </a>
-
-      <a href="https://t.me/neungneung_trade" target="_blank" rel="noopener" class="ticket">
-        <span class="ticket-label" data-i18n="contact_tg_label">Telegram</span>
-        <span class="ticket-value">@neungneung_trade</span>
-        <span class="ticket-action">↗</span>
-      </a>
-
-      <button type="button" class="ticket" data-copy="能能贸易">
-        <span class="ticket-label" data-i18n="contact_xhs_label">小红书私信</span>
-        <span class="ticket-value">能能贸易</span>
-        <span class="ticket-action" data-i18n="copy_action">点击复制</span>
-      </button>
-    </div>
+    <div class="ticket-grid" id="ticketGrid"></div>
   </section>
 
-  <div class="tearline" aria-hidden="true"></div>
+  
 
-  <section class="about">
+  <section class="about" id="about" data-block="about">
     <h2 class="section-title" data-i18n="about_title">关于能能贸易</h2>
     <p class="about-body" data-i18n="about_body">能能贸易扎根首尔城东区圣水洞,专注海运代购、港台化妆品批发与行李寄存服务,以首尔、仁川两地仓储,把你在韩国看中的一切安全送到手中。</p>
 
@@ -610,7 +579,7 @@
     </dl>
 
     <p class="footer-note" data-i18n="footer_note">以上信息如有更新,以本页面最新版本为准。</p>
-    <p class="copyright">© <span id="year"></span> NENG² Trading · 능능무역 · 能能贸易</p>
+    <p class="copyright">© <span id="year"></span> <span data-i18n="copyright">NENG² Trading · 능능무역 · 能能贸易</span></p>
       </section>
     </main>
   </div>
@@ -802,68 +771,239 @@
     }
   };
 
-  var siteEl = document.getElementById('site');
+  // ---------------------------------------------------------------
+  // 内容引擎：默认内容 + content.json 覆盖；后台 admin.html 通过 ?edit=1 实时预览
+  // ---------------------------------------------------------------
+  var LANGS = ['zh','en','kr'];
+  LANG.zh.brand_mark = LANG.en.brand_mark = LANG.kr.brand_mark = 'N²';
+  LANG.zh.copyright = LANG.en.copyright = LANG.kr.copyright = 'NENG² Trading · 능능무역 · 能能贸易';
 
+  function buildDefaultRates(){
+    var out = {};
+    Object.keys(LANG.zh.rates).forEach(function(k){
+      var r = {title:{}, note:{}, rows:[]};
+      LANGS.forEach(function(l){ r.title[l] = LANG[l].rates[k].title; r.note[l] = LANG[l].rates[k].note; });
+      LANG.zh.rates[k].rows.forEach(function(_, i){
+        var row = {name:{}, price:{}};
+        LANGS.forEach(function(l){ row.name[l] = LANG[l].rates[k].rows[i][0]; row.price[l] = LANG[l].rates[k].rows[i][1]; });
+        r.rows.push(row);
+      });
+      out[k] = r;
+    });
+    return out;
+  }
+
+  var DEFAULTS = {
+    version: 1,
+    texts: {},
+    styles: {},
+    order: { main:['services','contact','about'], side:['notice','status','unclaimed'] },
+    hiddenBlocks: {},
+    promo: {zh:'', en:'', kr:''},
+    hours: { open:'10:00', close:'18:00', lunchStart:'12:00', lunchEnd:'13:00', closedDays:[], closedToday:false },
+    unclaimed: [
+      {code:'···2216', weight:'2.3kg', date:'09.01'},
+      {code:'···0847', weight:'0.8kg', date:'08.29'},
+      {code:'···5590', weight:'5.1kg', date:'08.27'}
+    ],
+    contacts: {
+      wechat:{value:'neungneung_trade', show:true},
+      line:{value:'neungneung_trade', show:true},
+      ig:{value:'neungneung_trade', show:true},
+      tg:{value:'neungneung_trade', show:true},
+      xhs:{value:'能能贸易', show:true}
+    },
+    rates: buildDefaultRates()
+  };
+
+  function clone(o){ return JSON.parse(JSON.stringify(o)); }
+  function mergeContent(data){
+    var c = clone(DEFAULTS);
+    if(data && typeof data === 'object'){
+      Object.keys(DEFAULTS).forEach(function(k){ if(data[k] !== undefined && data[k] !== null){ c[k] = clone(data[k]); } });
+    }
+    return c;
+  }
+  var content = mergeContent(null);
+  var currentLang = 'zh';
+
+  function pick(obj, lang){
+    if(!obj) return '';
+    var v = obj[lang];
+    if(v !== undefined && v !== null && String(v).trim() !== '') return v;
+    return obj.zh || '';
+  }
+  function t(key, lang){
+    var o = content.texts && content.texts[key];
+    if(o && o[lang] !== undefined && String(o[lang]).trim() !== '') return o[lang];
+    var d = LANG[lang] && LANG[lang][key];
+    if(d !== undefined && typeof d === 'string') return d;
+    if(o && o.zh) return o.zh;
+    return LANG.zh[key];
+  }
+
+  var siteEl = document.getElementById('site');
+  var isEdit = /[?&]edit=1/.test(location.search) && window.parent !== window;
+
+  // ---------- 营业状态 ----------
+  function toMin(s){ var p = String(s||'0:0').split(':'); return (+p[0])*60 + (+p[1]||0); }
   function updateStatus(){
     try{
-      var lang = siteEl.getAttribute('data-lang') || 'zh';
-      var dict = LANG[lang] || LANG.zh;
-      var hour = parseInt(new Intl.DateTimeFormat('en-US', {timeZone:'Asia/Seoul', hour:'numeric', hour12:false}).format(new Date()), 10);
-      var isLunch = hour >= 12 && hour < 13;
-      var isOpen = !isLunch && hour >= 10 && hour < 18;
-      var dot = document.getElementById('statusDot');
-      var text = document.getElementById('statusText');
-      if(dot){
-        dot.classList.toggle('is-open', isOpen);
-        dot.classList.toggle('is-break', isLunch);
-      }
-      if(text){ text.textContent = isLunch ? dict.status_lunch : (isOpen ? dict.status_open : dict.status_closed); }
+      var parts = new Intl.DateTimeFormat('en-US',{timeZone:'Asia/Seoul', hour:'numeric', minute:'numeric', weekday:'short', hour12:false}).formatToParts(new Date());
+      var h=0,m=0,wd='';
+      parts.forEach(function(p){ if(p.type==='hour') h=+p.value%24; if(p.type==='minute') m=+p.value; if(p.type==='weekday') wd=p.value; });
+      var day = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].indexOf(wd);
+      var now = h*60+m, hr = content.hours || DEFAULTS.hours;
+      var dayOff = hr.closedToday || (hr.closedDays||[]).indexOf(day) !== -1;
+      var isLunch = !dayOff && hr.lunchStart && hr.lunchEnd && now >= toMin(hr.lunchStart) && now < toMin(hr.lunchEnd);
+      var isOpen = !dayOff && !isLunch && now >= toMin(hr.open) && now < toMin(hr.close);
+      var dot = document.getElementById('statusDot'), text = document.getElementById('statusText');
+      if(dot){ dot.classList.toggle('is-open', isOpen); dot.classList.toggle('is-break', !!isLunch); }
+      if(text){ text.textContent = isLunch ? t('status_lunch', currentLang) : (isOpen ? t('status_open', currentLang) : t('status_closed', currentLang)); }
     }catch(e){}
   }
 
-  // Limited-time promo panel: edit promo_body in the LANG dict above (per language) to
-  // publish a notice — the panel shows itself automatically. Leave promo_body empty
-  // ("") to keep it hidden, which is the default with no active campaign.
-  function updatePromo(dict){
-    try{
-      var hero = document.getElementById('heroSection');
-      var panel = document.getElementById('promoPanel');
-      if(!hero || !panel) return;
-      var hasPromo = !!(dict.promo_body && dict.promo_body.trim());
-      panel.hidden = !hasPromo;
-      hero.classList.toggle('has-promo', hasPromo);
-    }catch(e){}
-  }
-
+  // ---------- 文字 ----------
   function applyLang(code){
-    var dict = LANG[code];
-    if(!dict) return;
+    if(!LANG[code]) return;
+    currentLang = code;
     siteEl.setAttribute('data-lang', code);
     try{ document.documentElement.lang = code === 'zh' ? 'zh-CN' : (code === 'kr' ? 'ko' : 'en'); }catch(e){}
-    try{ document.title = dict.meta_title; }catch(e){}
+    try{ document.title = t('meta_title', code); }catch(e){}
     var nodes = siteEl.querySelectorAll('[data-i18n]');
     for(var i=0;i<nodes.length;i++){
       var key = nodes[i].getAttribute('data-i18n');
-      if(dict[key] !== undefined){ nodes[i].textContent = dict[key]; }
+      if(key === 'promo_body'){ nodes[i].textContent = pick(content.promo, code); continue; }
+      var v = t(key, code);
+      if(v !== undefined){ nodes[i].textContent = v; }
     }
     var tabs = siteEl.querySelectorAll('.lang-tab');
     for(var j=0;j<tabs.length;j++){
-      var isActive = tabs[j].getAttribute('data-setlang') === code;
-      tabs[j].classList.toggle('is-active', isActive);
-      tabs[j].setAttribute('aria-pressed', isActive ? 'true' : 'false');
+      var on = tabs[j].getAttribute('data-setlang') === code;
+      tabs[j].classList.toggle('is-active', on);
+      tabs[j].setAttribute('aria-pressed', on ? 'true' : 'false');
     }
+    var hero = document.getElementById('heroSection'), panel = document.getElementById('promoPanel');
+    var hasPromo = !!String(pick(content.promo, code)).trim();
+    if(panel){ panel.hidden = !hasPromo; }
+    if(hero){ hero.classList.toggle('has-promo', hasPromo); }
     updateStatus();
-    updatePromo(dict);
+    applyStyles();
   }
 
-  var tabButtons = siteEl.querySelectorAll('.lang-tab');
-  for(var t=0;t<tabButtons.length;t++){
-    tabButtons[t].addEventListener('click', function(){
-      applyLang(this.getAttribute('data-setlang'));
+  // ---------- 列表：无主包裹 / 联系方式 ----------
+  function el(tag, cls, text){ var e=document.createElement(tag); if(cls) e.className=cls; if(text!==undefined) e.textContent=text; return e; }
+  function renderUnclaimed(){
+    var ul = document.getElementById('unclaimedList'); if(!ul) return;
+    ul.innerHTML = '';
+    (content.unclaimed||[]).forEach(function(it){
+      var li = el('li','unclaimed-item');
+      var a = el('span','unclaimed-code', it.code||''); a.setAttribute('data-edit','unclaimed_code');
+      var meta = [it.weight, it.date].filter(function(x){ return x && String(x).trim(); }).join(' · ');
+      var b = el('span','unclaimed-meta', meta); b.setAttribute('data-edit','unclaimed_meta');
+      li.appendChild(a); li.appendChild(b); ul.appendChild(li);
+    });
+  }
+  var CONTACT_DEFS = [
+    {id:'wechat', label:'contact_wechat_label', mode:'copy'},
+    {id:'line',   label:'contact_line_label',   mode:'copy'},
+    {id:'ig',     label:'contact_ig_label',     mode:'link', url:'https://instagram.com/', at:true},
+    {id:'tg',     label:'contact_tg_label',     mode:'link', url:'https://t.me/', at:true},
+    {id:'xhs',    label:'contact_xhs_label',    mode:'copy'}
+  ];
+  function renderContacts(){
+    var grid = document.getElementById('ticketGrid'); if(!grid) return;
+    grid.innerHTML = '';
+    CONTACT_DEFS.forEach(function(d){
+      var c = (content.contacts||{})[d.id];
+      if(!c || !c.show || !String(c.value||'').trim()) return;
+      var v = String(c.value).trim().replace(/^@/,'');
+      var node;
+      if(d.mode === 'link'){
+        node = el('a','ticket'); node.href = d.url + encodeURIComponent(v); node.target = '_blank'; node.rel = 'noopener';
+      }else{
+        node = el('button','ticket'); node.type = 'button'; node.setAttribute('data-copy', v);
+      }
+      var lab = el('span','ticket-label'); lab.setAttribute('data-i18n', d.label);
+      var val = el('span','ticket-value', (d.at ? '@' : '') + v); val.setAttribute('data-edit','contact_value');
+      var act = el('span','ticket-action');
+      if(d.mode === 'link'){ act.textContent = '↗'; act.setAttribute('data-edit','contact_arrow'); }
+      else { act.setAttribute('data-i18n','copy_action'); }
+      node.appendChild(lab); node.appendChild(val); node.appendChild(act);
+      grid.appendChild(node);
     });
   }
 
-  // copy-to-clipboard for WeChat / Line / Xiaohongshu tickets
+  // ---------- 板块顺序与显示 ----------
+  function applyBlocks(){
+    var main = document.getElementById('mainCol'), side = document.getElementById('sidebar');
+    var hidden = content.hiddenBlocks || {};
+    if(main){
+      Array.prototype.slice.call(main.querySelectorAll(':scope > .tearline')).forEach(function(x){ x.remove(); });
+      var first = true;
+      (content.order.main||DEFAULTS.order.main).forEach(function(id){
+        var b = main.querySelector(':scope > [data-block="'+id+'"]'); if(!b) return;
+        b.hidden = !!hidden[id];
+        if(!b.hidden && !first){ var tl = el('div','tearline'); tl.setAttribute('aria-hidden','true'); main.appendChild(tl); }
+        main.appendChild(b);
+        if(!b.hidden) first = false;
+      });
+    }
+    if(side){
+      (content.order.side||DEFAULTS.order.side).forEach(function(id){
+        var b = side.querySelector(':scope > [data-block="'+id+'"]'); if(!b) return;
+        b.hidden = !!hidden[id];
+        side.appendChild(b);
+      });
+    }
+  }
+
+  // ---------- 样式：字号 / 粗细 / 颜色 / 对齐 / 微调 / 隐藏 ----------
+  function keyOf(node){ return node.getAttribute('data-edit') || node.getAttribute('data-i18n'); }
+  function applyStyles(){
+    var nodes = Array.prototype.slice.call(siteEl.querySelectorAll('[data-edit],[data-i18n]'));
+    var styles = content.styles || {};
+    nodes.forEach(function(n){
+      var s = n.style;
+      s.fontSize = ''; s.fontWeight = ''; s.color = ''; s.textAlign = ''; s.alignSelf = '';
+      s.position = ''; s.left = ''; s.top = '';
+      if(n.getAttribute('data-hidden-by-style')){ s.display = ''; n.removeAttribute('data-hidden-by-style'); }
+    });
+    // 先量好原始字号，再统一设置，避免互相影响
+    var plan = [];
+    nodes.forEach(function(n){
+      var st = styles[keyOf(n)];
+      if(!st) return;
+      var base = (st.size && st.size !== 100) ? parseFloat(getComputedStyle(n).fontSize) : 0;
+      var pcs = n.parentElement ? getComputedStyle(n.parentElement) : null;
+      plan.push({n:n, st:st, base:base, pc: pcs && {display:pcs.display, dir:pcs.flexDirection}});
+    });
+    plan.forEach(function(p){
+      var n = p.n, st = p.st, s = n.style;
+      if(p.base){ s.fontSize = (p.base * st.size / 100).toFixed(2) + 'px'; }
+      if(st.weight){ s.fontWeight = st.weight; }
+      if(st.color){ s.color = st.color; }
+      if(st.align){
+        if(p.pc && /flex/.test(p.pc.display) && /column/.test(p.pc.dir)){
+          s.alignSelf = {left:'flex-start', center:'center', right:'flex-end'}[st.align];
+        }
+        s.textAlign = st.align;
+      }
+      if(st.dx || st.dy){ s.position = 'relative'; s.left = (st.dx||0)+'px'; s.top = (st.dy||0)+'px'; }
+      if(st.hide){ s.display = 'none'; n.setAttribute('data-hidden-by-style','1'); }
+    });
+  }
+
+  function render(){
+    renderUnclaimed();
+    renderContacts();
+    applyBlocks();
+    applyLang(currentLang);
+    var yearEl = document.getElementById('year');
+    if(yearEl){ yearEl.textContent = new Date().getFullYear(); }
+  }
+
+  // ---------- 交互：语言切换 / 复制 / 资费弹窗 ----------
   var toast = document.getElementById('copyToast');
   var toastTimer = null;
   function showToast(text){
@@ -873,28 +1013,22 @@
     if(toastTimer) clearTimeout(toastTimer);
     toastTimer = setTimeout(function(){ toast.classList.remove('is-visible'); }, 1600);
   }
-  var copyButtons = siteEl.querySelectorAll('[data-copy]');
-  for(var c=0;c<copyButtons.length;c++){
-    copyButtons[c].addEventListener('click', function(){
-      var value = this.getAttribute('data-copy');
-      var lang = siteEl.getAttribute('data-lang') || 'zh';
-      var successText = (LANG[lang] && LANG[lang].copy_success) || 'Copied';
-      try{
-        if(navigator.clipboard && navigator.clipboard.writeText){
-          navigator.clipboard.writeText(value).then(function(){ showToast(successText); }).catch(function(){ showToast(value); });
-        }else{
-          var ta = document.createElement('textarea');
-          ta.value = value; ta.style.position='fixed'; ta.style.opacity='0';
-          document.body.appendChild(ta); ta.select();
-          try{ document.execCommand('copy'); }catch(e){}
-          document.body.removeChild(ta);
-          showToast(successText);
-        }
-      }catch(err){ showToast(value); }
-    });
+  function copyText(value){
+    var ok = t('copy_success', currentLang) || 'Copied';
+    try{
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(value).then(function(){ showToast(ok); }).catch(function(){ showToast(value); });
+      }else{
+        var ta = document.createElement('textarea');
+        ta.value = value; ta.style.position='fixed'; ta.style.opacity='0';
+        document.body.appendChild(ta); ta.select();
+        try{ document.execCommand('copy'); }catch(e){}
+        document.body.removeChild(ta);
+        showToast(ok);
+      }
+    }catch(err){ showToast(value); }
   }
 
-  // rate modal
   var rateOverlay = document.getElementById('rateModalOverlay');
   var rateClose = document.getElementById('rateModalClose');
   var rateTitleEl = document.getElementById('rateModalTitle');
@@ -903,26 +1037,21 @@
   var lastFocused = null;
   function onModalKeydown(e){ if(e.key === 'Escape'){ closeRateModal(); } }
   function openRateModal(key){
-    try{
-      var lang = siteEl.getAttribute('data-lang') || 'zh';
-      var dict = LANG[lang] || LANG.zh;
-      var data = dict.rates && dict.rates[key];
-      if(!data || !rateOverlay) return;
-      rateTitleEl.textContent = data.title;
-      rateBodyEl.innerHTML = '';
-      for(var i=0;i<data.rows.length;i++){
-        var tr = document.createElement('tr');
-        var td1 = document.createElement('td'); td1.textContent = data.rows[i][0];
-        var td2 = document.createElement('td'); td2.textContent = data.rows[i][1];
-        tr.appendChild(td1); tr.appendChild(td2);
-        rateBodyEl.appendChild(tr);
-      }
-      rateNoteEl.textContent = data.note || '';
-      lastFocused = document.activeElement;
-      rateOverlay.hidden = false;
-      document.addEventListener('keydown', onModalKeydown);
-      if(rateClose){ rateClose.focus(); }
-    }catch(e){}
+    var data = content.rates && content.rates[key];
+    if(!data || !rateOverlay) return;
+    rateTitleEl.textContent = pick(data.title, currentLang);
+    rateBodyEl.innerHTML = '';
+    (data.rows||[]).forEach(function(r){
+      var tr = document.createElement('tr');
+      tr.appendChild(el('td','', pick(r.name, currentLang)));
+      tr.appendChild(el('td','', pick(r.price, currentLang)));
+      rateBodyEl.appendChild(tr);
+    });
+    rateNoteEl.textContent = pick(data.note, currentLang);
+    lastFocused = document.activeElement;
+    rateOverlay.hidden = false;
+    document.addEventListener('keydown', onModalKeydown);
+    if(rateClose){ rateClose.focus(); }
   }
   function closeRateModal(){
     if(!rateOverlay) return;
@@ -930,24 +1059,70 @@
     document.removeEventListener('keydown', onModalKeydown);
     if(lastFocused && typeof lastFocused.focus === 'function'){ lastFocused.focus(); }
   }
-  var rateButtons = siteEl.querySelectorAll('.rate-badge');
-  for(var rb=0; rb<rateButtons.length; rb++){
-    rateButtons[rb].addEventListener('click', function(){
-      openRateModal(this.getAttribute('data-rate'));
-    });
-  }
   if(rateClose){ rateClose.addEventListener('click', closeRateModal); }
-  if(rateOverlay){
-    rateOverlay.addEventListener('click', function(e){
-      if(e.target === rateOverlay){ closeRateModal(); }
+  if(rateOverlay){ rateOverlay.addEventListener('click', function(e){ if(e.target === rateOverlay){ closeRateModal(); } }); }
+
+  if(!isEdit){
+    siteEl.addEventListener('click', function(e){
+      var tab = e.target.closest('.lang-tab');
+      if(tab){ applyLang(tab.getAttribute('data-setlang')); return; }
+      var cp = e.target.closest('[data-copy]');
+      if(cp){ copyText(cp.getAttribute('data-copy')); return; }
+      var rb = e.target.closest('.rate-badge');
+      if(rb){ openRateModal(rb.getAttribute('data-rate')); return; }
     });
   }
 
-  var yearEl = document.getElementById('year');
-  if(yearEl){ yearEl.textContent = new Date().getFullYear(); }
+  var resizeTimer = null;
+  window.addEventListener('resize', function(){ clearTimeout(resizeTimer); resizeTimer = setTimeout(applyStyles, 150); });
 
-  applyLang('zh');
-  setInterval(updateStatus, 60000);
+  function reveal(){ siteEl.classList.remove('is-loading'); }
+
+  // ---------- 后台编辑模式 ----------
+  if(isEdit){
+    var css = document.createElement('style');
+    css.textContent =
+      '.site [data-edit],.site [data-i18n]{cursor:pointer;}' +
+      '.site [data-edit]:hover,.site [data-i18n]:hover{outline:2px dashed var(--caramel);outline-offset:2px;}' +
+      '.site .is-picked{outline:2px solid var(--rust)!important;outline-offset:2px;}';
+    document.head.appendChild(css);
+    var picked = null;
+    var markPicked = function(key){
+      siteEl.querySelectorAll('.is-picked').forEach(function(n){ n.classList.remove('is-picked'); });
+      if(!key) return;
+      siteEl.querySelectorAll('[data-edit="'+key+'"],[data-i18n="'+key+'"]').forEach(function(n){ n.classList.add('is-picked'); });
+    };
+    document.addEventListener('click', function(e){
+      e.preventDefault(); e.stopPropagation();
+      var n = e.target.closest && e.target.closest('[data-edit],[data-i18n]');
+      if(!n || !siteEl.contains(n)) return;
+      picked = keyOf(n);
+      markPicked(picked);
+      window.parent.postMessage({source:'neng-site', type:'select', key:picked,
+        hasText: !!n.getAttribute('data-i18n') && n.getAttribute('data-i18n') !== 'promo_body',
+        sample: (n.textContent||'').trim().slice(0,40)}, '*');
+    }, true);
+    window.addEventListener('message', function(e){
+      if(e.source !== window.parent || !e.data || e.data.source !== 'neng-admin') return;
+      var m = e.data;
+      if(m.type === 'content'){ content = mergeContent(m.content); render(); markPicked(picked); }
+      if(m.type === 'lang'){ applyLang(m.lang); markPicked(picked); }
+      if(m.type === 'pick'){ picked = m.key; markPicked(picked); }
+    });
+    var langCopy = {};
+    LANGS.forEach(function(l){ langCopy[l] = {}; Object.keys(LANG[l]).forEach(function(k){ if(typeof LANG[l][k] === 'string') langCopy[l][k] = LANG[l][k]; }); });
+    render(); reveal();
+    window.parent.postMessage({source:'neng-site', type:'ready', defaults: DEFAULTS, lang: langCopy}, '*');
+  }else{
+    render();
+    var revealTimer = setTimeout(reveal, 1500);
+    fetch('content.json?t=' + Date.now(), {cache:'no-store'})
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(d){ if(d){ content = mergeContent(d); render(); } })
+      .catch(function(){})
+      .then(function(){ clearTimeout(revealTimer); reveal(); });
+    setInterval(updateStatus, 60000);
+  }
 })();
 </script>
 

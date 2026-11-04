@@ -531,12 +531,24 @@
       ]),
       h('div', {class:'row'}, [
         h('button', {class:'btn primary', text:'保存并测试', onclick:function(){
-          cfg.token = tok.value.trim(); cfg.owner = owner.value.trim(); cfg.repo = repo.value.trim(); saveCfg();
+          cfg.token = tok.value.replace(/\s+/g,''); cfg.owner = owner.value.trim(); cfg.repo = repo.value.trim(); saveCfg();
+          result.style.color = '';
+          if(!/^(github_pat_|ghp_)[A-Za-z0-9_]{20,}$/.test(cfg.token)){
+            result.textContent = '✗ 这不像钥匙：应该是 github_pat_ 开头的一长串英文数字（现在是 ' + cfg.token.length + ' 个字，开头「' + cfg.token.slice(0,11) + '」）。请重新复制贴上。';
+            result.style.color = 'var(--bad)'; return;
+          }
           result.textContent = '测试中…';
           api('').then(function(r){ return r.ok ? r.json() : Promise.reject(r); }).then(function(j){
             if(j.permissions && j.permissions.push){ result.textContent = '✓ 连接成功，可以发布'; result.style.color = 'var(--good)'; loadContent(); }
             else { result.textContent = '能读取但没有写入权限：钥匙要勾选 Contents → Read and write'; result.style.color = 'var(--bad)'; }
-          }).catch(function(r){ result.textContent = '✗ 连接失败（' + (r && r.status || '网络') + '）：钥匙不对，或没有选中这个仓库'; result.style.color = 'var(--bad)'; });
+          }).catch(function(r){
+            var st = r && r.status;
+            result.textContent = st === 401 ? '✗ 钥匙本身无效（401）：没复制完整、贴错了，或这把钥匙已被删除/过期。请重新生成一把再贴。'
+              : st === 404 ? '✗ 钥匙有效，但看不到 ' + cfg.owner + '/' + cfg.repo + '（404）：生成钥匙时没勾选这个仓库。'
+              : st === 403 ? '✗ 钥匙被拒绝（403）：权限不够，或需要等几分钟再试。'
+              : '✗ 连接失败（' + (st || '网络问题') + '）';
+            result.style.color = 'var(--bad)';
+          });
         }}),
         h('button', {class:'btn', text:'从这台设备删除钥匙', onclick:function(){ cfg.token = ''; saveCfg(); renderSettings(); say('钥匙已删除', ''); }})
       ]),

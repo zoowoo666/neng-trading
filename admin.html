@@ -71,6 +71,8 @@
   details{margin-bottom:.8rem;}
   summary{cursor:pointer; font-weight:700; padding:.3rem 0;}
   .check{display:flex; align-items:center; gap:.35rem; font-size:.88rem;}
+  .trb{border:0; background:none; padding:0 .2rem; color:var(--rust); font-size:.72rem; font-weight:600;}
+  .lab{display:flex; justify-content:space-between; align-items:center;}
 
   @media (max-width:900px){
     .wrap{grid-template-columns:1fr; height:auto;}
@@ -86,6 +88,7 @@
   <h1>能能贸易 · 后台</h1>
   <span class="msg" id="msg">载入中…</span>
   <span class="spacer"></span>
+  <label class="check" title="在中文框打字后，自动翻译成英文和韩文"><input type="checkbox" id="autoTr"> 自动翻译</label>
   <a class="link" href="./" target="_blank" rel="noopener">打开正式网页 ↗</a>
   <button class="btn primary" id="saveBtn">保存并发布</button>
 </div>
@@ -155,6 +158,69 @@
     (kids || []).forEach(function(c){ if(c === null || c === undefined) return; e.appendChild(typeof c === 'string' ? document.createTextNode(c) : c); });
     return e;
   }
+
+  // ---------- 自动翻译（中文 → 英文、韩文） ----------
+  // 先用 Google 免费接口，失败就改用 MyMemory；品牌名固定写法
+  if(cfg.autoTr === undefined) cfg.autoTr = true;
+  var autoTrBox = document.getElementById('autoTr');
+  autoTrBox.checked = !!cfg.autoTr;
+  autoTrBox.addEventListener('change', function(){ cfg.autoTr = autoTrBox.checked; saveCfg(); say(cfg.autoTr ? '自动翻译已打开' : '自动翻译已关闭', ''); });
+  var BRAND = {zh:'能能贸易', en:'NENG² Trading', kr:'능능무역'};
+  var TL_CODE = {en:'en', kr:'ko'};
+  var googleOff = false;
+  function trGoogle(text, tl){
+    var url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=zh-CN&tl=' + tl + '&dt=t&q=' + encodeURIComponent(text);
+    return fetch(url).then(function(r){ if(!r.ok) throw r; return r.json(); }).then(function(j){
+      var out = (j && j[0] || []).map(function(p){ return (p && p[0]) || ''; }).join('');
+      if(!out) throw new Error('empty');
+      return out;
+    });
+  }
+  function decodeEntities(s){ var t = document.createElement('textarea'); t.innerHTML = s; return t.value; }
+  function chunks(line){
+    if(line.length <= 150) return [line];
+    var parts = line.split(/(?<=[。！？!?；;])/), out = [], cur = '';
+    parts.forEach(function(p){ if(cur && (cur + p).length > 150){ out.push(cur); cur = ''; } cur += p; });
+    if(cur) out.push(cur);
+    return out;
+  }
+  function trMyMemory(text, tl){
+    return Promise.all(text.split('\n').map(function(line){
+      if(!line.trim()) return line;
+      return Promise.all(chunks(line).map(function(c){
+        return fetch('https://api.mymemory.translated.net/get?langpair=zh-CN|' + tl + '&q=' + encodeURIComponent(c))
+          .then(function(r){ return r.json(); }).then(function(j){
+            if(!j || String(j.responseStatus) !== '200' || j.quotaFinished) throw new Error('mymemory');
+            return decodeEntities(j.responseData.translatedText);
+          });
+      })).then(function(arr){ return arr.join(' '); });
+    })).then(function(lines){ return lines.join('\n'); });
+  }
+  function translateTo(text, l){
+    var src = text.split(BRAND.zh).join(BRAND[l]), tl = TL_CODE[l];
+    var p = googleOff ? Promise.reject() : trGoogle(src, tl);
+    return p.catch(function(){ googleOff = true; return trMyMemory(src, tl); });
+  }
+  // els = {zh, en, kr} 三个输入框；write(lang, value) 把译文写进内容
+  function wireTr(els, write){
+    var timer = null, seq = 0;
+    function run(){
+      clearTimeout(timer);
+      var src = els.zh.value;
+      if(!src.trim()) return;
+      var my = ++seq; say('翻译中…');
+      Promise.all(['en','kr'].map(function(l){ return translateTo(src, l); })).then(function(res){
+        if(my !== seq) return;
+        ['en','kr'].forEach(function(l, i){ els[l].value = res[i]; write(l, res[i]); });
+        changed(); say('已自动翻译成英文、韩文（可以再手动修改）', 'ok');
+      }).catch(function(){ if(my === seq) say('自动翻译失败，请手动填写英文、韩文', 'err'); });
+    }
+    els.zh.addEventListener('input', function(){ if(!cfg.autoTr) return; clearTimeout(timer); timer = setTimeout(run, 900); });
+    // 手动改英文或韩文时，取消还没完成的翻译，避免被覆盖
+    ['en','kr'].forEach(function(l){ els[l].addEventListener('input', function(){ clearTimeout(timer); seq++; }); });
+    return run;
+  }
+  function trButton(run){ return h('button', {class:'trb', type:'button', title:'用中文重新翻译英文、韩文', text:'↻ 翻译', onclick:run}); }
 
   // ---------- 和预览通信 ----------
   function send(m){ m.source = 'neng-admin'; try{ frame.contentWindow.postMessage(m, '*'); }catch(e){} }
@@ -300,15 +366,19 @@
     ]));
 
     if(selected.hasText){
-      var g = h('div', {class:'group'}, [h('div', {class:'gt', text:'文字内容（英文、韩文留空时显示中文）'})]);
+      var g = h('div', {class:'group'}, [h('div', {class:'gt', text:'文字内容（改中文会自动翻译英文、韩文）'})]);
+      function writeText(l, v){
+        var o = content.texts[key] || {zh:effText(key,'zh'), en:effText(key,'en'), kr:effText(key,'kr')};
+        o[l] = v; content.texts[key] = o;
+      }
+      var tas = {}, labels = {};
       LANGS.forEach(function(l){
-        var ta = h('textarea', {rows:2, oninput:function(){
-          var o = content.texts[key] || {zh:effText(key,'zh'), en:effText(key,'en'), kr:effText(key,'kr')};
-          o[l] = ta.value; content.texts[key] = o; changed();
-        }});
+        var ta = h('textarea', {rows:2, oninput:function(){ writeText(l, ta.value); changed(); }});
         ta.value = effText(key, l);
-        g.appendChild(h('div', {class:'field'}, [h('label', {text:LNAME[l]}), ta]));
+        tas[l] = ta; labels[l] = h('label', {class:'lab'}, [LNAME[l]]);
+        g.appendChild(h('div', {class:'field'}, [labels[l], ta]));
       });
+      labels.zh.appendChild(trButton(wireTr(tas, writeText)));
       pane.appendChild(g);
     }else{
       pane.appendChild(h('p', {class:'hint', text:'这段文字来自「资料」页（例如联系账号、无主包裹）或自动生成，这里只调样式。'}));
@@ -373,10 +443,15 @@
 
   // ---------- 资料 ----------
   function triInputs(obj, onchange, placeholder){
-    return h('div', {class:'tri'}, LANGS.map(function(l){
+    var els = {}, zhLabel = null;
+    var box = h('div', {class:'tri'}, LANGS.map(function(l){
       var inp = h('input', {type:'text', value: obj[l] || '', placeholder: (placeholder || '') + LSHORT[l], oninput:function(){ obj[l] = inp.value; onchange(); }});
-      return h('div', {}, [h('div', {class:'tl', text:LNAME[l]}), inp]);
+      var lab = h('div', {class:'tl lab'}, [LNAME[l]]);
+      els[l] = inp; if(l === 'zh') zhLabel = lab;
+      return h('div', {}, [lab, inp]);
     }));
+    zhLabel.appendChild(trButton(wireTr(els, function(l, v){ obj[l] = v; })));
+    return box;
   }
   function renderData(){
     var pane = document.getElementById('pane-data'); pane.innerHTML = '';
@@ -384,11 +459,14 @@
     // 限时活动
     var promo = h('details', {open:true}, [h('summary', {text:'限时活动'}),
       h('p', {class:'key', text:'填了中文就会在首页右侧显示，清空就隐藏。'})]);
+    var promoEls = {}, promoLabels = {};
     LANGS.forEach(function(l){
       var ta = h('textarea', {rows:2, oninput:function(){ content.promo[l] = ta.value; changed(); }});
       ta.value = content.promo[l] || '';
-      promo.appendChild(h('div', {class:'field'}, [h('label', {text:LNAME[l]}), ta]));
+      promoEls[l] = ta; promoLabels[l] = h('label', {class:'lab'}, [LNAME[l]]);
+      promo.appendChild(h('div', {class:'field'}, [promoLabels[l], ta]));
     });
+    promoLabels.zh.appendChild(trButton(wireTr(promoEls, function(l, v){ content.promo[l] = v; })));
     pane.appendChild(promo);
 
     // 营业时间

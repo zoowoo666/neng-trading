@@ -20,6 +20,31 @@
       "zh": "行李长、短期寄存, 出差、旅行、回国时寄存均可。另有行李转寄中国大陆业务，详情请私信咨询。",
       "en": "Short-term luggage storage in Seoul for business trips, travel, or layovers — message us for details.",
       "kr": "출장, 여행, 경유 중 서울 시내 단기 짐 보관 서비스 — 자세한 사항은 메시지로 문의해 주세요."
+    },
+    "hero_subline": {
+      "zh": "海运大包裹 · 化妆品批发 · 行李寄存、转寄 —— 首尔、仁川两地仓储直发,一条私信,货就上路。",
+      "en": "Large shipping parcels · Cosmetics wholesale · Luggage storage and forwarding - direct shipping from warehousing in Seoul and Incheon, just send a private message and the goods will be on their way.",
+      "kr": "대형택배 · 화장품 도매 · 수하물 보관 및 배송 - 서울,인천 창고에서 직배송, 개인 메시지만 보내주시면 상품이 배송됩니다."
+    },
+    "services_cosmetics_desc": {
+      "zh": "美妆产品集运打包,支持大批量整箱发货,适合分销与批发采购。",
+      "en": "Consolidation and packaging of beauty products supports large-volume, full-box shipments and is suitable for distribution and wholesale purchasing.",
+      "kr": "뷰티 제품의 통합 및 포장은 대용량, 풀박스 배송을 지원하며 유통 및 도매 구매에 적합합니다."
+    },
+    "about_body": {
+      "zh": "能能贸易扎根首尔城东区圣水洞,专注海运大包裹、化妆品批发与行李寄存服务,以首尔、仁川两地仓储,把你在韩国看中的好物安全送到手中。",
+      "en": "NENG² Trading is based in Seongsu-dong, Seongdong District, Seoul, specializing in shipping large parcels, cosmetics wholesale and luggage storage services. With warehousing in Seoul and Incheon, NENG² Trading can safely deliver the good things you like in Korea to your hands.",
+      "kr": "능능무역은 서울 성동구 성수동에 본사를 두고 있으며 대형 택배 배송, 화장품 도매 및 수하물 보관 서비스를 전문으로 하고 있습니다. 능능무역은 서울과 인천에 창고를 보유하고 있어 귀하가 좋아하는 한국의 좋은 물건을 안전하게 귀하의 손에 전달할 수 있습니다."
+    },
+    "about_seoul_value": {
+      "zh": "首尔特别市城东区圣水洞 峨嵯山路103 永东科技大厦 地下一层 2103号",
+      "en": "No. 2103, B1, Yeongdong Technology Building, 103 Achasan-ro, Seongsu-dong, Seongdong-gu, Seoul",
+      "kr": "서울시 성동구 성수동 아차산로 103 영동테크노 지하 1층 2103호"
+    },
+    "about_incheon_value": {
+      "zh": "仁川广域市元昌洞 北港路177番街 96号 C栋",
+      "en": "Building C, No. 96, 177th Street, Beigang-ro, Wonchang-dong, Incheon Metropolitan City",
+      "kr": "인천광역시 원창동 북항로 177번길 96호 C동"
     }
   },
   "styles": {},

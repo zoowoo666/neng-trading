@@ -78,8 +78,12 @@
 
   a{color:inherit;}
   h1,h2,h3{text-wrap:balance; margin:0;}
-  p{margin:0;}
+  p{margin:0; text-wrap:pretty;}
   ul{margin:0; padding:0; list-style:none;}
+  /* 后台文字框里按 Enter 的换行，网页上照样换行 */
+  [data-i18n],#rateModalTitle,#rateModalNote,.rate-table td{white-space:pre-line;}
+  /* 韩文按词换行，不把一个词拆成两行 */
+  .site[data-lang="kr"]{word-break:keep-all; overflow-wrap:break-word;}
   button{font:inherit; color:inherit; background:none; border:0; cursor:pointer;}
 
   .site{

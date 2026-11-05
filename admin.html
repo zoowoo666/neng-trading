@@ -197,9 +197,17 @@
     })).then(function(lines){ return lines.join('\n'); });
   }
   function translateTo(text, l){
-    var src = text.split(BRAND.zh).join(BRAND[l]), tl = TL_CODE[l];
+    // 品牌名先换成无意义的占位符 ZQXJ（翻译引擎会原样保留），翻完再换成固定写法
+    var src = text.split(BRAND.zh).join('ZQXJ'), tl = TL_CODE[l];
     var p = googleOff ? Promise.reject() : trGoogle(src, tl);
-    return p.catch(function(){ googleOff = true; return trMyMemory(src, tl); });
+    return p.catch(function(){ googleOff = true; return trMyMemory(src, tl); }).then(function(out){
+      if(l === 'kr'){
+        // ZQXJ 以元音结尾、능능무역 以收音结尾，助词要跟着改：가→이、를→을、는→은、와→과、로→으로…
+        var KR_P = {'가':'이', '를':'을', '는':'은', '와':'과', '로':'으로', '랑':'이랑', '라고':'이라고', '라는':'이라는', '예요':'이에요', '야':'이야'};
+        out = out.replace(/ZQXJ(라고|라는|예요|가|를|는|와|로|랑|야)/gi, function(m, ps){ return 'ZQXJ' + KR_P[ps]; });
+      }
+      return out.replace(/ZQXJ/gi, BRAND[l]);
+    });
   }
   // els = {zh, en, kr} 三个输入框；write(lang, value) 把译文写进内容
   function wireTr(els, write){
@@ -366,7 +374,7 @@
     ]));
 
     if(selected.hasText){
-      var g = h('div', {class:'group'}, [h('div', {class:'gt', text:'文字内容（改中文会自动翻译英文、韩文）'})]);
+      var g = h('div', {class:'group'}, [h('div', {class:'gt', text:'文字内容（改中文会自动翻译英文、韩文；按 Enter 换行）'})]);
       function writeText(l, v){
         var o = content.texts[key] || {zh:effText(key,'zh'), en:effText(key,'en'), kr:effText(key,'kr')};
         o[l] = v; content.texts[key] = o;

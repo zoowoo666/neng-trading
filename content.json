@@ -1,6 +1,27 @@
 {
   "version": 1,
-  "texts": {},
+  "texts": {
+    "hero_headline": {
+      "zh": "你在韩国看中的好物,能能贸易帮你运回来",
+      "en": "What you find in Korea, we ship home",
+      "kr": "한국에서 찜한 물건, 능능무역이 배송해 드립니다"
+    },
+    "services_sea_desc": {
+      "zh": "从下单到海运出货,以下四大品类均可代运:",
+      "en": "From order to ocean shipment, we source and forward across four categories:",
+      "kr": "주문부터 해상 출고까지, 아래 네 가지 품목을 대행합니다:"
+    },
+    "services_cosmetics_title": {
+      "zh": "化妆品大包裹(港台)",
+      "en": "Cosmetics — Bulk Parcels（HK / TW）",
+      "kr": "화장품 대량 소포（홍콩·대만）"
+    },
+    "services_luggage_desc": {
+      "zh": "行李长、短期寄存, 出差、旅行、回国时寄存均可。另有行李转寄中国大陆业务，详情请私信咨询。",
+      "en": "Short-term luggage storage in Seoul for business trips, travel, or layovers — message us for details.",
+      "kr": "출장, 여행, 경유 중 서울 시내 단기 짐 보관 서비스 — 자세한 사항은 메시지로 문의해 주세요."
+    }
+  },
   "styles": {},
   "order": {
     "main": [

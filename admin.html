@@ -85,7 +85,7 @@
 </head>
 <body>
 <div class="top">
-  <h1>能能贸易 · 后台 <small style="font-weight:400;font-size:.65rem;color:var(--umber)">v11-16b</small></h1>
+  <h1>能能贸易 · 后台 <small style="font-weight:400;font-size:.65rem;color:var(--umber)">v11-16c</small></h1>
   <span class="msg" id="msg">载入中…</span>
   <span class="spacer"></span>
   <label class="check" title="在中文框打字后，自动翻译成英文和韩文"><input type="checkbox" id="autoTr"> 自动翻译</label>
@@ -179,7 +179,7 @@
   function decodeEntities(s){ var t = document.createElement('textarea'); t.innerHTML = s; return t.value; }
   function chunks(line){
     if(line.length <= 150) return [line];
-    var parts = line.split(/(?<=[。！？!?；;])/), out = [], cur = '';
+    var parts = line.match(/[^。！？!?；;]+[。！？!?；;]*|[。！？!?；;]+/g) || [line], out = [], cur = '';
     parts.forEach(function(p){ if(cur && (cur + p).length > 150){ out.push(cur); cur = ''; } cur += p; });
     if(cur) out.push(cur);
     return out;

@@ -263,24 +263,34 @@
 
   function fetchRemote(){
     return api('/contents/content.json?ref=' + cfg.branch + '&t=' + Date.now(), {cache:'no-store'}).then(function(r){
-      if(r.status === 404) return {data:null, sha:null};
       if(!r.ok) throw r;
       return r.json().then(function(j){ return {data: JSON.parse(b64decode(j.content)), sha: j.sha}; });
     });
   }
+  var loadedOk = false;
   function loadContent(){
-    var p;
+    var p, note = '';
     if(cfg.token){
-      p = fetchRemote().then(function(res){ sha = res.sha; return res.data; }).catch(function(){ say('用钥匙读取失败，改读公开版本', 'err'); return loadPublic(); });
+      p = fetchRemote().then(function(res){ sha = res.sha; return res.data; }).catch(function(r){
+        var st = r && r.status;
+        note = st === 404 ? '钥匙读不到仓库 ' + cfg.owner + '/' + cfg.repo + '（404），请到「设置」检查钥匙和仓库名；已改读公开版本'
+             : st === 401 ? '钥匙无效或已过期（401），已改读公开版本'
+             : '用钥匙读取失败，已改读公开版本';
+        return loadPublic();
+      });
     }else{
       p = loadPublic();
     }
     p.then(function(data){
+      loadedOk = !!(data && typeof data === 'object');
       content = merge(data);
       send({type:'content', content:content});
       renderAll();
-      if(!cfg.token){ say('还没设置钥匙：可以先改着看，发布前到「设置」贴上钥匙', 'err'); }
-      else if(msgEl.className.indexOf('err') === -1){ say('已载入最新内容', 'ok'); }
+      var n = loadedOk ? Object.keys(content.texts || {}).length : 0;
+      if(!loadedOk){ say('没能读到线上内容，现在显示的是出厂默认文字，已禁止发布（避免覆盖）。请检查网络和「设置」里的钥匙后刷新', 'err'); }
+      else if(note){ say(note, 'err'); }
+      else if(!cfg.token){ say('还没设置钥匙：可以先改着看，发布前到「设置」贴上钥匙（已读取公开内容，' + n + ' 条文字修改）', 'err'); }
+      else { say('已载入最新内容（' + n + ' 条文字修改）', 'ok'); }
     });
   }
   function loadPublic(){
@@ -289,6 +299,7 @@
   function publish(){
     if(!content) return;
     if(!cfg.token){ showTab('settings'); say('请先在「设置」贴上 GitHub 钥匙', 'err'); return; }
+    if(!loadedOk){ say('没能读到线上内容，为避免覆盖已禁止发布。请刷新页面，或检查「设置」里的钥匙', 'err'); return; }
     var btn = document.getElementById('saveBtn'); btn.disabled = true; say('发布中…');
     fetchRemote().then(function(res){
       var now = new Date();

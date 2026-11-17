@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+
+Sitemap: https://zoowoo666.github.io/neng-trading/sitemap.xml

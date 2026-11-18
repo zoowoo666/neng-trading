@@ -240,26 +240,26 @@
       "rows": [
         {
           "name": {
-            "zh": "短期寄存(1–3天)",
-            "en": "Short-term (1–3 days)",
-            "kr": "단기 보관(1–3일)"
+            "zh": "短期寄存(1–15天)",
+            "en": "Short-term storage (1–15 days)",
+            "kr": "단기 보관(1~15일)"
           },
           "price": {
-            "zh": "¥XX/天 起(占位)",
-            "en": "from ¥XX/day (placeholder)",
-            "kr": "1일 ¥XX부터 (임시)"
+            "zh": "¥25/天 起(占位)",
+            "en": "From ¥25/day (placeholder)",
+            "kr": "¥25/일 부터(자리)"
           }
         },
         {
           "name": {
-            "zh": "长期寄存(4天以上)",
-            "en": "Long-term (4+ days)",
-            "kr": "장기 보관(4일 이상)"
+            "zh": "长期寄存(15天以上)",
+            "en": "Long-term storage (over 15 days)",
+            "kr": "장기 보관(15일 이상)"
           },
           "price": {
-            "zh": "¥XX/天 起(占位)",
-            "en": "from ¥XX/day (placeholder)",
-            "kr": "1일 ¥XX부터 (임시)"
+            "zh": "¥15/天 起(占位)",
+            "en": "From ¥15/day (placeholder)",
+            "kr": "¥15/일 부터(자리 차지)"
           }
         }
       ]

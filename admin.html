@@ -85,7 +85,7 @@
 </head>
 <body>
 <div class="top">
-  <h1>能能贸易 · 后台 <small style="font-weight:400;font-size:.65rem;color:var(--umber)">v11-19a</small></h1>
+  <h1>能能贸易 · 后台 <small style="font-weight:400;font-size:.65rem;color:var(--umber)">v11-19b</small></h1>
   <span class="msg" id="msg">载入中…</span>
   <span class="spacer"></span>
   <label class="check" title="在中文框打字后，自动翻译成英文和韩文"><input type="checkbox" id="autoTr"> 自动翻译</label>
@@ -535,8 +535,26 @@
     parcels.appendChild(h('button', {class:'btn small', text:'＋ 新增包裹', onclick:function(){ content.unclaimed.push({code:'···', weight:'', date:''}); changed(); renderData(); reopen('无主包裹'); }}));
     pane.appendChild(parcels);
 
+    // 海运业务小框
+    var tagsBox = h('details', {}, [h('summary', {text:'海运业务小框（' + (content.seaTags || []).length + ' 个）'}),
+      h('p', {class:'key', text:'首页「海运业务」下面那排小框。改中文会自动翻译英文、韩文。清空中文就不显示。'})]);
+    content.seaTags = content.seaTags || [];
+    content.seaTags.forEach(function(tg, i){
+      var arr = content.seaTags;
+      tagsBox.appendChild(h('div', {class:'card'}, [
+        h('div', {class:'ch'}, ['小框 ' + (i + 1), h('span', {class:'row'}, [
+          h('button', {class:'btn small', text:'↑', disabled: i === 0 ? true : null, onclick:function(){ arr.splice(i-1, 0, arr.splice(i,1)[0]); changed(); renderData(); reopen('海运业务小框'); }}),
+          h('button', {class:'btn small', text:'↓', disabled: i === arr.length - 1 ? true : null, onclick:function(){ arr.splice(i+1, 0, arr.splice(i,1)[0]); changed(); renderData(); reopen('海运业务小框'); }}),
+          h('button', {class:'btn small', text:'删除', onclick:function(){ arr.splice(i,1); changed(); renderData(); reopen('海运业务小框'); }})
+        ])]),
+        triInputs(tg, changed)
+      ]));
+    });
+    tagsBox.appendChild(h('button', {class:'btn small', text:'＋ 新增小框', onclick:function(){ content.seaTags.push({zh:'', en:'', kr:''}); changed(); renderData(); reopen('海运业务小框'); }}));
+    pane.appendChild(tagsBox);
+
     // 联系方式
-    var names = {wechat:'微信', line:'Line', ig:'Instagram', tg:'Telegram', xhs:'小红书'};
+    var names ={wechat:'微信', line:'Line', ig:'Instagram', tg:'Telegram', xhs:'小红书'};
     var contacts = h('details', {}, [h('summary', {text:'联系方式'}), h('p', {class:'key', text:'Instagram 和 Telegram 填用户名即可（不用加 @），会自动变成可点击的链接；其余是「点击复制」。'})]);
     Object.keys(names).forEach(function(id){
       var c = content.contacts[id] || (content.contacts[id] = {value:'', show:false});

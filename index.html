@@ -529,12 +529,9 @@
               <h3 class="ledger-title" data-i18n="services_sea_title">海运业务</h3>
               <button type="button" class="rate-badge" data-rate="sea" aria-haspopup="dialog" data-i18n="rate_cta">查看资费</button>
             </div>
-            <p class="ledger-desc" data-i18n="services_sea_desc">从下单到海运出货,以下四大品类均可代购代运:</p>
-            <ul class="tag-list">
-              <li class="tag" data-i18n="services_sea_item1">明星周边</li>
-              <li class="tag" data-i18n="services_sea_item2">电子元件</li>
-              <li class="tag" data-i18n="services_sea_item3">工业辅料</li>
-              <li class="tag" data-i18n="services_sea_item4">SD娃娃</li>
+            <p class="ledger-desc" data-i18n="services_sea_desc">从下单到海运出货,以下品类均可代购代运:</p>
+            <ul class="tag-list" id="seaTagList">
+              <li class="tag">明星周边</li><li class="tag">电子元件</li><li class="tag">工业辅料</li><li class="tag">SD娃娃</li><li class="tag">软件开发</li>
             </ul>
           </div>
         </article>
@@ -637,9 +634,7 @@
       services_title:"经营业务",
       idx_sea:"一", idx_cosmetics:"二", idx_luggage:"三",
       services_sea_title:"海运业务",
-      services_sea_desc:"从下单到海运出货,以下四大品类均可代购代运:",
-      services_sea_item1:"明星周边", services_sea_item2:"电子元件",
-      services_sea_item3:"工业辅料", services_sea_item4:"SD娃娃",
+      services_sea_desc:"从下单到海运出货,以下品类均可代购代运:",
       services_cosmetics_title:"港台化妆品大包裹",
       services_cosmetics_desc:"港台美妆产品集运打包,支持大批量整箱发货,适合分销与批发采购。",
       services_luggage_title:"行李寄存",
@@ -693,9 +688,7 @@
       services_title:"What We Handle",
       idx_sea:"01", idx_cosmetics:"02", idx_luggage:"03",
       services_sea_title:"Sea-Freight Sourcing",
-      services_sea_desc:"From order to ocean shipment, we source and forward across four categories:",
-      services_sea_item1:"Celebrity Merch", services_sea_item2:"Electronic Components",
-      services_sea_item3:"Industrial Supplies", services_sea_item4:"BJD / SD Dolls",
+      services_sea_desc:"From order to ocean shipment, we source and forward the following categories:",
       services_cosmetics_title:"HK / TW Cosmetics — Bulk Parcels",
       services_cosmetics_desc:"Consolidated freight for Hong Kong and Taiwan beauty products, packed for bulk and wholesale orders.",
       services_luggage_title:"Luggage Storage",
@@ -749,9 +742,7 @@
       services_title:"취급 업무",
       idx_sea:"01", idx_cosmetics:"02", idx_luggage:"03",
       services_sea_title:"해운 구매대행",
-      services_sea_desc:"주문부터 해상 출고까지, 아래 네 가지 품목을 대행합니다:",
-      services_sea_item1:"스타 굿즈", services_sea_item2:"전자부품",
-      services_sea_item3:"공업 부자재", services_sea_item4:"SD돌 (구체관절인형)",
+      services_sea_desc:"주문부터 해상 출고까지, 아래 품목을 대행합니다:",
       services_cosmetics_title:"홍콩·대만 화장품 대량 소포",
       services_cosmetics_desc:"홍콩·대만 뷰티 제품을 통합 포장하여 대량·도매 주문으로 발송합니다.",
       services_luggage_title:"짐 보관",
@@ -824,6 +815,13 @@
     styles: {},
     order: { main:['services','contact','about'], side:['notice','status','unclaimed'] },
     hiddenBlocks: {},
+    seaTags: [
+      {zh:'明星周边', en:'Celebrity Merch', kr:'스타 굿즈'},
+      {zh:'电子元件', en:'Electronic Components', kr:'전자부품'},
+      {zh:'工业辅料', en:'Industrial Supplies', kr:'공업 부자재'},
+      {zh:'SD娃娃', en:'BJD / SD Dolls', kr:'SD돌 (구체관절인형)'},
+      {zh:'软件开发', en:'Software Development', kr:'소프트웨어 개발'}
+    ],
     promo: {zh:'', en:'', kr:''},
     hours: { open:'10:00', close:'18:00', lunchStart:'12:00', lunchEnd:'13:00', closedDays:[], closedToday:false },
     unclaimed: [
@@ -895,6 +893,7 @@
     siteEl.setAttribute('data-lang', code);
     try{ document.documentElement.lang = code === 'zh' ? 'zh-CN' : (code === 'kr' ? 'ko' : 'en'); }catch(e){}
     try{ document.title = t('meta_title', code); }catch(e){}
+    renderSeaTags();
     var nodes = siteEl.querySelectorAll('[data-i18n]');
     for(var i=0;i<nodes.length;i++){
       var key = nodes[i].getAttribute('data-i18n');
@@ -918,6 +917,14 @@
 
   // ---------- 列表：无主包裹 / 联系方式 ----------
   function el(tag, cls, text){ var e=document.createElement(tag); if(cls) e.className=cls; if(text!==undefined) e.textContent=text; return e; }
+  function renderSeaTags(){
+    var ul = document.getElementById('seaTagList'); if(!ul) return;
+    ul.innerHTML = '';
+    (content.seaTags||[]).forEach(function(tg){
+      var txt = pick(tg, currentLang); if(!String(txt).trim()) return;
+      var li = el('li','tag', txt); li.setAttribute('data-edit','sea_tag'); ul.appendChild(li);
+    });
+  }
   function renderUnclaimed(){
     var ul = document.getElementById('unclaimedList'); if(!ul) return;
     ul.innerHTML = '';

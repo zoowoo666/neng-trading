@@ -85,7 +85,7 @@
 </head>
 <body>
 <div class="top">
-  <h1>能能贸易 · 后台 <small style="font-weight:400;font-size:.65rem;color:var(--umber)">v11-16c</small></h1>
+  <h1>能能贸易 · 后台 <small style="font-weight:400;font-size:.65rem;color:var(--umber)">v11-19a</small></h1>
   <span class="msg" id="msg">载入中…</span>
   <span class="spacer"></span>
   <label class="check" title="在中文框打字后，自动翻译成英文和韩文"><input type="checkbox" id="autoTr"> 自动翻译</label>
@@ -274,7 +274,7 @@
       return r.json().then(function(j){ return {data: JSON.parse(b64decode(j.content)), sha: j.sha}; });
     });
   }
-  var loadedOk = false;
+  var loadedOk = false, lastSaved = '';
   function loadContent(){
     var p, note = '';
     if(cfg.token){
@@ -291,6 +291,7 @@
     p.then(function(data){
       loadedOk = !!(data && typeof data === 'object');
       content = merge(data);
+      lastSaved = JSON.stringify(content);
       send({type:'content', content:content});
       renderAll();
       var n = loadedOk ? Object.keys(content.texts || {}).length : 0;
@@ -312,6 +313,7 @@
     if(!content) return;
     if(!cfg.token){ showTab('settings'); say('请先在「设置」贴上 GitHub 钥匙', 'err'); return; }
     if(!loadedOk){ say('没能读到线上内容，为避免覆盖已禁止发布。请刷新页面，或检查「设置」里的钥匙', 'err'); return; }
+    if(JSON.stringify(content) === lastSaved){ say('没有任何修改，不用发布（线上已经是这个内容）。如果你刚改过却看到这句，说明修改没被记下来，请刷新后重改', 'err'); return; }
     var btn = document.getElementById('saveBtn'); btn.disabled = true; say('发布中…');
     fetchRemote().then(function(res){
       var now = new Date();
@@ -323,7 +325,7 @@
       if(!r.ok) throw r;
       return r.json();
     }).then(function(j){
-      sha = j.content && j.content.sha; dirty = false;
+      sha = j.content && j.content.sha; dirty = false; lastSaved = JSON.stringify(content);
       say('已发布 ✓ 约 1 分钟后正式网页更新', 'ok');
     }).catch(function(err){
       var s = err && err.status;
@@ -648,7 +650,9 @@
           }
           result.textContent = '测试中…';
           api('').then(function(r){ return r.ok ? r.json() : Promise.reject(r); }).then(function(j){
-            if(j.permissions && j.permissions.push){ result.textContent = '✓ 连接成功，可以发布'; result.style.color = 'var(--good)'; loadContent(); }
+            if(j.permissions && j.permissions.push){ result.style.color = 'var(--good)';
+              if(dirty){ result.textContent = '✓ 连接成功。你刚才改的内容都还在，回到上面点「保存并发布」就行'; say('钥匙可用，你未发布的修改已保留，可以点「保存并发布」', 'ok'); }
+              else { result.textContent = '✓ 连接成功，可以发布'; loadContent(); } }
             else { result.textContent = '能读取但没有写入权限：钥匙要勾选 Contents → Read and write'; result.style.color = 'var(--bad)'; }
           }).catch(function(r){
             var st = r && r.status;

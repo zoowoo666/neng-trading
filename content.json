@@ -7,9 +7,9 @@
       "kr": "한국에서 찜한 물건, 능능무역이 배송해 드립니다"
     },
     "services_sea_desc": {
-      "zh": "从下单到海运出货,以下品类均可代运:",
-      "en": "From order to ocean shipment, we source and forward the following categories:",
-      "kr": "주문부터 해상 출고까지, 아래 품목을 대행합니다:"
+      "zh": "从下单到海运出货,以下四大品类均可代运:",
+      "en": "From order to ocean shipment, we source and forward across four categories:",
+      "kr": "주문부터 해상 출고까지, 아래 네 가지 품목을 대행합니다:"
     },
     "services_cosmetics_title": {
       "zh": "化妆品大包裹(港台)",
@@ -45,6 +45,11 @@
       "zh": "仁川广域市元昌洞 北港路177番街 96号 C栋",
       "en": "Building C, No. 96, 177th Street, Beigang-ro, Wonchang-dong, Incheon Metropolitan City",
       "kr": "인천광역시 원창동 북항로 177번길 96호 C동"
+    },
+    "notice_body": {
+      "zh": "欢迎关注能能贸易!首次下单可先私信咨询流程与预计时效,我们会尽快回复。 韩>日港台小包裹业务即将上架！",
+      "en": "Welcome to follow NENG² Trading! When placing an order for the first time, you can send a private message to inquire about the process and estimated timeliness. We will reply as soon as possible. South Korea>Japan, Hong Kong and Taiwan small parcel business will be launched soon!",
+      "kr": "능능무역 팔로우를 환영합니다! 처음 주문할 때 개인 메시지를 보내 프로세스 및 예상 일정에 대해 문의할 수 있습니다. 최대한 빨리 답변해드리겠습니다. 한국>일본,홍콩,대만 소화물 사업이 곧 시작됩니다!"
     }
   },
   "styles": {},
@@ -185,18 +190,6 @@
             "en": "",
             "kr": ""
           }
-        },
-        {
-          "name": {
-            "zh": "软件开发",
-            "en": "Software Development",
-            "kr": "소프트웨어 개발"
-          },
-          "price": {
-            "zh": "请联系客服",
-            "en": "Please contact us",
-            "kr": "고객센터로 문의해 주세요"
-          }
         }
       ]
     },
@@ -212,18 +205,6 @@
         "kr": "실제 요금은 수량·품목에 따라 견적 시 확정됩니다 (위 수치는 임시 값입니다)."
       },
       "rows": [
-        {
-          "name": {
-            "zh": "小包裹(≤5kg)",
-            "en": "Small parcel (≤5kg)",
-            "kr": "소포장(5kg 이하)"
-          },
-          "price": {
-            "zh": "¥XX/kg 起(占位)",
-            "en": "from ¥XX/kg (placeholder)",
-            "kr": "kg당 ¥XX부터 (임시)"
-          }
-        },
         {
           "name": {
             "zh": "大批量整箱",

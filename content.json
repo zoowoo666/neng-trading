@@ -219,9 +219,9 @@
             "kr": "대량·박스 단위"
           },
           "price": {
-            "zh": "¥XX/箱 起(占位)",
-            "en": "from ¥XX/carton (placeholder)",
-            "kr": "박스당 ¥XX부터 (임시)"
+            "zh": "¥57/kg 起(占位)",
+            "en": "Starting from ¥57/kg (seat occupied)",
+            "kr": "57엔/kg부터(좌석 점유 시)"
           }
         }
       ]

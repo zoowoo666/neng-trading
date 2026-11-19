@@ -65,12 +65,23 @@
       "zh": "海运、空运业务",
       "en": "Shipping and air transport business",
       "kr": "해운 및 항공운송업무"
+    },
+    "footer_note": {
+      "zh": "以上信息如有更新,以本页面最新版本为准。本公司的活动、业务及定价最终解释权归 능능무역 所有。",
+      "en": "If the above information is updated, the latest version of this page shall prevail. The final right to interpret the Company's activities, business, and pricing belongs to 능능무역.",
+      "kr": "위 정보가 업데이트되는 경우, 본 페이지의 최신 버전을 기준으로 합니다. 당사의 활동, 사업 및 가격 책정에 대한 최종 해석권은 능능무역에 있습니다."
     }
   },
   "styles": {
     "services_cosmetics_desc": {
       "weight": "600",
       "size": 115
+    },
+    "partners_title": {
+      "size": 170
+    },
+    "hero_eyebrow": {
+      "dy": -4
     }
   },
   "order": {

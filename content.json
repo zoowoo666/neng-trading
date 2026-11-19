@@ -202,9 +202,9 @@
   "rates": {
     "sea": {
       "title": {
-        "zh": "海运业务 · 资费参考",
-        "en": "Sea-Freight Sourcing · Rate Reference",
-        "kr": "해운 구매대행 · 요금 참고"
+        "zh": "海运&空运业务 · 资费参考",
+        "en": "Sea & Air Freight Business · Rate Reference",
+        "kr": "해상 및 항공 화물사업 · 관세안내"
       },
       "note": {
         "zh": "具体资费根据重量、体积与品类核算,以实际报价为准(以上为占位数据)。",
@@ -255,9 +255,9 @@
             "kr": "SD돌"
           },
           "price": {
-            "zh": "¥60/件 起",
-            "en": "Starting from ¥60/item",
-            "kr": "60엔/개부터"
+            "zh": "¥56/件 起",
+            "en": "Starting from ¥56/item",
+            "kr": "56엔/개부터"
           }
         },
         {
@@ -276,26 +276,38 @@
     },
     "cosmetics": {
       "title": {
-        "zh": "港台化妆品大包裹 · 资费参考",
-        "en": "HK / TW Cosmetics · Rate Reference",
-        "kr": "홍콩·대만 화장품 대량 소포 · 요금 참고"
+        "zh": "韩台 一件代发&大包裹 资费参考",
+        "en": "Korea and Taiwan Dropshipping & Large Package Rate Reference",
+        "kr": "한국 및 대만 Dropshipping 및 대형 패키지 요금 참조"
       },
       "note": {
-        "zh": "具体资费根据数量与品类核算,以实际报价为准(以上为占位数据)。",
-        "en": "Final rate depends on quantity and category — confirmed at quote time (figures above are placeholders).",
-        "kr": "실제 요금은 수량·품목에 따라 견적 시 확정됩니다 (위 수치는 임시 값입니다)."
+        "zh": "具体资费根据数量与品类核算,以实际报价为准",
+        "en": "The specific tariff is calculated based on quantity and category, and is subject to the actual quotation.",
+        "kr": "특정 관세는 수량과 카테고리에 따라 계산되며 실제 견적에 따릅니다."
       },
       "rows": [
         {
           "name": {
-            "zh": "大批量整箱",
-            "en": "Bulk / full carton",
-            "kr": "대량·박스 단위"
+            "zh": "大批量整箱 5kg以上",
+            "en": "Large batches of whole box more than 5kg",
+            "kr": "5kg이 넘는 전체 상자의 대량 배치"
           },
           "price": {
-            "zh": "¥57/kg 起(占位)",
-            "en": "Starting from ¥57/kg (seat occupied)",
-            "kr": "57엔/kg부터(좌석 점유 시)"
+            "zh": "¥42/kg 起",
+            "en": "Starting from ¥42/kg",
+            "kr": "42엔/kg부터"
+          }
+        },
+        {
+          "name": {
+            "zh": "直邮小包 3kg内",
+            "en": "Direct mail small package within 3kg",
+            "kr": "3kg 이내 다이렉트 메일 소형 패키지"
+          },
+          "price": {
+            "zh": "¥45起",
+            "en": "Starting from ¥45",
+            "kr": "45엔부터"
           }
         }
       ]
@@ -307,9 +319,9 @@
         "kr": "짐 보관 · 요금 참고"
       },
       "note": {
-        "zh": "大件行李或超时寄存另议(以上为占位数据)。",
-        "en": "Oversized bags or extended storage quoted separately (figures above are placeholders).",
-        "kr": "대형 수하물이나 장기 보관은 별도 협의합니다 (위 수치는 임시 값입니다)."
+        "zh": "一件行李要求是110L搬家袋或者다이소搬家箱，大件行李或超时寄存另议",
+        "en": "One piece of luggage is required to be a 110L moving bag or 다이소 moving box. Large luggage or overtime storage will be discussed separately.",
+        "kr": "수하물 1개는 110L 이사 가방 또는 다이소 이사 박스여야 합니다. 대형 수하물이나 초과 근무 보관에 대해서는 별도로 논의됩니다."
       },
       "rows": [
         {
@@ -319,9 +331,9 @@
             "kr": "단기 보관(1~15일)"
           },
           "price": {
-            "zh": "¥25/天 起(占位)",
-            "en": "From ¥25/day (placeholder)",
-            "kr": "¥25/일 부터(자리)"
+            "zh": "¥30/天 起",
+            "en": "Starting from ¥30/day",
+            "kr": "1일 30엔부터"
           }
         },
         {
@@ -331,18 +343,18 @@
             "kr": "장기 보관(15일 이상)"
           },
           "price": {
-            "zh": "¥15/天 起(占位)",
-            "en": "From ¥15/day (placeholder)",
-            "kr": "¥15/일 부터(자리 차지)"
+            "zh": "¥20/天 起",
+            "en": "Starting from ¥20/day",
+            "kr": "1일 20엔부터"
           }
         }
       ]
     },
     "svcmwnknoo6": {
       "title": {
-        "zh": "资费参考",
-        "en": "Rate Reference",
-        "kr": "요금 참고"
+        "zh": "软件定制资费参考",
+        "en": "Software customization fee reference",
+        "kr": "소프트웨어 맞춤화 수수료 참조"
       },
       "note": {
         "zh": "具体价格请联系客服。",

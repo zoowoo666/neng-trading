@@ -350,9 +350,9 @@
         },
         {
           "name": {
-            "zh": "行李回国（一人一批5箱以内）",
-            "en": "Shipping luggage back to China (up to 5 boxes per person)",
-            "kr": "귀국 시 짐 운송(1인당 5개 이하)"
+            "zh": "行李回国（一批5箱以内）",
+            "en": "Shipping luggage back to China (up to 5 boxes per shipment)",
+            "kr": "짐 한국으로 배송(한 번에 5개 이하)"
           },
           "price": {
             "zh": "¥42/kg 起（包国内运费）",

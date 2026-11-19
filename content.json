@@ -7,14 +7,14 @@
       "kr": "한국에서 찜한 물건, 능능무역이 배송해 드립니다"
     },
     "services_sea_desc": {
-      "zh": "从下单到海运出货,以下品类均可代运:",
-      "en": "From order to ocean shipment, we source and forward the following categories:",
-      "kr": "주문부터 해상 출고까지, 아래 품목을 대행합니다:"
+      "zh": "从下单到海运出货,以下四大品类均可代运:",
+      "en": "From order to ocean shipment, we source and forward across four categories:",
+      "kr": "주문부터 해상 출고까지, 아래 네 가지 품목을 대행합니다:"
     },
     "services_cosmetics_title": {
-      "zh": "化妆品大包裹(港台)",
-      "en": "Cosmetics — Bulk Parcels（HK / TW）",
-      "kr": "화장품 대량 소포（홍콩·대만）"
+      "zh": "直邮小包、Olive young/化妆品大包裹(韩>台)",
+      "en": "Direct mail small package, Olive young/cosmetics large package (Korea>Taiwan)",
+      "kr": "다이렉트 메일 소형 패키지, 올리브영/화장품 대형 패키지(한국>대만)"
     },
     "services_luggage_desc": {
       "zh": "行李长、短期寄存, 出差、旅行、回国时寄存均可。另有行李转寄中国大陆业务，详情请私信咨询。",
@@ -27,9 +27,9 @@
       "kr": "대형택배 · 화장품 도매 · 수하물 보관 및 배송 - 서울,인천 창고에서 직배송, 개인 메시지만 보내주시면 상품이 배송됩니다."
     },
     "services_cosmetics_desc": {
-      "zh": "美妆产品集运打包,支持大批量整箱发货,适合分销与批发采购。",
-      "en": "Consolidation and packaging of beauty products supports large-volume, full-box shipments and is suitable for distribution and wholesale purchasing.",
-      "kr": "뷰티 제품의 통합 및 포장은 대용량, 풀박스 배송을 지원하며 유통 및 도매 구매에 적합합니다."
+      "zh": "入仓后三天到台湾！美妆产品集运打包,支持大批量整箱发货,适合分销与批发采购。",
+      "en": "Arrive in Taiwan three days after entering the warehouse! Consolidation and packaging of beauty products supports large-volume, full-box shipments and is suitable for distribution and wholesale purchasing.",
+      "kr": "창고에 들어간지 3일만에 대만 도착! 뷰티 제품의 통합 및 포장은 대용량, 풀박스 배송을 지원하며 유통 및 도매 구매에 적합합니다."
     },
     "about_body": {
       "zh": "能能贸易扎根首尔城东区圣水洞,专注海运大包裹、化妆品批发与行李寄存服务,以首尔、仁川两地仓储,把你在韩国看中的好物安全送到手中。",
@@ -47,9 +47,9 @@
       "kr": "인천광역시 원창동 북항로 177번길 96호 C동"
     },
     "notice_body": {
-      "zh": "欢迎关注能能贸易!首次下单可先私信咨询流程与预计时效,我们会尽快回复。 韩>日港台小包裹业务即将上架！",
-      "en": "Welcome to follow NENG² Trading! When placing an order for the first time, you can send a private message to inquire about the process and estimated timeliness. We will reply as soon as possible. South Korea>Japan, Hong Kong and Taiwan small parcel business will be launched soon!",
-      "kr": "능능무역 팔로우를 환영합니다! 처음 주문할 때 개인 메시지를 보내 프로세스 및 예상 일정에 대해 문의할 수 있습니다. 최대한 빨리 답변해드리겠습니다. 한국>일본,홍콩,대만 소화물 사업이 곧 시작됩니다!"
+      "zh": "欢迎关注能能贸易!首次下单可先私信咨询流程与预计时效,我们会尽快回复。 韩>日港小包裹业务即将上架！目前韩>港大代理招募中，价格从优～",
+      "en": "Welcome to follow NENG² Trading! When placing an order for the first time, you can send a private message to inquire about the process and estimated timeliness. We will reply as soon as possible. South Korea>Japan and Hong Kong small parcel business will be launched soon! Currently, we are recruiting agents from South Korea and Hong Kong University, and the price is favorable~",
+      "kr": "능능무역 팔로우를 환영합니다! 처음 주문할 때 개인 메시지를 보내 프로세스 및 예상 일정에 대해 문의할 수 있습니다. 최대한 빨리 답변해드리겠습니다. 한국>일본,홍콩 소포사업 곧 시작됩니다! 현재 한국과 홍콩대학교에서 에이전트를 모집중인데 가격이 저렴하네요~"
     },
     "hero_eyebrow": {
       "zh": "首尔&仁川 · 跨境货运",
@@ -188,6 +188,18 @@
             "en": "From ¥60/item (placeholder)",
             "kr": "¥60/개부터(자리 표시)"
           }
+        },
+        {
+          "name": {
+            "zh": "贸易、仓储软件定制开发",
+            "en": "Custom development of trade and warehousing software",
+            "kr": "무역, 창고 소프트웨어 맞춤 개발"
+          },
+          "price": {
+            "zh": "",
+            "en": "",
+            "kr": ""
+          }
         }
       ]
     },
@@ -254,61 +266,6 @@
           }
         }
       ]
-    },
-    "svc4": {
-      "title": {
-        "zh": "软件开发与文件空运 · 资费参考",
-        "en": "Software Development & Document Air Freight · Rates",
-        "kr": "소프트웨어 개발 및 문서 항공 배송 · 요금 참고"
-      },
-      "note": {
-        "zh": "具体价格请联系客服。",
-        "en": "Please contact us for details.",
-        "kr": "자세한 요금은 고객센터로 문의해 주세요."
-      },
-      "rows": [
-        {
-          "name": {
-            "zh": "软件开发",
-            "en": "Software Development",
-            "kr": "소프트웨어 개발"
-          },
-          "price": {
-            "zh": "请联系客服",
-            "en": "Please contact us",
-            "kr": "고객센터로 문의해 주세요"
-          }
-        },
-        {
-          "name": {
-            "zh": "文件空运",
-            "en": "Document Air Freight",
-            "kr": "문서 항공 배송"
-          },
-          "price": {
-            "zh": "请联系客服",
-            "en": "Please contact us",
-            "kr": "고객센터로 문의해 주세요"
-          }
-        }
-      ]
     }
-  },
-  "customServices": [
-    {
-      "id": "svc4",
-      "title": {
-        "zh": "软件开发与文件空运",
-        "en": "Software Development & Document Air Freight",
-        "kr": "소프트웨어 개발 및 문서 항공 배송"
-      },
-      "desc": {
-        "zh": "中小型企业仓储与管理软件开发,以及普通文件空运回国。",
-        "en": "Warehouse and management software for small and mid-sized businesses, plus ordinary document air freight back to China.",
-        "kr": "중소기업을 위한 창고·관리 소프트웨어 개발, 그리고 일반 문서의 중국행 항공 배송."
-      },
-      "tags": [],
-      "rateOn": true
-    }
-  ]
+  }
 }

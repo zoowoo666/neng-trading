@@ -428,6 +428,16 @@
   .rate-table td:first-child{color:var(--ink); font-weight:600; padding-right:1rem;}
   .rate-table td:last-child{text-align:right; font-weight:700; font-variant-numeric:tabular-nums; color:var(--rust); white-space:nowrap;}
   .modal-footnote{font-size:.78rem; color:var(--umber); line-height:1.6; margin-top:1rem;}
+  @media (max-width:560px){
+    /* 手机：资费表每行改成「名称在上、价格在下」，长价格不再把名称挤成竖条 */
+    .rate-table,.rate-table tbody{display:block;}
+    .rate-table tr{display:block; padding:.75rem 0; border-bottom:1px solid var(--line);}
+    .rate-table td{display:block; padding:0; border:0;}
+    .rate-table td:first-child{padding-right:0; margin-bottom:.2rem;}
+    .rate-table td:last-child{text-align:left; white-space:normal; line-height:1.5;}
+    /* 手机：每项业务的「查看资费」都放在标题下面、靠左，四项位置一致 */
+    .ledger-head{flex-direction:column; align-items:flex-start; gap:.6rem;}
+  }
 
   /* ---------- about ---------- */
   .about{padding:1rem 0 0;}

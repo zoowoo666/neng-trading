@@ -214,14 +214,14 @@
       "rows": [
         {
           "name": {
-            "zh": "明星周边",
-            "en": "Celebrity Merch",
-            "kr": "스타 굿즈"
+            "zh": "明星周边（泡重另算）",
+            "en": "Celebrity Merchandise (Bubble Wrap Weight Charged Separately)",
+            "kr": "연예인 굿즈(포장 무게 별도 계산)"
           },
           "price": {
-            "zh": "¥45/kg 起",
-            "en": "Starting from ¥45/kg",
-            "kr": "45엔/kg부터"
+            "zh": "¥35/kg 5kg 起（不包国内）",
+            "en": "¥35/kg, minimum 5kg (excluding domestic shipping)",
+            "kr": "¥35/kg 5kg부터(국내 배송비 미포함)"
           }
         },
         {
@@ -268,8 +268,32 @@
           },
           "price": {
             "zh": "¥60/件 起",
-            "en": "Starting from ¥60/item",
-            "kr": "60엔/개부터"
+            "en": "From ¥60/item",
+            "kr": "¥60/개부터"
+          }
+        },
+        {
+          "name": {
+            "zh": "周边大包裹空运>台湾",
+            "en": "Regional Large Package Air Freight > Taiwan",
+            "kr": "주변 대형 소포 항공 운송 > 대만"
+          },
+          "price": {
+            "zh": "¥70起 5kg 起（清关费+运费自理）",
+            "en": "From ¥70 for 5kg and up (customs clearance fee + shipping fee to be borne by the customer)",
+            "kr": "70위안부터 5kg부터(통관료 + 운임 별도 부담)"
+          }
+        },
+        {
+          "name": {
+            "zh": "周边大包裹空运>香港",
+            "en": "Regional Large Package Air Freight > Hong Kong",
+            "kr": "주변 대형 소포 항공 운송 > 홍콩"
+          },
+          "price": {
+            "zh": "¥70起 5kg 起（包运费，特殊地区不包）",
+            "en": "From ¥70 for 5kg (shipping included, except for special regions)",
+            "kr": "70위안부터 5kg부터(배송비 포함, 일부 지역 제외)"
           }
         }
       ]

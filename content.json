@@ -47,9 +47,9 @@
       "kr": "인천광역시 원창동 북항로 177번길 96호 C동"
     },
     "notice_body": {
-      "zh": "欢迎关注能能贸易!首次下单可先私信咨询流程,我们会尽快回复。\n·韩>日港小包裹业务即将上架！\n·目前韩>港大代理招募中，价格从优",
-      "en": "Welcome to follow NENG² Trading! When placing an order for the first time, you can send a private message to inquire about the process, and we will reply as soon as possible.\n·Korea>Japan-Hong Kong small parcel business will be launched soon!\n·Currently recruiting agents from South Korea>Hong Kong University, with favorable prices",
-      "kr": "능능무역 팔로우를 환영합니다! 처음 주문하실 때 비밀댓글로 진행과정을 문의해주시면 최대한 빨리 답변해드리겠습니다.\n·한국>일본-홍콩 소포장 사업이 곧 시작됩니다!\n·현재 한국>홍콩대학교에서 에이전트를 모집하고 있으며 가격도 저렴합니다."
+      "zh": "欢迎关注能能贸易!首次下单可先私信咨询流程,我们会尽快回复。\n·韩>日港小包裹业务即将上架！\n·目前韩>港大代理招募中，价格从优\n·另有服装空运线，只接大批量非品牌",
+      "en": "Welcome to follow NENG² Trading!For your first order, you can send us a private message to inquire about the process, and we will reply as soon as possible.\n· Korea > Japan and Hong Kong small package service is coming soon!\n· Currently recruiting agents for South Korea > Hong Kong. Competitive pricing available.\n· There is also an air freight line for clothing, which only accepts large quantities of non-branded items.",
+      "kr": "능능무역을 팔로우해 주세요!첫 주문 시 먼저 메시지로 주문 절차를 문의해 주시면 최대한 신속하게 답변해 드리겠습니다.\n· 한-일-홍콩 소형 소포 서비스가 곧 출시됩니다!\n· 현재 한국 > 홍콩대 에이전트 모집 중, 가격 우대\n· 별도의 의류 항공 운송 라인이 있으며, 대량의 노브랜드 제품만 취급합니다."
     },
     "hero_eyebrow": {
       "zh": "首尔&仁川 · 跨境货运",
@@ -207,9 +207,9 @@
         "kr": "해상 및 항공 화물사업 · 관세안내"
       },
       "note": {
-        "zh": "具体资费根据重量、体积与品类核算,以实际报价为准(以上为占位数据)。",
-        "en": "Final rate depends on weight, volume and category — confirmed at quote time (figures above are placeholders).",
-        "kr": "실제 요금은 무게·부피·품목에 따라 견적 시 확정됩니다 (위 수치는 임시 값입니다)."
+        "zh": "具体资费根据重量、体积与品类核算,以实际报价为准。另有服装空运线，只接大批量非品牌",
+        "en": "Specific rates are calculated based on weight, volume, and category, with the actual quote prevailing. There is also an air freight line for clothing, which only accepts large quantities of non-branded items.",
+        "kr": "구체적인 요금은 중량, 부피, 품목에 따라 산정되며, 실제 견적을 기준으로 합니다. 의류 항공 운송 라인도 별도로 있으며, 비브랜드 제품만 대량으로 취급합니다."
       },
       "rows": [
         {

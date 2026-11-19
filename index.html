@@ -469,6 +469,19 @@
   .guest-ok{font-size:1.05rem; font-weight:700; line-height:1.5; margin:0 0 .5rem;}
   .guest-ok::before{content:"✓"; display:inline-block; margin-right:.5rem; color:var(--rust);}
   .guest-note{font-size:.84rem; line-height:1.6; color:var(--umber); margin:0 0 .9rem;}
+  .board{margin-top:1.6rem; padding-top:1rem; border-top:1px solid var(--line);}
+  .board[hidden]{display:none;}
+  .board-head{display:flex; align-items:baseline; justify-content:space-between; gap:1rem; margin-bottom:.4rem;}
+  .board-title{font-size:.78rem; font-weight:700; letter-spacing:.14em; color:var(--umber); margin:0;}
+  .board-count{font-size:.78rem; color:var(--umber);}
+  .board-list{list-style:none; margin:0; padding:0;}
+  .board-row{display:flex; align-items:baseline; gap:.8rem; padding:.5rem 0; border-bottom:1px solid var(--line); font-size:.92rem;}
+  .board-rank{flex:none; width:1.2rem; color:var(--umber); font-variant-numeric:tabular-nums; font-size:.8rem;}
+  .board-name{flex:1 1 auto; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:600;}
+  .board-date{flex:none; color:var(--umber); font-size:.8rem; font-variant-numeric:tabular-nums;}
+  .board-row.is-me .board-name,.board-row.is-me .board-rank{color:var(--rust);}
+  .board-empty{font-size:.84rem; color:var(--umber); margin:.6rem 0 0;}
+  .board-empty[hidden]{display:none;}
   .guest-again{padding:0; font-size:.84rem; color:var(--rust); text-decoration:underline; text-underline-offset:3px;}
   @media (max-width:900px){ .about-grid{grid-template-columns:1fr; gap:2rem;} }
 
@@ -672,6 +685,15 @@
           <p class="guest-note" data-i18n="guest_note">如需回复,请通过上方的联系方式找我们。</p>
           <button type="button" class="guest-again" id="guestAgain" data-i18n="guest_again">再写一条</button>
         </div>
+
+        <div class="board" id="guestBoard" hidden>
+          <div class="board-head">
+            <h4 class="board-title" data-i18n="board_title">留言榜</h4>
+            <span class="board-count" id="boardCount"></span>
+          </div>
+          <ol class="board-list" id="boardList"></ol>
+          <p class="board-empty" id="boardEmpty" data-i18n="board_empty">还没有人留言,来做第一位吧。</p>
+        </div>
       </div>
     </div>
 
@@ -731,6 +753,10 @@
       contact_wechat_label:"微信", contact_line_label:"Line",
       contact_ig_label:"Instagram", contact_tg_label:"Telegram", contact_xhs_label:"小红书私信",
       copy_action:"点击复制", copy_success:"已复制",
+      board_title:"留言榜",
+      board_count:"共 {n} 位朋友留言",
+      board_empty:"还没有人留言,来做第一位吧。",
+      guest_unsure:"网络不稳定,没能确认是否送达。稍后再试,或通过上方联系方式找我们。",
       guest_title:"给我们留言",
       guest_sub:"留下花名和想说的话,只有我们看得到。",
       guest_name_ph:"你的花名",
@@ -798,6 +824,10 @@
       contact_wechat_label:"WeChat", contact_line_label:"Line",
       contact_ig_label:"Instagram", contact_tg_label:"Telegram", contact_xhs_label:"Xiaohongshu DM",
       copy_action:"Tap to copy", copy_success:"Copied",
+      board_title:"GUESTBOOK",
+      board_count:"{n} friends have left a message",
+      board_empty:"No messages yet. Be the first!",
+      guest_unsure:"Unstable connection. We could not confirm delivery. Try again later, or reach us via the contact options above.",
       guest_title:"Leave us a message",
       guest_sub:"Add a nickname and your message. Only we can read it.",
       guest_name_ph:"Your nickname",
@@ -865,6 +895,10 @@
       contact_wechat_label:"위챗", contact_line_label:"라인",
       contact_ig_label:"인스타그램", contact_tg_label:"텔레그램", contact_xhs_label:"샤오홍슈 DM",
       copy_action:"눌러서 복사", copy_success:"복사됨",
+      board_title:"방명록",
+      board_count:"{n}명이 메시지를 남겼습니다",
+      board_empty:"아직 메시지가 없습니다. 첫 번째가 되어 보세요!",
+      guest_unsure:"네트워크가 불안정해 전달 여부를 확인하지 못했습니다. 잠시 후 다시 시도하시거나 위 연락처로 문의해 주세요.",
       guest_title:"메시지 남기기",
       guest_sub:"닉네임과 남기실 말씀을 적어 주세요. 저희만 볼 수 있습니다.",
       guest_name_ph:"닉네임",
@@ -1045,6 +1079,7 @@
     if(panel){ panel.hidden = !hasPromo; }
     if(hero){ hero.classList.toggle('has-promo', hasPromo); }
     if(typeof renderGuest === 'function'){ renderGuest(); }
+    if(typeof renderBoard === 'function' && boardEl){ renderBoard(); }
     updateStatus();
     applyStyles();
   }
@@ -1328,6 +1363,64 @@
     if(guestDoneName !== null){ gOk.textContent = String(t('guest_ok', currentLang)||'').replace('{name}', guestDoneName); }
     if(gBtn.disabled && gBtn.getAttribute('data-busy')){ gBtn.textContent = t('guest_sending', currentLang); }
   }
+
+  // ---------- 留言榜（只记花名和日期，留言内容不会公开） ----------
+  var BOARD_URL = '';   // Supabase 项目网址，例如 https://xxxx.supabase.co
+  var BOARD_KEY = '';   // Supabase anon 公钥（可公开）；任一为空时留言榜隐藏
+  var boardEl = document.getElementById('guestBoard'), boardList = document.getElementById('boardList'),
+      boardCount = document.getElementById('boardCount'), boardEmpty = document.getElementById('boardEmpty');
+  var boardRows = [], boardTotal = 0, boardMe = null;
+  var BOARD_SHOW = 6;
+  function boardOn(){ return !!(BOARD_URL && BOARD_KEY); }
+  function boardDate(iso){
+    try{ var d = new Date(iso); if(isNaN(d.getTime())) return ''; var m = d.getMonth()+1, dd = d.getDate(); return (m<10?'0':'')+m+'.'+(dd<10?'0':'')+dd; }catch(e){ return ''; }
+  }
+  function renderBoard(){
+    if(!boardEl) return;
+    if(!boardOn() && !isEdit){ boardEl.hidden = true; return; }
+    boardEl.hidden = false;
+    boardList.innerHTML = '';
+    var rows = boardRows.slice(0, BOARD_SHOW);
+    for(var i=0;i<rows.length;i++){
+      var li = el('li','board-row'+(rows[i].me ? ' is-me' : ''));
+      li.appendChild(el('span','board-rank', String(i+1)));
+      li.appendChild(el('span','board-name', rows[i].name));
+      li.appendChild(el('span','board-date', rows[i].date));
+      boardList.appendChild(li);
+    }
+    var n = Math.max(boardTotal, boardRows.length);
+    boardCount.textContent = n ? String(t('board_count', currentLang)||'').replace('{n}', n) : '';
+    boardEmpty.hidden = rows.length > 0;
+  }
+  function boardLoad(){
+    if(!boardOn() || isEdit) return;
+    try{
+      fetch(BOARD_URL + '/rest/v1/guest_board?select=name,created_at&order=created_at.desc&limit=' + BOARD_SHOW, {
+        headers:{apikey:BOARD_KEY, Authorization:'Bearer '+BOARD_KEY, Prefer:'count=exact'}
+      }).then(function(r){
+        var cr = r.headers.get('content-range'); var m = cr && /\/(\d+)$/.exec(cr);
+        if(m) boardTotal = parseInt(m[1],10) || 0;
+        return r.json();
+      }).then(function(rows){
+        if(!rows || !rows.map) return;
+        var mine = boardRows.filter(function(x){ return x.me; });
+        boardRows = mine.concat(rows.map(function(x){ return {name:x.name, date:boardDate(x.created_at)}; }));
+        renderBoard();
+      }).catch(function(){});
+    }catch(e){}
+  }
+  function boardAdd(name){
+    if(!boardOn() || isEdit) return;
+    boardRows.unshift({name:name, date:boardDate(new Date().toISOString()), me:true}); boardTotal += 1; renderBoard();
+    try{
+      fetch(BOARD_URL + '/rest/v1/guest_board', {
+        method:'POST',
+        headers:{apikey:BOARD_KEY, Authorization:'Bearer '+BOARD_KEY, 'Content-Type':'application/json', Prefer:'return=minimal'},
+        body: JSON.stringify({name:name, lang:currentLang})
+      }).catch(function(){});
+    }catch(e){}
+  }
+
   function guestLast(){ try{ return parseInt(localStorage.getItem('neng_guest_last')||'0',10)||0; }catch(e){ return 0; } }
   if(gForm && !isEdit){
     gMsg.addEventListener('input', function(){ gCount.textContent = gMsg.value.length + ' / 500'; });
@@ -1341,19 +1434,21 @@
       gErr.textContent = '';
       gBtn.disabled = true; gBtn.setAttribute('data-busy','1'); gBtn.textContent = t('guest_sending', currentLang);
       var finished = false;
-      function fail(){
+      function reset(){ gBtn.disabled = false; gBtn.removeAttribute('data-busy'); gBtn.textContent = t('guest_send', currentLang); }
+      function fail(code, unsure){
         if(finished) return; finished = true;
-        gBtn.disabled = false; gBtn.removeAttribute('data-busy'); gBtn.textContent = t('guest_send', currentLang);
-        gErr.textContent = t('guest_fail', currentLang);
+        reset();
+        gErr.textContent = t(unsure ? 'guest_unsure' : 'guest_fail', currentLang);
+        try{ console.log('guest send failed:', code); }catch(e){}
       }
       function success(){
         if(finished) return; finished = true;
         try{ localStorage.setItem('neng_guest_last', String(new Date().getTime())); }catch(e){}
-        guestDoneName = name; renderGuest();
-        gBtn.disabled = false; gBtn.removeAttribute('data-busy'); gBtn.textContent = t('guest_send', currentLang);
+        guestDoneName = name; renderGuest(); reset();
         gForm.hidden = true; gDone.hidden = false;
+        boardAdd(name);   // 记到留言榜（失败也不影响留言本身）
       }
-      var timer = setTimeout(fail, 15000);
+      var timer = setTimeout(function(){ fail('timeout', true); }, 30000);
       try{
         // 用表单格式提交（浏览器视为「简单请求」，不会先发预检，兼容性最好）
         var fd = new FormData();
@@ -1361,12 +1456,21 @@
         fd.append('subject', '能能贸易官网留言 · ' + name);
         fd.append('from_name', '能能贸易官网');
         fd.append('name', name); fd.append('message', msg); fd.append('lang', currentLang);
-        fetch(GUEST_ENDPOINT, { method:'POST', headers:{'Accept':'application/json'}, body: fd
-        }).then(function(r){ return r.json(); }).then(function(j){
+        fetch(GUEST_ENDPOINT, { method:'POST', headers:{'Accept':'application/json'}, body: fd })
+        .then(function(r){
+          return r.text().then(function(txt){
+            var j = null; try{ j = JSON.parse(txt); }catch(e){}
+            return {ok:r.ok, status:r.status, j:j};
+          });
+        })
+        .then(function(x){
           clearTimeout(timer);
-          if(j && (j.success === true || j.success === 'true')) success(); else fail();
-        }).catch(function(){ clearTimeout(timer); fail(); });
-      }catch(err){ clearTimeout(timer); fail(); }
+          if(x.j && (x.j.success === true || x.j.success === 'true')) success();
+          else if(x.ok && !x.j) success();   // 服务器说 2xx 但内容读不懂：按已送达算
+          else fail('http ' + x.status + ' ' + (x.j && x.j.message || ''));
+        })
+        .catch(function(err){ clearTimeout(timer); fail('net ' + (err && err.message), true); });
+      }catch(err){ clearTimeout(timer); fail('throw ' + (err && err.message)); }
     });
     gAgain.addEventListener('click', function(){
       guestDoneName = null; gName.value = ''; gMsg.value = ''; gCount.textContent = '0 / 500';
@@ -1377,6 +1481,8 @@
   }
 
   renderGuest();
+  renderBoard();
+  boardLoad();
 
   var resizeTimer = null;
   window.addEventListener('resize', function(){ clearTimeout(resizeTimer); resizeTimer = setTimeout(applyStyles, 150); });

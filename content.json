@@ -347,6 +347,30 @@
             "en": "Starting from ¥20/day",
             "kr": "1일 20엔부터"
           }
+        },
+        {
+          "name": {
+            "zh": "行李回国（一人一批5箱以内）",
+            "en": "Shipping luggage back to China (up to 5 boxes per person)",
+            "kr": "귀국 시 짐 운송(1인당 5개 이하)"
+          },
+          "price": {
+            "zh": "¥42/kg 起（包国内运费）",
+            "en": "From ¥42/kg (including domestic shipping)",
+            "kr": "42위안/kg부터(국내 배송비 포함)"
+          }
+        },
+        {
+          "name": {
+            "zh": "行李上门取件",
+            "en": "Luggage pick-up service",
+            "kr": "수하물 픽업 서비스"
+          },
+          "price": {
+            "zh": "仁川2₩ 首尔3.5₩起",
+            "en": "Incheon from ₩2, Seoul from ₩3.5",
+            "kr": "인천 2원~, 서울 3.5원~"
+          }
         }
       ]
     },

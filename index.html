@@ -1355,15 +1355,13 @@
       }
       var timer = setTimeout(fail, 15000);
       try{
-        fetch(GUEST_ENDPOINT, {
-          method:'POST',
-          headers:{'Content-Type':'application/json','Accept':'application/json'},
-          body: JSON.stringify({
-            access_key: GUEST_KEY,
-            subject: '能能贸易官网留言 · ' + name,
-            from_name: '能能贸易官网',
-            name: name, message: msg, lang: currentLang
-          })
+        // 用表单格式提交（浏览器视为「简单请求」，不会先发预检，兼容性最好）
+        var fd = new FormData();
+        fd.append('access_key', GUEST_KEY);
+        fd.append('subject', '能能贸易官网留言 · ' + name);
+        fd.append('from_name', '能能贸易官网');
+        fd.append('name', name); fd.append('message', msg); fd.append('lang', currentLang);
+        fetch(GUEST_ENDPOINT, { method:'POST', headers:{'Accept':'application/json'}, body: fd
         }).then(function(r){ return r.json(); }).then(function(j){
           clearTimeout(timer);
           if(j && (j.success === true || j.success === 'true')) success(); else fail();

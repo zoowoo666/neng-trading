@@ -7,9 +7,9 @@
       "kr": "한국에서 찜한 물건, 능능무역이 배송해 드립니다"
     },
     "services_sea_desc": {
-      "zh": "从下单到海运出货,以下四大品类均可代运:",
-      "en": "From order to ocean shipment, we source and forward across four categories:",
-      "kr": "주문부터 해상 출고까지, 아래 네 가지 품목을 대행합니다:"
+      "zh": "从下单到海运出货,以下品类均可代运:",
+      "en": "From order to ocean shipment, we source and forward the following categories:",
+      "kr": "주문부터 해상 출고까지, 아래 품목을 대행합니다:"
     },
     "services_cosmetics_title": {
       "zh": "化妆品大包裹(港台)",
@@ -188,18 +188,6 @@
             "en": "From ¥60/item (placeholder)",
             "kr": "¥60/개부터(자리 표시)"
           }
-        },
-        {
-          "name": {
-            "zh": "贸易、仓储软件定制开发",
-            "en": "Custom development of trade and warehousing software",
-            "kr": "무역, 창고 소프트웨어 맞춤 개발"
-          },
-          "price": {
-            "zh": "",
-            "en": "",
-            "kr": ""
-          }
         }
       ]
     },
@@ -266,6 +254,61 @@
           }
         }
       ]
+    },
+    "svc4": {
+      "title": {
+        "zh": "软件开发与文件空运 · 资费参考",
+        "en": "Software Development & Document Air Freight · Rates",
+        "kr": "소프트웨어 개발 및 문서 항공 배송 · 요금 참고"
+      },
+      "note": {
+        "zh": "具体价格请联系客服。",
+        "en": "Please contact us for details.",
+        "kr": "자세한 요금은 고객센터로 문의해 주세요."
+      },
+      "rows": [
+        {
+          "name": {
+            "zh": "软件开发",
+            "en": "Software Development",
+            "kr": "소프트웨어 개발"
+          },
+          "price": {
+            "zh": "请联系客服",
+            "en": "Please contact us",
+            "kr": "고객센터로 문의해 주세요"
+          }
+        },
+        {
+          "name": {
+            "zh": "文件空运",
+            "en": "Document Air Freight",
+            "kr": "문서 항공 배송"
+          },
+          "price": {
+            "zh": "请联系客服",
+            "en": "Please contact us",
+            "kr": "고객센터로 문의해 주세요"
+          }
+        }
+      ]
     }
-  }
+  },
+  "customServices": [
+    {
+      "id": "svc4",
+      "title": {
+        "zh": "软件开发与文件空运",
+        "en": "Software Development & Document Air Freight",
+        "kr": "소프트웨어 개발 및 문서 항공 배송"
+      },
+      "desc": {
+        "zh": "中小型企业仓储与管理软件开发,以及普通文件空运回国。",
+        "en": "Warehouse and management software for small and mid-sized businesses, plus ordinary document air freight back to China.",
+        "kr": "중소기업을 위한 창고·관리 소프트웨어 개발, 그리고 일반 문서의 중국행 항공 배송."
+      },
+      "tags": [],
+      "rateOn": true
+    }
+  ]
 }

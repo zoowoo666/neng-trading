@@ -85,7 +85,7 @@
 </head>
 <body>
 <div class="top">
-  <h1>能能贸易 · 后台 <small style="font-weight:400;font-size:.65rem;color:var(--umber)">v11-19b</small></h1>
+  <h1>能能贸易 · 后台 <small style="font-weight:400;font-size:.65rem;color:var(--umber)">v11-19c</small></h1>
   <span class="msg" id="msg">载入中…</span>
   <span class="spacer"></span>
   <label class="check" title="在中文框打字后，自动翻译成英文和韩文"><input type="checkbox" id="autoTr"> 自动翻译</label>
@@ -319,6 +319,7 @@
       var now = new Date();
       var stamp = new Intl.DateTimeFormat('zh-CN',{timeZone:'Asia/Seoul', year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit', hour12:false}).format(now);
       var body = {message:'后台更新内容 ' + stamp, content: b64encode(JSON.stringify(content, null, 2) + '\n'), branch: cfg.branch};
+      if(sha && res.sha && res.sha !== sha){ var e = new Error('stale'); e.stale = true; throw e; }
       if(res.sha) body.sha = res.sha;
       return api('/contents/content.json', {method:'PUT', body: JSON.stringify(body), headers:{'Content-Type':'application/json'}});
     }).then(function(r){
@@ -329,6 +330,7 @@
       say('已发布 ✓ 约 1 分钟后正式网页更新', 'ok');
     }).catch(function(err){
       var s = err && err.status;
+      if(err && err.stale){ say('线上内容比你开着的这个页面更新（可能你在别的设备或窗口发布过）。为避免覆盖，已取消发布。请刷新页面，再把改动重做一遍', 'err'); return; }
       if(s === 401) say('钥匙无效或已过期，请到「设置」重新贴一把', 'err');
       else if(s === 403 || s === 404) say('钥匙没有这个仓库的写入权限，或仓库名不对', 'err');
       else if(s === 409) say('有冲突：请刷新页面后再改一次', 'err');
@@ -553,6 +555,55 @@
     tagsBox.appendChild(h('button', {class:'btn small', text:'＋ 新增小框', onclick:function(){ content.seaTags.push({zh:'', en:'', kr:''}); changed(); renderData(); reopen('海运业务小框'); }}));
     pane.appendChild(tagsBox);
 
+    // 更多业务（第四项起）
+    content.customServices = content.customServices || [];
+    var ZHN = ['一','二','三','四','五','六','七','八','九','十','十一','十二'];
+    var svcBox = h('details', {}, [h('summary', {text:'更多业务（第四项起，' + content.customServices.length + ' 项）'}),
+      h('p', {class:'key', text:'首页「经营业务」里排在「三」后面的业务，序号自动排成四、五、六……。每一项可以有标题、介绍、小框和「查看资费」按钮，都可以不要。'})]);
+    function svcAgain(){ renderData(); reopen('更多业务'); }
+    content.customServices.forEach(function(sv, i){
+      var arr = content.customServices;
+      sv.title = sv.title || {zh:'',en:'',kr:''}; sv.desc = sv.desc || {zh:'',en:'',kr:''}; sv.tags = sv.tags || [];
+      var card = h('div', {class:'card'}, [
+        h('div', {class:'ch'}, ['第 ' + ZHN[i + 3] + ' 项', h('span', {class:'row'}, [
+          h('button', {class:'btn small', text:'↑', disabled: i === 0 ? true : null, onclick:function(){ arr.splice(i-1, 0, arr.splice(i,1)[0]); changed(); svcAgain(); }}),
+          h('button', {class:'btn small', text:'↓', disabled: i === arr.length - 1 ? true : null, onclick:function(){ arr.splice(i+1, 0, arr.splice(i,1)[0]); changed(); svcAgain(); }}),
+          h('button', {class:'btn small', text:'删除', onclick:function(){
+            if(!confirm('确定删除这一项业务吗？（发布前还可以关掉页面放弃）')) return;
+            delete content.rates[sv.id]; arr.splice(i,1); changed(); svcAgain();
+          }})
+        ])]),
+        h('div', {class:'field'}, [h('label', {text:'标题'}), triInputs(sv.title, changed)]),
+        h('div', {class:'field'}, [h('label', {text:'介绍（可留空）'}), triAreas(sv.desc, changed)])
+      ]);
+      // 小框
+      var tg = h('div', {class:'field'}, [h('label', {text:'小框（' + sv.tags.length + ' 个，可以一个都不要）'})]);
+      sv.tags.forEach(function(t, k){
+        tg.appendChild(h('div', {class:'card'}, [
+          h('div', {class:'ch'}, ['小框 ' + (k + 1), h('button', {class:'btn small', text:'删除', onclick:function(){ sv.tags.splice(k,1); changed(); svcAgain(); }})]),
+          triInputs(t, changed)
+        ]));
+      });
+      tg.appendChild(h('button', {class:'btn small', text:'＋ 新增小框', onclick:function(){ sv.tags.push({zh:'',en:'',kr:''}); changed(); svcAgain(); }}));
+      card.appendChild(tg);
+      // 资费按钮
+      var cb = h('input', {type:'checkbox', checked: !!sv.rateOn, onchange:function(){
+        sv.rateOn = cb.checked;
+        if(sv.rateOn && !content.rates[sv.id]){
+          content.rates[sv.id] = {title:{zh:'资费参考',en:'Rate Reference',kr:'요금 참고'}, note:{zh:'具体价格请联系客服。',en:'Please contact us for details.',kr:'자세한 요금은 고객센터로 문의해 주세요.'}, rows:[]};
+        }
+        changed(); svcAgain();
+      }});
+      card.appendChild(h('label', {class:'check', style:'margin:.5rem 0'}, [cb, '显示「查看资费」按钮']));
+      if(sv.rateOn && content.rates[sv.id]) card.appendChild(rateEditor(sv.id, '第 ' + ZHN[i + 3] + ' 项的价目表', '更多业务'));
+      svcBox.appendChild(card);
+    });
+    svcBox.appendChild(h('button', {class:'btn small', text:'＋ 新增一项业务', onclick:function(){
+      content.customServices.push({id:'svc' + Date.now().toString(36), title:{zh:'',en:'',kr:''}, desc:{zh:'',en:'',kr:''}, tags:[], rateOn:false});
+      changed(); svcAgain();
+    }}));
+    pane.appendChild(svcBox);
+
     // 联系方式
     var names ={wechat:'微信', line:'Line', ig:'Instagram', tg:'Telegram', xhs:'小红书'};
     var contacts = h('details', {}, [h('summary', {text:'联系方式'}), h('p', {class:'key', text:'Instagram 和 Telegram 填用户名即可（不用加 @），会自动变成可点击的链接；其余是「点击复制」。'})]);
@@ -566,20 +617,10 @@
 
     // 资费
     var rateNames = {sea:'海运业务', cosmetics:'港台化妆品大包裹', luggage:'行李寄存'};
+    var customIds = (content.customServices || []).map(function(sv){ return sv.id; });
     Object.keys(content.rates).forEach(function(rk){
-      var r = content.rates[rk];
-      var d = h('details', {}, [h('summary', {text:'资费 · ' + (rateNames[rk] || rk)}),
-        h('div', {class:'field'}, [h('label', {text:'弹窗标题'}), triInputs(r.title, changed)])]);
-      r.rows.forEach(function(row, i){
-        d.appendChild(h('div', {class:'card'}, [
-          h('div', {class:'ch'}, ['第 ' + (i + 1) + ' 行', h('button', {class:'btn small', text:'删除', onclick:function(){ r.rows.splice(i,1); changed(); renderData(); reopen(rateNames[rk]); }})]),
-          h('div', {class:'field'}, [h('label', {text:'项目'}), triInputs(row.name, changed)]),
-          h('div', {class:'field'}, [h('label', {text:'价格'}), triInputs(row.price, changed)])
-        ]));
-      });
-      d.appendChild(h('button', {class:'btn small', text:'＋ 新增一行', onclick:function(){ r.rows.push({name:{zh:'',en:'',kr:''}, price:{zh:'',en:'',kr:''}}); changed(); renderData(); reopen(rateNames[rk]); }}));
-      d.appendChild(h('div', {class:'field', style:'margin-top:.6rem'}, [h('label', {text:'备注'}), triInputs(r.note, changed)]));
-      pane.appendChild(d);
+      if(customIds.indexOf(rk) !== -1) return;   // 更多业务的价目表在它自己的卡片里
+      pane.appendChild(rateEditor(rk, '资费 · ' + (rateNames[rk] || rk), null));
     });
 
     // 全部文字
@@ -603,6 +644,36 @@
     }
     fill();
     pane.appendChild(all);
+  }
+  function rateEditor(rk, label, parentLabel){
+    var r = content.rates[rk];
+    r.rows = r.rows || []; r.title = r.title || {zh:'',en:'',kr:''}; r.note = r.note || {zh:'',en:'',kr:''};
+    function again(){ renderData(); if(parentLabel) reopen(parentLabel); reopen(label); }
+    var d = h('details', {}, [h('summary', {text:label}),
+      h('div', {class:'field'}, [h('label', {text:'弹窗标题'}), triInputs(r.title, changed)])]);
+    r.rows.forEach(function(row, i){
+      d.appendChild(h('div', {class:'card'}, [
+        h('div', {class:'ch'}, ['第 ' + (i + 1) + ' 行', h('button', {class:'btn small', text:'删除', onclick:function(){ r.rows.splice(i,1); changed(); again(); }})]),
+        h('div', {class:'field'}, [h('label', {text:'项目'}), triInputs(row.name, changed)]),
+        h('div', {class:'field'}, [h('label', {text:'价格'}), triInputs(row.price, changed)])
+      ]));
+    });
+    d.appendChild(h('button', {class:'btn small', text:'＋ 新增一行', onclick:function(){ r.rows.push({name:{zh:'',en:'',kr:''}, price:{zh:'',en:'',kr:''}}); changed(); again(); }}));
+    d.appendChild(h('div', {class:'field', style:'margin-top:.6rem'}, [h('label', {text:'备注'}), triInputs(r.note, changed)]));
+    return d;
+  }
+  // 三语多行文字框（改中文自动翻译）
+  function triAreas(obj, onchange){
+    var els = {}, zhLab = null;
+    var box = h('div', {}, LANGS.map(function(l){
+      var ta = h('textarea', {rows:2, oninput:function(){ obj[l] = ta.value; onchange(); }});
+      ta.value = obj[l] || '';
+      els[l] = ta;
+      var lab = h('label', {class:'lab'}, [LNAME[l]]); if(l === 'zh') zhLab = lab;
+      return h('div', {class:'field'}, [lab, ta]);
+    }));
+    zhLab.appendChild(trButton(wireTr(els, function(l, v){ obj[l] = v; })));
+    return box;
   }
   function reopen(label){
     document.querySelectorAll('#pane-data details').forEach(function(d){ if(d.querySelector('summary').textContent.indexOf(label) !== -1) d.open = true; });

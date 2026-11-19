@@ -531,7 +531,7 @@
             </div>
             <p class="ledger-desc" data-i18n="services_sea_desc">从下单到海运出货,以下品类均可代购代运:</p>
             <ul class="tag-list" id="seaTagList">
-              <li class="tag">明星周边</li><li class="tag">电子元件</li><li class="tag">工业辅料</li><li class="tag">SD娃娃</li><li class="tag">软件开发</li>
+              <li class="tag">明星周边</li><li class="tag">电子元件</li><li class="tag">工业辅料</li><li class="tag">SD娃娃</li>
             </ul>
           </div>
         </article>
@@ -819,9 +819,9 @@
       {zh:'明星周边', en:'Celebrity Merch', kr:'스타 굿즈'},
       {zh:'电子元件', en:'Electronic Components', kr:'전자부품'},
       {zh:'工业辅料', en:'Industrial Supplies', kr:'공업 부자재'},
-      {zh:'SD娃娃', en:'BJD / SD Dolls', kr:'SD돌 (구체관절인형)'},
-      {zh:'软件开发', en:'Software Development', kr:'소프트웨어 개발'}
+      {zh:'SD娃娃', en:'BJD / SD Dolls', kr:'SD돌 (구체관절인형)'}
     ],
+    customServices: [],
     promo: {zh:'', en:'', kr:''},
     hours: { open:'10:00', close:'18:00', lunchStart:'12:00', lunchEnd:'13:00', closedDays:[], closedToday:false },
     unclaimed: [
@@ -894,6 +894,7 @@
     try{ document.documentElement.lang = code === 'zh' ? 'zh-CN' : (code === 'kr' ? 'ko' : 'en'); }catch(e){}
     try{ document.title = t('meta_title', code); }catch(e){}
     renderSeaTags();
+    renderCustomServices();
     var nodes = siteEl.querySelectorAll('[data-i18n]');
     for(var i=0;i<nodes.length;i++){
       var key = nodes[i].getAttribute('data-i18n');
@@ -917,6 +918,40 @@
 
   // ---------- 列表：无主包裹 / 联系方式 ----------
   function el(tag, cls, text){ var e=document.createElement(tag); if(cls) e.className=cls; if(text!==undefined) e.textContent=text; return e; }
+  // 更多业务（第四项起）：标题、介绍、小框、资费按钮都来自后台
+  var ZH_NUM = ['一','二','三','四','五','六','七','八','九','十','十一','十二'];
+  function renderCustomServices(){
+    var sec = document.getElementById('services'); if(!sec) return;
+    Array.prototype.slice.call(sec.querySelectorAll('.ledger-row[data-custom]')).forEach(function(x){ x.remove(); });
+    (content.customServices||[]).forEach(function(sv, i){
+      var n = 4 + i;
+      var art = el('article','ledger-row'); art.setAttribute('data-custom','1');
+      var idx = el('div','ledger-index', currentLang === 'zh' ? (ZH_NUM[n-1] || String(n)) : (n < 10 ? '0' : '') + n);
+      idx.setAttribute('data-edit','svc_index');
+      var body = el('div','ledger-body'), head = el('div','ledger-head');
+      var h3 = el('h3','ledger-title', pick(sv.title, currentLang)); h3.setAttribute('data-edit','svc_title');
+      head.appendChild(h3);
+      if(sv.rateOn && content.rates && content.rates[sv.id]){
+        var btn = el('button','rate-badge'); btn.type = 'button';
+        btn.setAttribute('data-rate', sv.id); btn.setAttribute('aria-haspopup','dialog'); btn.setAttribute('data-i18n','rate_cta');
+        head.appendChild(btn);
+      }
+      body.appendChild(head);
+      var tags = (sv.tags||[]).map(function(tg){ return pick(tg, currentLang); }).filter(function(x){ return String(x).trim(); });
+      var desc = pick(sv.desc, currentLang);
+      if(String(desc).trim()){
+        var p = el('p','ledger-desc', desc); p.setAttribute('data-edit','svc_desc');
+        if(!tags.length) p.style.marginBottom = '0';
+        body.appendChild(p);
+      }
+      if(tags.length){
+        var ul = el('ul','tag-list');
+        tags.forEach(function(x){ var li = el('li','tag', x); li.setAttribute('data-edit','svc_tag'); ul.appendChild(li); });
+        body.appendChild(ul);
+      }
+      art.appendChild(idx); art.appendChild(body); sec.appendChild(art);
+    });
+  }
   function renderSeaTags(){
     var ul = document.getElementById('seaTagList'); if(!ul) return;
     ul.innerHTML = '';

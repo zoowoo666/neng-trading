@@ -132,6 +132,7 @@
   .site .section-title,
   .site .ledger-title,
   .site .ledger-index,
+  .site .partner,
   .site .modal-title{font-family:var(--font-display);}
 
   .site.is-loading{visibility:hidden;}
@@ -439,6 +440,21 @@
   .footer-note{font-size:.8rem; color:var(--umber); line-height:1.6; margin-bottom:.5rem;}
   .copyright{font-size:.78rem; color:var(--umber);}
 
+  /* ---------- partners + footer ---------- */
+  .partners{margin-top:3.75rem; text-align:center;}
+  .partners[hidden]{display:none;}
+  .partners-title{font-size:.78rem; font-weight:700; letter-spacing:.24em; text-transform:uppercase; color:var(--umber); margin:0 0 1.5rem;}
+  .partner-wrap{overflow:hidden; border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .partner-list{display:flex; flex-wrap:wrap; justify-content:center; margin:0 0 0 -1px; padding:0; list-style:none;}
+  .partner{
+    flex:1 1 240px; display:flex; align-items:center; justify-content:center;
+    padding:2.1rem 1.5rem; min-height:6.2rem;
+    border-left:1px solid var(--line); box-shadow:0 -1px 0 var(--line);
+    font-size:1.15rem; font-weight:700; letter-spacing:.02em; line-height:1.45; text-wrap:balance;
+  }
+  .site-foot{margin-top:2.25rem; text-align:center;}
+  .site-foot .footer-note{margin-bottom:.4rem;}
+
   /* ---------- page-load fade (never scroll-gated: everything is visible at rest) ---------- */
   @media (prefers-reduced-motion:no-preference){
     .site{animation:pageIn .45s ease both;}
@@ -600,11 +616,23 @@
       </div>
     </dl>
 
-    <p class="footer-note" data-i18n="footer_note">以上信息如有更新,以本页面最新版本为准。</p>
-    <p class="copyright">© <span id="year"></span> <span data-i18n="copyright">NENG² Trading · 능능무역 · 能能贸易</span></p>
       </section>
     </main>
   </div>
+
+  <section class="partners" id="partners">
+    <h2 class="partners-title" data-i18n="partners_title">合作伙伴</h2>
+    <div class="partner-wrap">
+      <ul class="partner-list" id="partnerList">
+        <li class="partner">B&amp;T贸易</li><li class="partner">China one 智能物流中心</li><li class="partner">韩国圆通国际</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer class="site-foot">
+    <p class="footer-note" data-i18n="footer_note">以上信息如有更新,以本页面最新版本为准。</p>
+    <p class="copyright">© <span id="year"></span> <span data-i18n="copyright">NENG² Trading · 능능무역 · 能能贸易</span></p>
+  </footer>
 
   <div class="modal-overlay" id="rateModalOverlay" hidden>
     <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="rateModalTitle">
@@ -649,6 +677,7 @@
       about_seoul_label:"首尔办公室", about_seoul_value:"首尔特别市城东区圣水洞",
       about_incheon_label:"仁川仓库", about_incheon_value:"仁川广域市元昌洞",
       about_hours_label:"营业时间", about_hours_value:"10:00 – 18:00",
+      partners_title:"合作伙伴",
       footer_note:"以上信息如有更新,以本页面最新版本为准。",
       notice_label:"公告 NOTICE",
       notice_body:"欢迎关注能能贸易!首次下单可先私信咨询流程与预计时效,我们会尽快回复。",
@@ -703,6 +732,7 @@
       about_seoul_label:"Seoul Office", about_seoul_value:"Seongsu-dong, Seongdong-gu, Seoul",
       about_incheon_label:"Incheon Warehouse", about_incheon_value:"Wonchang-dong, Incheon",
       about_hours_label:"Hours", about_hours_value:"10:00 – 18:00",
+      partners_title:"Partners",
       footer_note:"Details on this page are updated periodically — please check back for the latest.",
       notice_label:"NOTICE",
       notice_body:"Welcome to NENG² Trading! First time ordering — message us for the process and estimated timing, we'll reply as soon as we can.",
@@ -757,6 +787,7 @@
       about_seoul_label:"서울 사무실", about_seoul_value:"서울특별시 성동구 성수동",
       about_incheon_label:"인천 창고", about_incheon_value:"인천광역시 원창동",
       about_hours_label:"영업시간", about_hours_value:"10:00 – 18:00",
+      partners_title:"파트너",
       footer_note:"본 페이지의 정보는 수시로 업데이트됩니다. 최신 내용을 확인해 주세요.",
       notice_label:"공지사항",
       notice_body:"능능무역을 찾아주셔서 감사합니다! 첫 주문이시라면 메시지로 진행 절차와 예상 소요 시간을 문의해 주세요.",
@@ -822,6 +853,11 @@
       {zh:'SD娃娃', en:'BJD / SD Dolls', kr:'SD돌 (구체관절인형)'}
     ],
     customServices: [],
+    partners: [
+      {zh:'B&T贸易', en:'B&T Trading', kr:'B&T 무역'},
+      {zh:'China one 智能物流中心', en:'China One Smart Logistics Center', kr:'차이나원 스마트 물류센터'},
+      {zh:'韩国圆通国际', en:'YTO International Korea', kr:'한국 YTO 인터내셔널'}
+    ],
     promo: {zh:'', en:'', kr:''},
     hours: { open:'10:00', close:'18:00', lunchStart:'12:00', lunchEnd:'13:00', closedDays:[], closedToday:false },
     unclaimed: [
@@ -895,6 +931,7 @@
     try{ document.title = t('meta_title', code); }catch(e){}
     renderSeaTags();
     renderCustomServices();
+    renderPartners();
     var nodes = siteEl.querySelectorAll('[data-i18n]');
     for(var i=0;i<nodes.length;i++){
       var key = nodes[i].getAttribute('data-i18n');
@@ -918,6 +955,15 @@
 
   // ---------- 列表：无主包裹 / 联系方式 ----------
   function el(tag, cls, text){ var e=document.createElement(tag); if(cls) e.className=cls; if(text!==undefined) e.textContent=text; return e; }
+  function renderPartners(){
+    var sec = document.getElementById('partners'), ul = document.getElementById('partnerList'); if(!sec || !ul) return;
+    ul.innerHTML = '';
+    (content.partners||[]).forEach(function(pt){
+      var txt = pick(pt, currentLang); if(!String(txt).trim()) return;
+      var li = el('li','partner', txt); li.setAttribute('data-edit','partner_name'); ul.appendChild(li);
+    });
+    sec.hidden = !ul.children.length;
+  }
   // 更多业务（第四项起）：标题、介绍、小框、资费按钮都来自后台
   var ZH_NUM = ['一','二','三','四','五','六','七','八','九','十','十一','十二'];
   function renderCustomServices(){

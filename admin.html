@@ -85,7 +85,7 @@
 </head>
 <body>
 <div class="top">
-  <h1>能能贸易 · 后台 <small style="font-weight:400;font-size:.65rem;color:var(--umber)">v11-19c</small></h1>
+  <h1>能能贸易 · 后台 <small style="font-weight:400;font-size:.65rem;color:var(--umber)">v11-19d</small></h1>
   <span class="msg" id="msg">载入中…</span>
   <span class="spacer"></span>
   <label class="check" title="在中文框打字后，自动翻译成英文和韩文"><input type="checkbox" id="autoTr"> 自动翻译</label>
@@ -538,22 +538,7 @@
     pane.appendChild(parcels);
 
     // 海运业务小框
-    var tagsBox = h('details', {}, [h('summary', {text:'海运业务小框（' + (content.seaTags || []).length + ' 个）'}),
-      h('p', {class:'key', text:'首页「海运业务」下面那排小框。改中文会自动翻译英文、韩文。清空中文就不显示。'})]);
-    content.seaTags = content.seaTags || [];
-    content.seaTags.forEach(function(tg, i){
-      var arr = content.seaTags;
-      tagsBox.appendChild(h('div', {class:'card'}, [
-        h('div', {class:'ch'}, ['小框 ' + (i + 1), h('span', {class:'row'}, [
-          h('button', {class:'btn small', text:'↑', disabled: i === 0 ? true : null, onclick:function(){ arr.splice(i-1, 0, arr.splice(i,1)[0]); changed(); renderData(); reopen('海运业务小框'); }}),
-          h('button', {class:'btn small', text:'↓', disabled: i === arr.length - 1 ? true : null, onclick:function(){ arr.splice(i+1, 0, arr.splice(i,1)[0]); changed(); renderData(); reopen('海运业务小框'); }}),
-          h('button', {class:'btn small', text:'删除', onclick:function(){ arr.splice(i,1); changed(); renderData(); reopen('海运业务小框'); }})
-        ])]),
-        triInputs(tg, changed)
-      ]));
-    });
-    tagsBox.appendChild(h('button', {class:'btn small', text:'＋ 新增小框', onclick:function(){ content.seaTags.push({zh:'', en:'', kr:''}); changed(); renderData(); reopen('海运业务小框'); }}));
-    pane.appendChild(tagsBox);
+    pane.appendChild(listEditor('海运业务小框', 'seaTags', '首页「海运业务」下面那排小框。改中文会自动翻译英文、韩文。清空中文就不显示。'));
 
     // 更多业务（第四项起）
     content.customServices = content.customServices || [];
@@ -604,6 +589,9 @@
     }}));
     pane.appendChild(svcBox);
 
+    // 合作伙伴
+    pane.appendChild(listEditor('合作伙伴', 'partners', '首页最下方的「合作伙伴」一栏，按顺序横向排开。清空全部名字，这一栏就自动隐藏。'));
+
     // 联系方式
     var names ={wechat:'微信', line:'Line', ig:'Instagram', tg:'Telegram', xhs:'小红书'};
     var contacts = h('details', {}, [h('summary', {text:'联系方式'}), h('p', {class:'key', text:'Instagram 和 Telegram 填用户名即可（不用加 @），会自动变成可点击的链接；其余是「点击复制」。'})]);
@@ -644,6 +632,25 @@
     }
     fill();
     pane.appendChild(all);
+  }
+  // 通用的三语名单编辑器：新增 / 删除 / 上下移动 / 改名（海运小框、合作伙伴共用）
+  function listEditor(label, key, hint){
+    content[key] = content[key] || [];
+    var arr = content[key];
+    function again(){ renderData(); reopen(label); }
+    var box = h('details', {}, [h('summary', {text:label + '（' + arr.length + ' 个）'}), h('p', {class:'key', text:hint})]);
+    arr.forEach(function(it, i){
+      box.appendChild(h('div', {class:'card'}, [
+        h('div', {class:'ch'}, ['第 ' + (i + 1) + ' 个', h('span', {class:'row'}, [
+          h('button', {class:'btn small', text:'↑', disabled: i === 0 ? true : null, onclick:function(){ arr.splice(i-1, 0, arr.splice(i,1)[0]); changed(); again(); }}),
+          h('button', {class:'btn small', text:'↓', disabled: i === arr.length - 1 ? true : null, onclick:function(){ arr.splice(i+1, 0, arr.splice(i,1)[0]); changed(); again(); }}),
+          h('button', {class:'btn small', text:'删除', onclick:function(){ arr.splice(i,1); changed(); again(); }})
+        ])]),
+        triInputs(it, changed)
+      ]));
+    });
+    box.appendChild(h('button', {class:'btn small', text:'＋ 新增', onclick:function(){ arr.push({zh:'', en:'', kr:''}); changed(); again(); }}));
+    return box;
   }
   function rateEditor(rk, label, parentLabel){
     var r = content.rates[rk];

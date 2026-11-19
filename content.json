@@ -47,9 +47,9 @@
       "kr": "인천광역시 원창동 북항로 177번길 96호 C동"
     },
     "notice_body": {
-      "zh": "欢迎关注能能贸易!首次下单可先私信咨询流程,我们会尽快回复。\n·韩>日港小包裹业务即将上架！\n·目前韩>港大代理招募中，价格从优\n·另有服装空运线，只接大批量非品牌",
-      "en": "Welcome to follow NENG² Trading!For your first order, you can send us a private message to inquire about the process, and we will reply as soon as possible.\n· Korea > Japan and Hong Kong small package service is coming soon!\n· Currently recruiting agents for South Korea > Hong Kong. Competitive pricing available.\n· There is also an air freight line for clothing, which only accepts large quantities of non-branded items.",
-      "kr": "능능무역을 팔로우해 주세요!첫 주문 시 먼저 메시지로 주문 절차를 문의해 주시면 최대한 신속하게 답변해 드리겠습니다.\n· 한-일-홍콩 소형 소포 서비스가 곧 출시됩니다!\n· 현재 한국 > 홍콩대 에이전트 모집 중, 가격 우대\n· 별도의 의류 항공 운송 라인이 있으며, 대량의 노브랜드 제품만 취급합니다."
+      "zh": "欢迎关注能能贸易!首次下单可先私信咨询流程,我们会尽快回复。\n\n·韩>日港小包裹业务即将上架！\n·目前韩>港大代理招募中，价格从优\n·另有服装空运线，只接大批量非品牌",
+      "en": "Welcome to follow NENG² Trading!For your first order, you can send us a private message to inquire about the process, and we will get back to you as soon as possible.\n\n· Small package service from South Korea to Japan and Hong Kong is coming soon!\n· Currently recruiting agents for South Korea > Hong Kong. Competitive pricing available.\n· There is also an air freight route for clothing, which only accepts large quantities of non-branded items.",
+      "kr": "능능무역을 팔로우해 주세요!첫 주문 시 먼저 메시지로 주문 절차를 문의해 주시면 최대한 신속하게 답변해 드리겠습니다.\n\n· 한중>일홍콩 소형 소포 서비스가 곧 출시됩니다!\n· 현재 한국 > 홍콩대 에이전트 모집 중, 가격 우대\n· 별도의 의류 항공 운송 라인이 있으며 대량의 노브랜드 제품만 취급합니다."
     },
     "hero_eyebrow": {
       "zh": "首尔&仁川 · 跨境货运",
@@ -88,9 +88,9 @@
   "hiddenBlocks": {},
   "seaTags": [
     {
-      "zh": "明星周边",
-      "en": "Celebrity Merch",
-      "kr": "스타 굿즈"
+      "zh": "明星周边>中港台",
+      "en": "Celebrity Merchandise > Mainland China, Hong Kong, Taiwan",
+      "kr": "연예인 굿즈 > 중국·홍콩·대만"
     },
     {
       "zh": "电子元件",
@@ -367,9 +367,9 @@
             "kr": "장기 보관(15일 이상)"
           },
           "price": {
-            "zh": "¥20/天 起",
-            "en": "Starting from ¥20/day",
-            "kr": "1일 20엔부터"
+            "zh": "¥17/天 起",
+            "en": "From ¥17/day",
+            "kr": "¥17/일 부터"
           }
         },
         {

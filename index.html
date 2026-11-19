@@ -1371,6 +1371,11 @@
       boardCount = document.getElementById('boardCount'), boardEmpty = document.getElementById('boardEmpty');
   var boardRows = [], boardTotal = 0, boardMe = null;
   var BOARD_SHOW = 6;
+  // 新版 publishable 密钥（sb_publishable_ 开头）只放 apikey；旧版 anon（eyJ 开头）还要放 Authorization
+  function boardHeaders(extra){
+    var h = {apikey:BOARD_KEY}; if(/^eyJ/.test(BOARD_KEY)){ h.Authorization = 'Bearer '+BOARD_KEY; }
+    for(var k in extra){ h[k] = extra[k]; } return h;
+  }
   function boardOn(){ return !!(BOARD_URL && BOARD_KEY); }
   function boardDate(iso){
     try{ var d = new Date(iso); if(isNaN(d.getTime())) return ''; var m = d.getMonth()+1, dd = d.getDate(); return (m<10?'0':'')+m+'.'+(dd<10?'0':'')+dd; }catch(e){ return ''; }
@@ -1396,7 +1401,7 @@
     if(!boardOn() || isEdit) return;
     try{
       fetch(BOARD_URL + '/rest/v1/guest_board?select=name,created_at&order=created_at.desc&limit=' + BOARD_SHOW, {
-        headers:{apikey:BOARD_KEY, Authorization:'Bearer '+BOARD_KEY, Prefer:'count=exact'}
+        headers: boardHeaders({Prefer:'count=exact'})
       }).then(function(r){
         var cr = r.headers.get('content-range'); var m = cr && /\/(\d+)$/.exec(cr);
         if(m) boardTotal = parseInt(m[1],10) || 0;
@@ -1415,7 +1420,7 @@
     try{
       fetch(BOARD_URL + '/rest/v1/guest_board', {
         method:'POST',
-        headers:{apikey:BOARD_KEY, Authorization:'Bearer '+BOARD_KEY, 'Content-Type':'application/json', Prefer:'return=minimal'},
+        headers: boardHeaders({'Content-Type':'application/json', Prefer:'return=minimal'}),
         body: JSON.stringify({name:name, lang:currentLang})
       }).catch(function(){});
     }catch(e){}

@@ -32,9 +32,9 @@
       "kr": "창고에 들어간지 3일만에 대만 도착! 뷰티 제품의 통합 및 포장은 대용량, 풀박스 배송을 지원하며 유통 및 도매 구매에 적합합니다."
     },
     "about_body": {
-      "zh": "能能贸易扎根首尔城东区圣水洞,专注海运大包裹、化妆品批发与行李寄存服务,以首尔、仁川两地仓储,把你在韩国看中的好物安全送到手中。",
-      "en": "NENG² Trading is based in Seongsu-dong, Seongdong District, Seoul, specializing in shipping large parcels, cosmetics wholesale and luggage storage services. With warehousing in Seoul and Incheon, NENG² Trading can safely deliver the good things you like in Korea to your hands.",
-      "kr": "능능무역은 서울 성동구 성수동에 본사를 두고 있으며 대형 택배 배송, 화장품 도매 및 수하물 보관 서비스를 전문으로 하고 있습니다. 능능무역은 서울과 인천에 창고를 보유하고 있어 귀하가 좋아하는 한국의 좋은 물건을 안전하게 귀하의 손에 전달할 수 있습니다."
+      "zh": "能能贸易 四年物流+快递经验，专注小包直邮、海运大包裹、化妆品批发与行李寄存服务，以首尔、仁川两地仓储，把你在韩国看中的好物安全送到手中。",
+      "en": "NENG² Trading has four years of experience in logistics + express delivery. It specializes in small direct mail, large sea parcels, cosmetics wholesale and luggage storage services. With warehousing in Seoul and Incheon, it can safely deliver the good things you like in Korea to your hands.",
+      "kr": "능능무역은 물류 + 특급 배송 분야에서 4년의 경험을 보유하고 있습니다. 소형 다이렉트 메일, 대형 해상 소포, 화장품 도매 및 수하물 보관 서비스를 전문으로 합니다. 서울과 인천에 창고를 두고 있어 한국에서 좋아하는 좋은 물건을 안전하게 손끝까지 전달할 수 있습니다."
     },
     "about_seoul_value": {
       "zh": "首尔特别市城东区圣水洞 峨嵯山路103 永东科技大厦 地下一层 2103号",
@@ -67,7 +67,12 @@
       "kr": "해운 및 항공운송업무"
     }
   },
-  "styles": {},
+  "styles": {
+    "services_cosmetics_desc": {
+      "weight": "600",
+      "size": 115
+    }
+  },
   "order": {
     "main": [
       "services",

@@ -447,6 +447,7 @@
   /* ---------- guestbook ---------- */
   .about-grid{display:grid; grid-template-columns:minmax(0,1fr) minmax(280px,22rem); gap:3rem; align-items:start;}
   .about-col{min-width:0;}
+  .guest[hidden]{display:none;}
   .guest{border-top:1px solid var(--line); padding-top:1.1rem;}
   .guest-title{font-size:1.15rem; font-weight:700; margin:0 0 .35rem;}
   .guest-sub{font-size:.84rem; line-height:1.6; color:var(--umber); margin:0 0 1rem;}
@@ -1310,7 +1311,9 @@
 
 
   // ---------- 留言（发到站长邮箱，访客看不到别人的留言） ----------
-  var GUEST_ENDPOINT = 'https://formsubmit.co/ajax/zoowoo666@gmail.com';
+  var GUEST_ENDPOINT = 'https://api.web3forms.com/submit';
+  var GUEST_KEY = '';   // Web3Forms access key（公开也安全，邮箱不会暴露）；为空时整个留言框隐藏
+  if(!GUEST_KEY && !isEdit){ var gBox = document.getElementById('guest'); if(gBox){ gBox.hidden = true; } }
   var guestDoneName = null;
   var gForm = document.getElementById('guestForm'), gName = document.getElementById('guestName'),
       gMsg = document.getElementById('guestMsg'), gHp = document.getElementById('guestHp'),
@@ -1356,9 +1359,10 @@
           method:'POST',
           headers:{'Content-Type':'application/json','Accept':'application/json'},
           body: JSON.stringify({
-            _subject: '能能贸易官网留言 · ' + name,
-            _template: 'table', _captcha: 'false',
-            '花名': name, '留言': msg, '语言': currentLang
+            access_key: GUEST_KEY,
+            subject: '能能贸易官网留言 · ' + name,
+            from_name: '能能贸易官网',
+            name: name, message: msg, lang: currentLang
           })
         }).then(function(r){ return r.json(); }).then(function(j){
           clearTimeout(timer);

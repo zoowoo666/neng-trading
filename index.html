@@ -1312,7 +1312,7 @@
 
   // ---------- 留言（发到站长邮箱，访客看不到别人的留言） ----------
   var GUEST_ENDPOINT = 'https://api.web3forms.com/submit';
-  var GUEST_KEY = '';   // Web3Forms access key（公开也安全，邮箱不会暴露）；为空时整个留言框隐藏
+  var GUEST_KEY = 'da6a3358-720b-488d-9eb6-05baeea72439';   // Web3Forms access key（公开也安全，邮箱不会暴露）；为空时整个留言框隐藏
   if(!GUEST_KEY && !isEdit){ var gBox = document.getElementById('guest'); if(gBox){ gBox.hidden = true; } }
   var guestDoneName = null;
   var gForm = document.getElementById('guestForm'), gName = document.getElementById('guestName'),

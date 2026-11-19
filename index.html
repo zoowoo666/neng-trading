@@ -395,6 +395,13 @@
     padding:1.5rem;
   }
   .modal-overlay[hidden]{display:none;}
+  .modal-overlay{opacity:0; transition:opacity .28s ease;}
+  .modal-overlay.is-open{opacity:1;}
+  .modal-panel{transition:transform .32s cubic-bezier(.2,.8,.2,1), opacity .24s ease;}
+  .modal-panel.is-from{transition:none; opacity:0;}
+  @media (prefers-reduced-motion:reduce){
+    .modal-overlay,.modal-panel{transition:none;}
+  }
   .modal-panel{
     width:100%; max-width:26rem;
     max-height:82vh; overflow-y:auto;
@@ -457,7 +464,7 @@
 
   /* ---------- page-load fade (never scroll-gated: everything is visible at rest) ---------- */
   @media (prefers-reduced-motion:no-preference){
-    .site{animation:pageIn .45s ease both;}
+    .site{animation:pageIn .45s ease backwards;}
     @keyframes pageIn{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;} }
   }
 
@@ -1147,7 +1154,7 @@
   var rateTitleEl = document.getElementById('rateModalTitle');
   var rateBodyEl = document.getElementById('rateModalBody');
   var rateNoteEl = document.getElementById('rateModalNote');
-  var lastFocused = null;
+  var lastFocused = null, modalOrigin = null, closeTimer = null;
   function onModalKeydown(e){ if(e.key === 'Escape'){ closeRateModal(); } }
   function openRateModal(key){
     var data = content.rates && content.rates[key];
@@ -1162,15 +1169,42 @@
     });
     rateNoteEl.textContent = pick(data.note, currentLang);
     lastFocused = document.activeElement;
+    modalOrigin = lastFocused && lastFocused.getBoundingClientRect ? lastFocused : null;
+    clearTimeout(closeTimer);
     rateOverlay.hidden = false;
+    var panel = rateOverlay.querySelector('.modal-panel');
+    // 弹窗从被点的按钮「长」出来：先把它缩到按钮位置，再放大回屏幕正中
+    panel.classList.add('is-from');
+    panel.style.transform = fromButton(panel);
+    void panel.offsetWidth;
+    panel.classList.remove('is-from');
+    panel.style.transform = '';
+    rateOverlay.classList.add('is-open');
     document.addEventListener('keydown', onModalKeydown);
-    if(rateClose){ rateClose.focus(); }
+    if(rateClose){ try{ rateClose.focus({preventScroll:true}); }catch(e){ rateClose.focus(); } }
+  }
+  function fromButton(panel){
+    if(!modalOrigin) return 'scale(.92)';
+    var b = modalOrigin.getBoundingClientRect(), p = panel.getBoundingClientRect();
+    var dx = (b.left + b.width/2) - (p.left + p.width/2);
+    var dy = (b.top + b.height/2) - (p.top + p.height/2);
+    return 'translate('+dx+'px,'+dy+'px) scale(.12)';
   }
   function closeRateModal(){
-    if(!rateOverlay) return;
-    rateOverlay.hidden = true;
+    if(!rateOverlay || rateOverlay.hidden) return;
+    var panel = rateOverlay.querySelector('.modal-panel');
     document.removeEventListener('keydown', onModalKeydown);
-    if(lastFocused && typeof lastFocused.focus === 'function'){ lastFocused.focus(); }
+    rateOverlay.classList.remove('is-open');
+    panel.style.transform = fromButton(panel);
+    panel.style.opacity = '0';
+    clearTimeout(closeTimer);
+    closeTimer = setTimeout(function(){
+      rateOverlay.hidden = true;
+      panel.style.transform = ''; panel.style.opacity = '';
+      if(lastFocused && typeof lastFocused.focus === 'function'){
+        try{ lastFocused.focus({preventScroll:true}); }catch(e){ lastFocused.focus(); }
+      }
+    }, 300);
   }
   if(rateClose){ rateClose.addEventListener('click', closeRateModal); }
   if(rateOverlay){ rateOverlay.addEventListener('click', function(e){ if(e.target === rateOverlay){ closeRateModal(); } }); }

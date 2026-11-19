@@ -444,6 +444,33 @@
   .stamp-row dt{color:var(--umber); font-weight:600;}
   .stamp-row dd{margin:0; font-weight:700; text-align:right;}
   .tabular{font-variant-numeric:tabular-nums;}
+  /* ---------- guestbook ---------- */
+  .about-grid{display:grid; grid-template-columns:minmax(0,1fr) minmax(280px,22rem); gap:3rem; align-items:start;}
+  .about-col{min-width:0;}
+  .guest{border-top:1px solid var(--line); padding-top:1.1rem;}
+  .guest-title{font-size:1.15rem; font-weight:700; margin:0 0 .35rem;}
+  .guest-sub{font-size:.84rem; line-height:1.6; color:var(--umber); margin:0 0 1rem;}
+  .guest-field{display:block; width:100%; box-sizing:border-box; margin:0 0 .7rem; padding:.7rem .85rem;
+    font:inherit; font-size:.94rem; color:var(--ink); background:var(--paper);
+    border:1px solid var(--line); border-radius:0; outline:none; -webkit-appearance:none; appearance:none;}
+  .guest-field::placeholder{color:var(--umber); opacity:.6;}
+  .guest-field:focus{border-color:var(--rust);}
+  textarea.guest-field{height:7.5rem; resize:vertical; line-height:1.6;}
+  .guest-hp{position:absolute; left:-9999px; width:1px; height:1px; opacity:0;}
+  .guest-row{display:flex; align-items:center; justify-content:space-between; gap:1rem;}
+  .guest-count{font-size:.78rem; color:var(--umber); font-variant-numeric:tabular-nums;}
+  .guest-btn{padding:.6rem 1.4rem; background:var(--rust); color:var(--on-accent); font-weight:700; font-size:.9rem; border:0; transition:opacity .15s ease;}
+  .guest-btn:hover{opacity:.88;}
+  .guest-btn[disabled]{opacity:.45; cursor:default;}
+  .guest-msg{font-size:.82rem; line-height:1.5; margin:.7rem 0 0; min-height:1.2em; color:var(--rust);}
+  .guest-done{padding:.4rem 0 .2rem;}
+  .guest-done[hidden],.guest-form[hidden]{display:none;}
+  .guest-ok{font-size:1.05rem; font-weight:700; line-height:1.5; margin:0 0 .5rem;}
+  .guest-ok::before{content:"✓"; display:inline-block; margin-right:.5rem; color:var(--rust);}
+  .guest-note{font-size:.84rem; line-height:1.6; color:var(--umber); margin:0 0 .9rem;}
+  .guest-again{padding:0; font-size:.84rem; color:var(--rust); text-decoration:underline; text-underline-offset:3px;}
+  @media (max-width:900px){ .about-grid{grid-template-columns:1fr; gap:2rem;} }
+
   .footer-note{font-size:.8rem; color:var(--umber); line-height:1.6; margin-bottom:.5rem;}
   .copyright{font-size:.78rem; color:var(--umber);}
 
@@ -595,6 +622,8 @@
 
   <section class="about" id="about" data-block="about">
     <h2 class="section-title" data-i18n="about_title">关于能能贸易</h2>
+    <div class="about-grid">
+      <div class="about-col">
     <p class="about-body" data-i18n="about_body">能能贸易扎根首尔城东区圣水洞,专注海运代购、港台化妆品批发与行李寄存服务,以首尔、仁川两地仓储,把你在韩国看中的一切安全送到手中。</p>
 
     <div class="route" aria-hidden="true">
@@ -622,6 +651,28 @@
         <dd data-i18n="about_hours_value" class="tabular">10:00 – 18:00</dd>
       </div>
     </dl>
+      </div>
+
+      <div class="guest" id="guest">
+        <h3 class="guest-title" data-i18n="guest_title">给我们留言</h3>
+        <p class="guest-sub" data-i18n="guest_sub">留下花名和想说的话,只有我们看得到。</p>
+        <form class="guest-form" id="guestForm" novalidate>
+          <input class="guest-field" id="guestName" name="name" type="text" maxlength="20" autocomplete="nickname" aria-label="花名">
+          <textarea class="guest-field" id="guestMsg" name="message" maxlength="500" aria-label="留言"></textarea>
+          <input class="guest-hp" id="guestHp" name="website" type="text" tabindex="-1" autocomplete="off" aria-hidden="true">
+          <div class="guest-row">
+            <span class="guest-count" id="guestCount">0 / 500</span>
+            <button type="submit" class="guest-btn" id="guestBtn" data-i18n="guest_send">提交留言</button>
+          </div>
+          <p class="guest-msg" id="guestErr" role="alert"></p>
+        </form>
+        <div class="guest-done" id="guestDone" hidden>
+          <p class="guest-ok" id="guestOk"></p>
+          <p class="guest-note" data-i18n="guest_note">如需回复,请通过上方的联系方式找我们。</p>
+          <button type="button" class="guest-again" id="guestAgain" data-i18n="guest_again">再写一条</button>
+        </div>
+      </div>
+    </div>
 
       </section>
     </main>
@@ -679,6 +730,18 @@
       contact_wechat_label:"微信", contact_line_label:"Line",
       contact_ig_label:"Instagram", contact_tg_label:"Telegram", contact_xhs_label:"小红书私信",
       copy_action:"点击复制", copy_success:"已复制",
+      guest_title:"给我们留言",
+      guest_sub:"留下花名和想说的话,只有我们看得到。",
+      guest_name_ph:"你的花名",
+      guest_msg_ph:"想对我们说什么…",
+      guest_send:"提交留言",
+      guest_sending:"发送中…",
+      guest_ok:"留言已送达,谢谢你,{name}!",
+      guest_note:"如需回复,请通过上方的联系方式找我们。",
+      guest_again:"再写一条",
+      guest_need:"请填写花名和留言。",
+      guest_wait:"请稍等一会儿再留言。",
+      guest_fail:"发送失败,请稍后再试。",
       about_title:"关于能能贸易",
       about_body:"能能贸易扎根首尔城东区圣水洞,专注海运代购、港台化妆品批发与行李寄存服务,以首尔、仁川两地仓储,把你在韩国看中的一切安全送到手中。",
       about_seoul_label:"首尔办公室", about_seoul_value:"首尔特别市城东区圣水洞",
@@ -734,6 +797,18 @@
       contact_wechat_label:"WeChat", contact_line_label:"Line",
       contact_ig_label:"Instagram", contact_tg_label:"Telegram", contact_xhs_label:"Xiaohongshu DM",
       copy_action:"Tap to copy", copy_success:"Copied",
+      guest_title:"Leave us a message",
+      guest_sub:"Add a nickname and your message. Only we can read it.",
+      guest_name_ph:"Your nickname",
+      guest_msg_ph:"What would you like to tell us…",
+      guest_send:"Send message",
+      guest_sending:"Sending…",
+      guest_ok:"Message sent. Thank you, {name}!",
+      guest_note:"To get a reply, please reach us through the contact options above.",
+      guest_again:"Write another",
+      guest_need:"Please enter a nickname and a message.",
+      guest_wait:"Please wait a moment before sending another.",
+      guest_fail:"Could not send. Please try again later.",
       about_title:"About NENG² Trading",
       about_body:"Based in Seongsu-dong, Seoul, NENG² Trading handles sea-freight sourcing, HK/TW cosmetics wholesale, and luggage storage — using our Seoul and Incheon warehouses to get what you want from Korea safely into your hands.",
       about_seoul_label:"Seoul Office", about_seoul_value:"Seongsu-dong, Seongdong-gu, Seoul",
@@ -789,6 +864,18 @@
       contact_wechat_label:"위챗", contact_line_label:"라인",
       contact_ig_label:"인스타그램", contact_tg_label:"텔레그램", contact_xhs_label:"샤오홍슈 DM",
       copy_action:"눌러서 복사", copy_success:"복사됨",
+      guest_title:"메시지 남기기",
+      guest_sub:"닉네임과 남기실 말씀을 적어 주세요. 저희만 볼 수 있습니다.",
+      guest_name_ph:"닉네임",
+      guest_msg_ph:"전하고 싶은 말씀을 적어 주세요…",
+      guest_send:"메시지 보내기",
+      guest_sending:"보내는 중…",
+      guest_ok:"메시지가 전달되었습니다. 감사합니다, {name}님!",
+      guest_note:"답변이 필요하시면 위의 연락처로 문의해 주세요.",
+      guest_again:"하나 더 쓰기",
+      guest_need:"닉네임과 메시지를 입력해 주세요.",
+      guest_wait:"잠시 후에 다시 남겨 주세요.",
+      guest_fail:"전송에 실패했습니다. 잠시 후 다시 시도해 주세요.",
       about_title:"능능무역 소개",
       about_body:"서울 성동구 성수동에 자리한 능능무역은 해운 구매대행, 홍콩·대만 화장품 도매, 짐 보관 서비스를 전문으로 합니다. 서울과 인천 두 곳의 창고를 통해 한국에서 원하시는 모든 것을 안전하게 전달합니다.",
       about_seoul_label:"서울 사무실", about_seoul_value:"서울특별시 성동구 성수동",
@@ -956,6 +1043,7 @@
     var hasPromo = !!String(pick(content.promo, code)).trim();
     if(panel){ panel.hidden = !hasPromo; }
     if(hero){ hero.classList.toggle('has-promo', hasPromo); }
+    if(typeof renderGuest === 'function'){ renderGuest(); }
     updateStatus();
     applyStyles();
   }
@@ -1219,6 +1307,74 @@
       if(rb){ openRateModal(rb.getAttribute('data-rate')); return; }
     });
   }
+
+
+  // ---------- 留言（发到站长邮箱，访客看不到别人的留言） ----------
+  var GUEST_ENDPOINT = 'https://formsubmit.co/ajax/zoowoo666@gmail.com';
+  var guestDoneName = null;
+  var gForm = document.getElementById('guestForm'), gName = document.getElementById('guestName'),
+      gMsg = document.getElementById('guestMsg'), gHp = document.getElementById('guestHp'),
+      gBtn = document.getElementById('guestBtn'), gErr = document.getElementById('guestErr'),
+      gCount = document.getElementById('guestCount'), gDone = document.getElementById('guestDone'),
+      gOk = document.getElementById('guestOk'), gAgain = document.getElementById('guestAgain');
+  function renderGuest(){
+    if(!gForm) return;
+    gName.placeholder = t('guest_name_ph', currentLang) || '';
+    gMsg.placeholder = t('guest_msg_ph', currentLang) || '';
+    gName.setAttribute('aria-label', gName.placeholder); gMsg.setAttribute('aria-label', gMsg.placeholder);
+    if(guestDoneName !== null){ gOk.textContent = String(t('guest_ok', currentLang)||'').replace('{name}', guestDoneName); }
+    if(gBtn.disabled && gBtn.getAttribute('data-busy')){ gBtn.textContent = t('guest_sending', currentLang); }
+  }
+  function guestLast(){ try{ return parseInt(localStorage.getItem('neng_guest_last')||'0',10)||0; }catch(e){ return 0; } }
+  if(gForm && !isEdit){
+    gMsg.addEventListener('input', function(){ gCount.textContent = gMsg.value.length + ' / 500'; });
+    gForm.addEventListener('submit', function(e){
+      e.preventDefault();
+      if(gBtn.disabled) return;
+      if(gHp.value) return; // 机器人填了隐藏栏
+      var name = gName.value.replace(/^\s+|\s+$/g,''), msg = gMsg.value.replace(/^\s+|\s+$/g,'');
+      if(!name || !msg){ gErr.textContent = t('guest_need', currentLang); return; }
+      if(new Date().getTime() - guestLast() < 60000){ gErr.textContent = t('guest_wait', currentLang); return; }
+      gErr.textContent = '';
+      gBtn.disabled = true; gBtn.setAttribute('data-busy','1'); gBtn.textContent = t('guest_sending', currentLang);
+      var finished = false;
+      function fail(){
+        if(finished) return; finished = true;
+        gBtn.disabled = false; gBtn.removeAttribute('data-busy'); gBtn.textContent = t('guest_send', currentLang);
+        gErr.textContent = t('guest_fail', currentLang);
+      }
+      function success(){
+        if(finished) return; finished = true;
+        try{ localStorage.setItem('neng_guest_last', String(new Date().getTime())); }catch(e){}
+        guestDoneName = name; renderGuest();
+        gBtn.disabled = false; gBtn.removeAttribute('data-busy'); gBtn.textContent = t('guest_send', currentLang);
+        gForm.hidden = true; gDone.hidden = false;
+      }
+      var timer = setTimeout(fail, 15000);
+      try{
+        fetch(GUEST_ENDPOINT, {
+          method:'POST',
+          headers:{'Content-Type':'application/json','Accept':'application/json'},
+          body: JSON.stringify({
+            _subject: '能能贸易官网留言 · ' + name,
+            _template: 'table', _captcha: 'false',
+            '花名': name, '留言': msg, '语言': currentLang
+          })
+        }).then(function(r){ return r.json(); }).then(function(j){
+          clearTimeout(timer);
+          if(j && (j.success === true || j.success === 'true')) success(); else fail();
+        }).catch(function(){ clearTimeout(timer); fail(); });
+      }catch(err){ clearTimeout(timer); fail(); }
+    });
+    gAgain.addEventListener('click', function(){
+      guestDoneName = null; gName.value = ''; gMsg.value = ''; gCount.textContent = '0 / 500';
+      gDone.hidden = true; gForm.hidden = false; gName.focus();
+    });
+  } else if(gForm){
+    gForm.addEventListener('submit', function(e){ e.preventDefault(); });
+  }
+
+  renderGuest();
 
   var resizeTimer = null;
   window.addEventListener('resize', function(){ clearTimeout(resizeTimer); resizeTimer = setTimeout(applyStyles, 150); });

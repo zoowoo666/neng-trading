@@ -28,8 +28,8 @@
 <meta name="twitter:card" content="summary">
 <style>body{margin:0;padding:0;background:#F1E7D8}img{max-width:100%}[hidden]:not([hidden=until-found]){display:none!important}</style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,500&family=Noto+Serif+SC:wght@600;700;900&family=Gowun+Batang:wght@400;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" media="print" onload="this.media='all'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,500&family=Noto+Serif+SC:wght@600;700;900&family=Gowun+Batang:wght@400;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap"></noscript>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,500&family=Noto+Serif+SC:wght@600;700;900&family=Gowun+Batang:wght@400;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700;900&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;1,500&family=Noto+Serif+SC:wght@600;700;900&family=Gowun+Batang:wght@400;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700;900&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap"></noscript>
 <style>
   :root{
     --cream:#F1E7D8;
@@ -117,6 +117,10 @@
   .site[data-lang="zh"]{
     --font-display:'Noto Serif SC',serif;
     --font-body:'Noto Sans SC',-apple-system,sans-serif;
+  }
+  .site[data-lang="zht"]{
+    --font-display:'Noto Serif TC','Noto Serif SC',serif;
+    --font-body:'Noto Sans TC','Noto Sans SC',-apple-system,sans-serif;
   }
   .site[data-lang="en"]{
     --font-display:'Fraunces',Georgia,serif;
@@ -545,7 +549,8 @@
       </span>
     </div>
     <nav class="langswitch" role="group" aria-label="Language / 语言 / 언어">
-      <button type="button" class="lang-tab is-active" data-setlang="zh">中文</button>
+      <button type="button" class="lang-tab is-active" data-setlang="zh" lang="zh-CN">简</button>
+      <button type="button" class="lang-tab" data-setlang="zht" lang="zh-TW">繁</button>
       <button type="button" class="lang-tab" data-setlang="en">EN</button>
       <button type="button" class="lang-tab" data-setlang="kr">한국어</button>
     </nav>
@@ -1025,13 +1030,38 @@
   var content = mergeContent(null);
   var currentLang = 'zh';
 
+  // ---------- 繁体：由简体自动转换（OpenCC 台湾用语），点「繁」时才加载转换库 ----------
+  var ZHT_FIX = [['臺','台'],['檔案','文件'],['直髮','直發'],['伙伴','夥伴'],['回復','回覆'],['大批次','大批量'],['檢視資費','查看資費'],['定製','客製化']];
+  var zhtConv = null, zhtCache = {};
+  function conv(str){
+    if(!zhtConv || !str) return str;
+    var c = zhtCache[str]; if(c !== undefined) return c;
+    try{
+      c = zhtConv(str);
+      // 校正：转换库对物流/贸易场景的几处误译与过度本地化
+      for(var i=0;i<ZHT_FIX.length;i++){ c = c.split(ZHT_FIX[i][0]).join(ZHT_FIX[i][1]); }
+    }catch(e){ c = str; }
+    zhtCache[str] = c; return c;
+  }
+  function loadZht(cb){
+    if(zhtConv){ cb(true); return; }
+    var sc = document.createElement('script');
+    sc.src = 'vendor/opencc-cn2t.js';
+    sc.onload = function(){
+      try{ zhtConv = OpenCC.Converter({from:'cn', to:'twp'}); cb(true); }catch(e){ cb(false); }
+    };
+    sc.onerror = function(){ cb(false); };
+    document.head.appendChild(sc);
+  }
   function pick(obj, lang){
+    if(lang === 'zht'){ return conv(pick(obj, 'zh')); }
     if(!obj) return '';
     var v = obj[lang];
     if(v !== undefined && v !== null && String(v).trim() !== '') return v;
     return obj.zh || '';
   }
   function t(key, lang){
+    if(lang === 'zht'){ return conv(t(key, 'zh')); }
     var o = content.texts && content.texts[key];
     if(o && o[lang] !== undefined && String(o[lang]).trim() !== '') return o[lang];
     var d = LANG[lang] && LANG[lang][key];
@@ -1063,10 +1093,10 @@
 
   // ---------- 文字 ----------
   function applyLang(code){
-    if(!LANG[code]) return;
+    if(!LANG[code] && code !== 'zht') return;
     currentLang = code;
     siteEl.setAttribute('data-lang', code);
-    try{ document.documentElement.lang = code === 'zh' ? 'zh-CN' : (code === 'kr' ? 'ko' : 'en'); }catch(e){}
+    try{ document.documentElement.lang = code === 'zh' ? 'zh-CN' : (code === 'zht' ? 'zh-TW' : (code === 'kr' ? 'ko' : 'en')); }catch(e){}
     try{ document.title = t('meta_title', code); }catch(e){}
     renderSeaTags();
     renderCustomServices();
@@ -1113,7 +1143,7 @@
     (content.customServices||[]).forEach(function(sv, i){
       var n = 4 + i;
       var art = el('article','ledger-row'); art.setAttribute('data-custom','1');
-      var idx = el('div','ledger-index', currentLang === 'zh' ? (ZH_NUM[n-1] || String(n)) : (n < 10 ? '0' : '') + n);
+      var idx = el('div','ledger-index', (currentLang === 'zh' || currentLang === 'zht') ? (ZH_NUM[n-1] || String(n)) : (n < 10 ? '0' : '') + n);
       idx.setAttribute('data-edit','svc_index');
       var body = el('div','ledger-body'), head = el('div','ledger-head');
       var h3 = el('h3','ledger-title', pick(sv.title, currentLang)); h3.setAttribute('data-edit','svc_title');
@@ -1343,10 +1373,16 @@
   if(rateClose){ rateClose.addEventListener('click', closeRateModal); }
   if(rateOverlay){ rateOverlay.addEventListener('click', function(e){ if(e.target === rateOverlay){ closeRateModal(); } }); }
 
+  if(isEdit){ var zhtTab = siteEl.querySelector('[data-setlang="zht"]'); if(zhtTab){ zhtTab.style.display = 'none'; } }   // 后台只编辑简体原文，繁体由简体自动转
   if(!isEdit){
     siteEl.addEventListener('click', function(e){
       var tab = e.target.closest('.lang-tab');
-      if(tab){ applyLang(tab.getAttribute('data-setlang')); return; }
+      if(tab){
+        var want = tab.getAttribute('data-setlang');
+        if(want === 'zht' && !zhtConv){ loadZht(function(ok){ applyLang(ok ? 'zht' : currentLang); }); }
+        else { applyLang(want); }
+        return;
+      }
       var cp = e.target.closest('[data-copy]');
       if(cp){ copyText(cp.getAttribute('data-copy')); return; }
       var rb = e.target.closest('.rate-badge');
@@ -1431,7 +1467,7 @@
       fetch(BOARD_URL + '/rest/v1/guest_board', {
         method:'POST',
         headers: boardHeaders({'Content-Type':'application/json', Prefer:'return=minimal'}),
-        body: JSON.stringify({name:name, lang:currentLang})
+        body: JSON.stringify({name:name, lang:(currentLang === 'zht' ? 'zh' : currentLang)})
       }).catch(function(){});
     }catch(e){}
   }

@@ -173,6 +173,11 @@
     box-shadow:2px 2px 0 var(--shadow);
     transition:transform .12s ease, box-shadow .12s ease;
   }
+  .lang-zhx{display:inline-flex; align-items:baseline; gap:.3rem;}
+  .lang-zhx .zhx-sep{opacity:.5; font-weight:400;}
+  .lang-zhx .zhx-t,.lang-zhx .zhx-s{opacity:1; transition:opacity .15s ease;}
+  .lang-zhx.is-active .zhx-t:not(.is-cur),.lang-zhx.is-active .zhx-s:not(.is-cur){opacity:.5; font-weight:500;}
+  .lang-zhx.is-active .is-cur{font-weight:700;}
   .lang-tab:hover{transform:translate(1px,1px); box-shadow:1px 1px 0 var(--shadow);}
   .lang-tab.is-active{
     background:var(--rust); color:var(--on-accent); border-color:var(--rust);
@@ -549,8 +554,7 @@
       </span>
     </div>
     <nav class="langswitch" role="group" aria-label="Language / 语言 / 언어">
-      <button type="button" class="lang-tab is-active" data-setlang="zh" lang="zh-CN">简</button>
-      <button type="button" class="lang-tab" data-setlang="zht" lang="zh-TW">繁</button>
+      <button type="button" class="lang-tab lang-zhx is-active" data-setlang="zhx" aria-label="繁體 / 简体"><span class="zhx-t is-cur" lang="zh-TW">繁</span><span class="zhx-sep">/</span><span class="zhx-s" lang="zh-CN">简</span></button>
       <button type="button" class="lang-tab" data-setlang="en">EN</button>
       <button type="button" class="lang-tab" data-setlang="kr">한국어</button>
     </nav>
@@ -1032,7 +1036,7 @@
 
   // ---------- 繁体：由简体自动转换（OpenCC 台湾用语），点「繁」时才加载转换库 ----------
   var ZHT_FIX = [['臺','台'],['檔案','文件'],['直髮','直發'],['伙伴','夥伴'],['回復','回覆'],['大批次','大批量'],['檢視資費','查看資費'],['定製','客製化']];
-  var zhtConv = null, zhtCache = {};
+  var zhtConv = null, zhtCache = {}, lastZh = 'zht';
   function conv(str){
     if(!zhtConv || !str) return str;
     var c = zhtCache[str]; if(c !== undefined) return c;
@@ -1095,6 +1099,7 @@
   function applyLang(code){
     if(!LANG[code] && code !== 'zht') return;
     currentLang = code;
+    if(code === 'zh' || code === 'zht'){ lastZh = code; }
     siteEl.setAttribute('data-lang', code);
     try{ document.documentElement.lang = code === 'zh' ? 'zh-CN' : (code === 'zht' ? 'zh-TW' : (code === 'kr' ? 'ko' : 'en')); }catch(e){}
     try{ document.title = t('meta_title', code); }catch(e){}
@@ -1110,7 +1115,12 @@
     }
     var tabs = siteEl.querySelectorAll('.lang-tab');
     for(var j=0;j<tabs.length;j++){
-      var on = tabs[j].getAttribute('data-setlang') === code;
+      var sl = tabs[j].getAttribute('data-setlang');
+      var on = sl === 'zhx' ? (code === 'zh' || code === 'zht') : sl === code;
+      if(sl === 'zhx'){
+        var st = tabs[j].querySelector('.zhx-t'), ss = tabs[j].querySelector('.zhx-s');
+        if(st) st.classList.toggle('is-cur', code !== 'zh'); if(ss) ss.classList.toggle('is-cur', code === 'zh');
+      }
       tabs[j].classList.toggle('is-active', on);
       tabs[j].setAttribute('aria-pressed', on ? 'true' : 'false');
     }
@@ -1373,13 +1383,16 @@
   if(rateClose){ rateClose.addEventListener('click', closeRateModal); }
   if(rateOverlay){ rateOverlay.addEventListener('click', function(e){ if(e.target === rateOverlay){ closeRateModal(); } }); }
 
-  if(isEdit){ var zhtTab = siteEl.querySelector('[data-setlang="zht"]'); if(zhtTab){ zhtTab.style.display = 'none'; } }   // 后台只编辑简体原文，繁体由简体自动转
+  if(isEdit){ var zhxTab = siteEl.querySelector('[data-setlang="zhx"]'); if(zhxTab){ zhxTab.style.display = 'none'; } }   // 后台只编辑简体原文，繁体由简体自动转
   if(!isEdit){
     siteEl.addEventListener('click', function(e){
       var tab = e.target.closest('.lang-tab');
       if(tab){
         var want = tab.getAttribute('data-setlang');
-        if(want === 'zht' && !zhtConv){ loadZht(function(ok){ applyLang(ok ? 'zht' : currentLang); }); }
+        if(want === 'zhx'){   // 繁/简 一个按钮：在繁体和简体之间切换；从英/韩文回来时回到上次用的那种
+          want = currentLang === 'zht' ? 'zh' : (currentLang === 'zh' ? 'zht' : lastZh);
+        }
+        if(want === 'zht' && !zhtConv){ loadZht(function(ok){ applyLang(ok ? 'zht' : 'zh'); }); }
         else { applyLang(want); }
         return;
       }
@@ -1576,13 +1589,17 @@
     render(); reveal();
     window.parent.postMessage({source:'neng-site', type:'ready', defaults: DEFAULTS, lang: langCopy}, '*');
   }else{
-    render();
-    var revealTimer = setTimeout(reveal, 1500);
+    // 前台默认繁体：等转换库和 content.json 都就绪再显示，避免先闪一下简体
+    currentLang = 'zht';
+    var libReady = false, dataReady = false;
+    var revealTimer = setTimeout(function(){ render(); reveal(); }, 3000);
+    function tryReveal(){ if(libReady && dataReady){ clearTimeout(revealTimer); render(); reveal(); } }
+    loadZht(function(ok){ if(!ok && currentLang === 'zht'){ currentLang = 'zh'; } libReady = true; tryReveal(); if(siteEl.className.indexOf('is-loading') < 0){ render(); } });
     fetch('content.json?t=' + Date.now(), {cache:'no-store'})
       .then(function(r){ return r.ok ? r.json() : null; })
-      .then(function(d){ if(d){ content = mergeContent(d); render(); } })
+      .then(function(d){ if(d){ content = mergeContent(d); } })
       .catch(function(){})
-      .then(function(){ clearTimeout(revealTimer); reveal(); });
+      .then(function(){ dataReady = true; tryReveal(); });
     setInterval(updateStatus, 60000);
   }
 })();
